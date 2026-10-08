@@ -53,12 +53,14 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date() });
 });
 
-// API Routes
+// Public and Auth Routes (No token required for public endpoints)
+app.use('/api/public', publicRoutes);
 app.use('/api/auth', authRoutes);
+
+// Protected Recruiter Routes
 app.use('/api/jobs', jobRoutes);
 app.use('/api', questionRoutes);
 app.use('/api', applicationRoutes);
-app.use('/api/public', publicRoutes);
 
 // 404 Handler for undefined routes
 app.use((req, res, next) => {
