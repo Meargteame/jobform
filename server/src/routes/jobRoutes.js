@@ -8,6 +8,7 @@ const {
   updateJob,
   togglePublishJob,
   deleteJob,
+  seedDemoForRecruiter,
 } = require('../controllers/jobController');
 const { protect } = require('../middleware/auth');
 
@@ -15,6 +16,7 @@ router.use(protect);
 
 router.get('/', getJobs);
 router.get('/stats/summary', getDashboardStats);
+router.post('/seed-demo', seedDemoForRecruiter);
 router.post('/', createJob);
 router.get('/:id', getJobById);
 router.put('/:id', updateJob);

@@ -299,6 +299,95 @@ const deleteJob = async (req, res, next) => {
   }
 };
 
+// @desc    Seed sample job and applicants for the logged-in recruiter
+// @route   POST /api/jobs/seed-demo
+// @access  Private (Recruiter)
+const seedDemoForRecruiter = async (req, res, next) => {
+  try {
+    const slug = generateSlug('Senior Full-Stack Developer');
+    const job = await Job.create({
+      recruiter: req.user._id,
+      title: 'Senior Full-Stack Developer',
+      companyName: req.user.companyName || 'My Company',
+      location: 'Hybrid / Remote',
+      employmentType: 'Full-time',
+      salary: '$75,000 - $100,000 / year',
+      description:
+        'We are seeking a talented Senior Full-Stack Developer to lead frontend architecture, implement scalable backend APIs, and build responsive web applications.',
+      requirements:
+        '• 4+ years of React and Node.js\n• Experience with RESTful APIs and databases\n• Strong problem solving and team communication',
+      deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      slug,
+      status: 'published',
+    });
+
+    const q1 = await Question.create({
+      job: job._id,
+      label: 'Years of Professional Experience',
+      type: 'number',
+      required: true,
+      options: [],
+      order: 0,
+    });
+
+    const q2 = await Question.create({
+      job: job._id,
+      label: 'Primary Frontend Framework',
+      type: 'select',
+      required: true,
+      options: ['React', 'Vue', 'Angular', 'Svelte'],
+      order: 1,
+    });
+
+    const q3 = await Question.create({
+      job: job._id,
+      label: 'Why are you excited about this role?',
+      type: 'textarea',
+      required: true,
+      options: [],
+      order: 2,
+    });
+
+    await Application.create({
+      job: job._id,
+      fullName: 'Abebe Bekele',
+      email: 'abebe.bekele@example.com',
+      phone: '+251 91 123 4567',
+      cvUrl: '/uploads/sample_cv_abebe.pdf',
+      status: 'applied',
+      submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+      answers: [
+        { question: q1._id, label: q1.label, type: q1.type, answer: '5' },
+        { question: q2._id, label: q2.label, type: q2.type, answer: 'React' },
+        { question: q3._id, label: q3.label, type: q3.type, answer: 'Passionate about engineering reliable user-centric software.' },
+      ],
+    });
+
+    await Application.create({
+      job: job._id,
+      fullName: 'Selamawit Tadesse',
+      email: 'selamawit.t@example.com',
+      phone: '+251 92 987 6543',
+      cvUrl: '/uploads/sample_cv_selamawit.pdf',
+      status: 'shortlisted',
+      submittedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+      answers: [
+        { question: q1._id, label: q1.label, type: q1.type, answer: '6' },
+        { question: q2._id, label: q2.label, type: q2.type, answer: 'React' },
+        { question: q3._id, label: q3.label, type: q3.type, answer: 'I love clean design systems and performant state management.' },
+      ],
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'Sample job and applications loaded successfully.',
+      data: job,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getJobs,
   getDashboardStats,
@@ -307,4 +396,5 @@ module.exports = {
   updateJob,
   togglePublishJob,
   deleteJob,
+  seedDemoForRecruiter,
 };

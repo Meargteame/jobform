@@ -148,6 +148,21 @@ const DashboardPage = () => {
     setTimeout(() => setCopiedSlug(null), 2500);
   };
 
+  const handleSeedDemo = async () => {
+    try {
+      setLoading(true);
+      const res = await api.post('/jobs/seed-demo');
+      if (res.data.success) {
+        showToast('Sample job posting & applicants loaded!');
+        await fetchDashboardData();
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to load demo role.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Filter & Sort Logic
   const filteredJobs = useMemo(() => {
     return jobs
@@ -417,13 +432,22 @@ const DashboardPage = () => {
           </p>
           <div className="mt-6">
             {jobs.length === 0 ? (
-              <Link
-                to="/dashboard/jobs/new"
-                className="inline-flex items-center px-4 py-2 text-xs font-semibold rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors"
-              >
-                <Plus className="w-4 h-4 mr-1.5" />
-                Post Your First Job
-              </Link>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5">
+                <Link
+                  to="/dashboard/jobs/new"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2.5 text-xs font-bold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors"
+                >
+                  <Plus className="w-4 h-4 mr-1.5" />
+                  Post Your First Job
+                </Link>
+                <button
+                  onClick={handleSeedDemo}
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2.5 text-xs font-bold rounded-xl text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors"
+                >
+                  <Sparkles className="w-4 h-4 mr-1.5 text-emerald-600" />
+                  Load Sample Role & Applicants
+                </button>
+              </div>
             ) : (
               <button
                 onClick={() => {
