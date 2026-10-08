@@ -30,30 +30,173 @@
 @layer components {
   /* BetterForm Design System Buttons (Section 5) */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 h-[44px] px-[20px] rounded-[8px] font-sans font-semibold text-[14px] leading-none bg-ink text-paper border border-ink transition-colors hover:bg-[#202022] active:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 44px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 8px;
+    font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1;
+    background-color: #0B0B0C;
+    color: #F2F1EC;
+    border: 1px solid #0B0B0C;
+    transition: background-color 150ms ease, border-color 150ms ease;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .btn-primary:hover {
+    background-color: #202022;
+    border-color: #202022;
+  }
+  .btn-primary:active {
+    background-color: #000000;
+    border-color: #000000;
+  }
+  .btn-primary:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #F2F1EC, 0 0 0 4px #13E884;
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .btn-primary-dark {
-    @apply inline-flex items-center justify-center gap-2 h-[44px] px-[20px] rounded-[8px] font-sans font-semibold text-[14px] leading-none bg-signal text-ink border border-signal transition-colors hover:bg-[#11d377] active:bg-[#0fc26d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 44px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 8px;
+    font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1;
+    background-color: #13E884;
+    color: #0B0B0C;
+    border: 1px solid #13E884;
+    transition: background-color 150ms ease, border-color 150ms ease;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .btn-primary-dark:hover {
+    background-color: #11d377;
+    border-color: #11d377;
+  }
+  .btn-primary-dark:active {
+    background-color: #0fc26d;
+    border-color: #0fc26d;
+  }
+  .btn-primary-dark:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #0B0B0C, 0 0 0 4px #13E884;
+  }
+  .btn-primary-dark:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 h-[44px] px-[20px] rounded-[8px] font-sans font-semibold text-[14px] leading-none bg-transparent text-ink border border-ink transition-colors hover:bg-ink/5 active:bg-ink/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 44px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 8px;
+    font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1;
+    background-color: transparent;
+    color: #0B0B0C;
+    border: 1px solid #0B0B0C;
+    transition: background-color 150ms ease;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .btn-secondary:hover {
+    background-color: rgba(11, 11, 12, 0.05);
+  }
+  .btn-secondary:active {
+    background-color: rgba(11, 11, 12, 0.10);
+  }
+  .btn-secondary:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #F2F1EC, 0 0 0 4px #13E884;
+  }
+  .btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .btn-tertiary {
-    @apply inline-flex items-center justify-center gap-2 h-[44px] px-[20px] rounded-[8px] font-sans font-semibold text-[14px] leading-none bg-transparent text-muted border border-line transition-colors hover:text-ink hover:bg-paper-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 44px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 8px;
+    font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1;
+    background-color: transparent;
+    color: #6B6A63;
+    border: 1px solid rgba(11, 11, 12, 0.13);
+    transition: color 150ms ease, background-color 150ms ease;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .btn-tertiary:hover {
+    color: #0B0B0C;
+    background-color: #E7E6DF;
+  }
+  .btn-tertiary:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #F2F1EC, 0 0 0 4px #13E884;
+  }
+  .btn-tertiary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .btn-compact {
-    @apply h-[36px] px-[14px] text-[13px];
+    height: 36px;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 13px;
   }
 
   /* Form Fields (Section 5): 44px, 8px radius, 1px line, focus 2px green ring offset 2px with inner border */
   .bf-input {
-    @apply h-[44px] px-[14px] rounded-[8px] border border-line bg-white text-ink text-[15px] transition-all placeholder:text-muted/60;
+    height: 44px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(11, 11, 12, 0.13);
+    background-color: #FFFFFF;
+    color: #0B0B0C;
+    font-size: 14px;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
   }
-
+  .bf-input::placeholder {
+    color: rgba(107, 106, 99, 0.6);
+  }
   .bf-input:focus {
     outline: none;
     border-color: #0B0B0C;
