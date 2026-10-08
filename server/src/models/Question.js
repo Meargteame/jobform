@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { isMemoryMode, memoryQuestion } = require('../config/memoryStore');
 
 const questionTypes = [
   'text',
@@ -52,5 +53,16 @@ const questionSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Question', questionSchema);
+const MongooseQuestion = mongoose.models.Question || mongoose.model('Question', questionSchema);
+
+const QuestionProxy = new Proxy(MongooseQuestion, {
+  get(target, prop) {
+    if (isMemoryMode() && memoryQuestion[prop] !== undefined) {
+      return memoryQuestion[prop];
+    }
+    return target[prop];
+  },
+});
+
+module.exports = QuestionProxy;
 module.exports.questionTypes = questionTypes;

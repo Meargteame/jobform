@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const { isMemoryMode, memoryUser } = require('../config/memoryStore');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -31,7 +32,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Hash password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   try {
@@ -43,9 +43,19 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-// Compare password helper
 userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = mongoose.model('User', userSchema);
+const MongooseUser = mongoose.models.User || mongoose.model('User', userSchema);
+
+const UserProxy = new Proxy(MongooseUser, {
+  get(target, prop) {
+    if (isMemoryMode() && memoryUser[prop] !== undefined) {
+      return memoryUser[prop];
+    }
+    return target[prop];
+  },
+});
+
+module.exports = UserProxy;

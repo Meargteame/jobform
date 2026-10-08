@@ -48,13 +48,20 @@ const getDashboardStats = async (req, res, next) => {
 
     const jobIds = recruiterJobs.map((j) => j._id);
     const totalApplications = await Application.countDocuments({ job: { $in: jobIds } });
+    const shortlistedCount = await Application.countDocuments({ job: { $in: jobIds }, status: 'shortlisted' });
+    const reviewPendingCount = await Application.countDocuments({ job: { $in: jobIds }, status: 'applied' });
+    const shortlistRate = totalApplications > 0 ? Math.round((shortlistedCount / totalApplications) * 100) : 0;
 
     return res.status(200).json({
       success: true,
       data: {
         totalJobs,
         publishedJobs,
+        draftJobs: totalJobs - publishedJobs,
         totalApplications,
+        shortlistedCount,
+        reviewPendingCount,
+        shortlistRate,
       },
     });
   } catch (err) {

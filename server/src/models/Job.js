@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { isMemoryMode, memoryJob } = require('../config/memoryStore');
 
 const employmentTypes = [
   'Full-time',
@@ -77,5 +78,16 @@ const jobSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Job', jobSchema);
+const MongooseJob = mongoose.models.Job || mongoose.model('Job', jobSchema);
+
+const JobProxy = new Proxy(MongooseJob, {
+  get(target, prop) {
+    if (isMemoryMode() && memoryJob[prop] !== undefined) {
+      return memoryJob[prop];
+    }
+    return target[prop];
+  },
+});
+
+module.exports = JobProxy;
 module.exports.employmentTypes = employmentTypes;

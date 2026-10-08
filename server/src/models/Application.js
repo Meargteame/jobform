@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { isMemoryMode, memoryApplication } = require('../config/memoryStore');
 
 const applicationStatusValues = ['applied', 'shortlisted', 'rejected'];
 
@@ -68,5 +69,16 @@ const applicationSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Application', applicationSchema);
+const MongooseApplication = mongoose.models.Application || mongoose.model('Application', applicationSchema);
+
+const ApplicationProxy = new Proxy(MongooseApplication, {
+  get(target, prop) {
+    if (isMemoryMode() && memoryApplication[prop] !== undefined) {
+      return memoryApplication[prop];
+    }
+    return target[prop];
+  },
+});
+
+module.exports = ApplicationProxy;
 module.exports.applicationStatusValues = applicationStatusValues;
