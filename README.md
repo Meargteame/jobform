@@ -1,8 +1,9 @@
-# JobForm — Production-Ready MVP
+# BetterForm — Production-Ready MVP
 
-> A job application form platform and candidate pipeline designed for recruiters and hiring managers.
+> The Minimalist Hiring Workflow for Modern Teams.
+> **Create better job applications.**
 
-JobForm allows recruiters to post vacancies, customize application screening forms with dynamic question types, publish public application links, collect resumes (PDF/DOC/DOCX), and review candidate applications from an intuitive B2B SaaS dashboard.
+BetterForm allows recruiters and hiring teams to create professional job postings, customize application screening forms with dynamic question types, publish public application links, collect resumes (PDF/DOC/DOCX), and review candidate applications from an intuitive B2B SaaS dashboard.
 
 Candidates require **no account** and can apply directly via a shared link.
 
@@ -33,12 +34,13 @@ Recruiter Reviews Candidate (Inspects CV & Answers, Shortlists or Rejects)
 - **JavaScript (ES6+)**
 - **React Router v6**
 - **Tailwind CSS**
+- **Typography**: Space Grotesk & Outfit
 - **Axios**
 - **Lucide React** (Minimalist Icons)
 
 ### Backend
 - **Node.js** & **Express.js**
-- **MongoDB** & **Mongoose**
+- **MongoDB** & **Mongoose** (with seamless zero-config In-Memory Store fallback)
 - **JWT** (`jsonwebtoken`) & **bcryptjs**
 - **Multer** (CV upload handling with format and 5MB size validation)
 - **Helmet**, **CORS**, and **express-rate-limit** (Production Security)
@@ -48,7 +50,7 @@ Recruiter Reviews Candidate (Inspects CV & Answers, Shortlists or Rejects)
 ## 3. Project Structure
 
 ```text
-jobform/
+betterform/
 ├── client/
 │   ├── src/
 │   │   ├── components/
@@ -83,7 +85,8 @@ jobform/
 ├── server/
 │   ├── src/
 │   │   ├── config/
-│   │   │   └── db.js
+│   │   │   ├── db.js
+│   │   │   └── memoryStore.js
 │   │   ├── controllers/
 │   │   │   ├── authController.js
 │   │   │   ├── jobController.js
@@ -124,17 +127,17 @@ jobform/
 
 ## 4. Environment Variables
 
-Create `.env` in the root directory (or use `.env.example`):
+Create `.env` in the root directory (or copy `.env.example`):
 
 ```env
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/jobform
-JWT_SECRET=super_secret_jobform_jwt_dev_key_2026
-CLIENT_URL=http://localhost:5173
+MONGODB_URI=mongodb://localhost:27017/betterform
+JWT_SECRET=super_secret_betterform_jwt_dev_key_2026
+CLIENT_URL=http://localhost:5180
 UPLOAD_DIR=uploads
 ```
 
-Create `client/.env` (optional, defaults to `http://localhost:5000/api`):
+Create `client/.env`:
 
 ```env
 VITE_API_URL=http://localhost:5000/api
@@ -169,10 +172,9 @@ cd ../client && npm install
 
 Ensure MongoDB is running locally:
 ```bash
-# If using local MongoDB
 mongod
 ```
-Or set `MONGODB_URI` in `.env` to a MongoDB Atlas cluster URI.
+Or set `MONGODB_URI` in `.env` to a MongoDB Atlas cluster URI. *(If MongoDB is not installed locally, BetterForm automatically activates an in-memory database store for immediate zero-config operation).*
 
 ### 3. Seed Demo Data
 
@@ -183,7 +185,7 @@ npm run seed
 ```
 
 #### Demo Recruiter Credentials:
-- **Email:** `demo@jobform.local`
+- **Email:** `demo@betterform.local`
 - **Password:** `Demo123456`
 - **Company:** `Yonile Digital`
 - **Job:** `Senior Full-Stack Developer`
@@ -199,24 +201,14 @@ npm run dev
 
 This concurrently starts:
 - **Backend API Server:** `http://localhost:5000`
-- **Frontend Vite Client:** `http://localhost:5173`
-
-Or run them in separate terminals:
-
-```bash
-# Terminal 1 - Backend
-npm run server
-
-# Terminal 2 - Frontend
-npm run client
-```
+- **Frontend Vite Client:** `http://localhost:5180`
 
 ---
 
 ## 6. Key Features & Highlights
 
 1. **Recruiter Authentication**: Secure registration, login, and token-based profile validation with bcrypt and JWT.
-2. **Dashboard & Metrics**: Overview cards (Total Jobs, Published Jobs, Total Applications), real-time status toggling, and copyable public application links.
+2. **Left Sidebar & Dashboard**: Permanent vertical sidebar navigation, company workspace badge, 4 KPI cards (Total Postings, Total Applicants, Shortlist Rate, Portal Status), real-time status toggling, and copyable public application links.
 3. **Application Form Builder**:
    - Automatically bundles the 4 standard application questions: **Full Name**, **Email**, **Phone**, and **CV**.
    - Supports 10 question types: `text`, `textarea`, `email`, `phone`, `number`, `url`, `select`, `radio`, `checkbox`, `file`.
@@ -246,6 +238,7 @@ npm run client
 - `GET /api/jobs` — Get recruiter's jobs with application counts
 - `GET /api/jobs/stats/summary` — Recruiter dashboard metric summary
 - `POST /api/jobs` — Create new job (generates unique slug)
+- `POST /api/jobs/seed-demo` — 1-click sample role loader for testing
 - `GET /api/jobs/:id` — Get single job details
 - `PUT /api/jobs/:id` — Update job posting
 - `DELETE /api/jobs/:id` — Delete job and cascade delete its questions & applications
@@ -276,13 +269,3 @@ npm run client
 - **Rate Limiting**: Public application submissions are rate-limited via `express-rate-limit` to prevent abuse.
 - **File Validation**: CV uploads are filtered by extension and mime-type, with an enforced 5MB size limit.
 - **Input Sanitization & Centralized Error Handler**: Handles 400, 401, 403, 404, 409, and 500 error responses consistently.
-
----
-
-## 9. Future Roadmap (Post-MVP)
-
-- Cloud object storage adapter (AWS S3 / Google Cloud Storage)
-- Automated email notifications to candidates upon status change
-- Team member invitations and multi-recruiter permissions
-- Interview scheduling integrations (Calendly / Google Meet)
-- CSV export for candidate applications

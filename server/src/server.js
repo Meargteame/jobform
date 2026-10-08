@@ -16,7 +16,7 @@ const startServer = async () => {
 
     const server = app.listen(PORT, () => {
       console.log(`===============================================`);
-      console.log(`🚀 JobForm API running in ${process.env.NODE_ENV || 'development'} mode`);
+      console.log(`🚀 BetterForm API running in ${process.env.NODE_ENV || 'development'} mode`);
       console.log(`📡 URL: http://localhost:${PORT}`);
       console.log(`===============================================`);
     });
@@ -25,7 +25,7 @@ const startServer = async () => {
     const exitHandler = () => {
       if (server) {
         server.close(() => {
-          console.log('JobForm server closed.');
+          console.log('BetterForm server closed.');
           process.exit(0);
         });
       } else {

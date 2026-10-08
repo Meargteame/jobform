@@ -61,7 +61,7 @@ const DashboardLayout = () => {
             <Briefcase className="w-4 h-4" />
           </div>
           <span className="font-extrabold text-lg tracking-tight text-slate-900">
-            Job<span className="text-emerald-600">Form</span>
+            Better<span className="text-emerald-600">Form</span>
           </span>
         </Link>
 
@@ -96,7 +96,7 @@ const DashboardLayout = () => {
               </div>
               <div className="flex flex-col">
                 <span className="font-extrabold text-xl tracking-tight text-slate-900 leading-none">
-                  Job<span className="text-emerald-600">Form</span>
+                  Better<span className="text-emerald-600">Form</span>
                 </span>
                 <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 mt-1">
                   Recruiter Suite

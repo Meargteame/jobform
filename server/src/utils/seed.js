@@ -38,20 +38,20 @@ const seedData = async () => {
     }
 
     console.log('Clearing old demo seed data...');
-    const demoUser = await User.findOne({ email: 'demo@jobform.local' });
-    if (demoUser) {
-      const demoJobs = await Job.find({ recruiter: demoUser._id });
+    const oldUsers = await User.find({ email: { $in: ['demo@betterform.local', 'demo@jobform.local'] } });
+    for (const oldUser of oldUsers) {
+      const demoJobs = await Job.find({ recruiter: oldUser._id });
       const demoJobIds = demoJobs.map((j) => j._id);
       await Question.deleteMany({ job: { $in: demoJobIds } });
       await Application.deleteMany({ job: { $in: demoJobIds } });
-      await Job.deleteMany({ recruiter: demoUser._id });
-      await User.deleteOne({ _id: demoUser._id });
+      await Job.deleteMany({ recruiter: oldUser._id });
+      await User.deleteOne({ _id: oldUser._id });
     }
 
-    console.log('Creating demo recruiter: demo@jobform.local / Demo123456');
+    console.log('Creating demo recruiter: demo@betterform.local / Demo123456');
     const recruiter = await User.create({
       name: 'Yonile Recruitment Team',
-      email: 'demo@jobform.local',
+      email: 'demo@betterform.local',
       password: 'Demo123456',
       companyName: 'Yonile Digital',
     });
@@ -221,10 +221,10 @@ const seedData = async () => {
 
     console.log('✅ Demo seed data created successfully!');
     console.log('----------------------------------------------------');
-    console.log('Recruiter Email:    demo@jobform.local');
+    console.log('Recruiter Email:    demo@betterform.local');
     console.log('Recruiter Password: Demo123456');
     console.log('Published Job Slug: ' + slug);
-    console.log('Public URL:         http://localhost:5173/apply/' + slug);
+    console.log('Public URL:         http://localhost:5180/apply/' + slug);
     console.log('----------------------------------------------------');
 
     await disconnectDB();

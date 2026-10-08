@@ -57,7 +57,7 @@ const RegisterPage = () => {
             <Briefcase className="w-5 h-5" />
           </div>
           <span className="font-bold text-2xl tracking-tight text-gray-900">
-            Job<span className="text-emerald-600">Form</span>
+            Better<span className="text-emerald-600">Form</span>
           </span>
         </Link>
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">

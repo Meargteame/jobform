@@ -19,11 +19,15 @@ const LandingPage = () => {
 
   const handleDemoLogin = async () => {
     try {
-      await login('demo@jobform.local', 'Demo123456');
+      await login('demo@betterform.local', 'Demo123456');
       navigate('/dashboard');
     } catch (e) {
-      // If server seed not run or credentials changed, take to login page with prefill
-      navigate('/login?demo=true');
+      try {
+        await login('demo@jobform.local', 'Demo123456');
+        navigate('/dashboard');
+      } catch (err2) {
+        navigate('/login?demo=true');
+      }
     }
   };
 
@@ -37,7 +41,7 @@ const LandingPage = () => {
               <Briefcase className="w-5 h-5" />
             </div>
             <span className="font-bold text-xl tracking-tight text-gray-900">
-              Job<span className="text-emerald-600">Form</span>
+              Better<span className="text-emerald-600">Form</span>
             </span>
           </Link>
 

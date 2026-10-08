@@ -1,7 +1,7 @@
 {
-  "name": "jobform-server",
+  "name": "betterform-server",
   "version": "1.0.0",
-  "description": "JobForm Backend API",
+  "description": "BetterForm Backend API",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

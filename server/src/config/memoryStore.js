@@ -407,10 +407,20 @@ const seedMemoryStore = async () => {
 
   const demoUser = await memoryUser.create({
     name: 'Yonile Recruitment Team',
-    email: 'demo@jobform.local',
+    email: 'demo@betterform.local',
     password: 'Demo123456',
     companyName: 'Yonile Digital',
   });
+
+  // Also support demo@jobform.local for legacy sessions
+  store.users.push(new MemoryUser({
+    _id: demoUser._id,
+    name: demoUser.name,
+    email: 'demo@jobform.local',
+    password: demoUser.password,
+    companyName: demoUser.companyName,
+    createdAt: demoUser.createdAt,
+  }));
 
   const job1 = await memoryJob.create({
     recruiter: demoUser._id,
@@ -507,7 +517,7 @@ const seedMemoryStore = async () => {
     ],
   });
 
-  console.log('[MemoryStore] Pre-seeded demo recruiter & job: demo@jobform.local / Demo123456');
+  console.log('[MemoryStore] Pre-seeded demo recruiter & job: demo@betterform.local / Demo123456');
 };
 
 module.exports = {

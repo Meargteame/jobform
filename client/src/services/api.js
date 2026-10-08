@@ -10,7 +10,9 @@ const api = axios.create({
 // Attach JWT token automatically if present in localStorage
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('jobform_token');
+    const token =
+      localStorage.getItem('betterform_token') ||
+      localStorage.getItem('jobform_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,8 +27,12 @@ api.interceptors.response.use(
   (error) => {
     // If 401 Unauthorized occurs on a protected route, remove expired token
     if (error.response && error.response.status === 401) {
-      const isAuthRoute = error.config.url.includes('/auth/login') || error.config.url.includes('/auth/register');
+      const isAuthRoute =
+        error.config.url.includes('/auth/login') ||
+        error.config.url.includes('/auth/register');
       if (!isAuthRoute) {
+        localStorage.removeItem('betterform_token');
+        localStorage.removeItem('betterform_user');
         localStorage.removeItem('jobform_token');
         localStorage.removeItem('jobform_user');
       }

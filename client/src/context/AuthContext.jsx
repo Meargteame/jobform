@@ -5,20 +5,28 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('jobform_user');
+    const savedUser =
+      localStorage.getItem('betterform_user') ||
+      localStorage.getItem('jobform_user');
     try {
       return savedUser ? JSON.parse(savedUser) : null;
     } catch {
       return null;
     }
   });
-  const [token, setToken] = useState(() => localStorage.getItem('jobform_token'));
+  const [token, setToken] = useState(
+    () =>
+      localStorage.getItem('betterform_token') ||
+      localStorage.getItem('jobform_token')
+  );
   const [loading, setLoading] = useState(true);
 
   // Validate token and fetch current user profile on app load
   useEffect(() => {
     const fetchCurrentUser = async () => {
-      const storedToken = localStorage.getItem('jobform_token');
+      const storedToken =
+        localStorage.getItem('betterform_token') ||
+        localStorage.getItem('jobform_token');
       if (!storedToken) {
         setLoading(false);
         return;
@@ -28,7 +36,7 @@ export const AuthProvider = ({ children }) => {
         const res = await api.get('/auth/me');
         if (res.data.success && res.data.user) {
           setUser(res.data.user);
-          localStorage.setItem('jobform_user', JSON.stringify(res.data.user));
+          localStorage.setItem('betterform_user', JSON.stringify(res.data.user));
         }
       } catch (err) {
         console.warn('Session verification failed:', err.response?.data?.message || err.message);
@@ -47,8 +55,8 @@ export const AuthProvider = ({ children }) => {
       const { token: receivedToken, user: receivedUser } = res.data;
       setToken(receivedToken);
       setUser(receivedUser);
-      localStorage.setItem('jobform_token', receivedToken);
-      localStorage.setItem('jobform_user', JSON.stringify(receivedUser));
+      localStorage.setItem('betterform_token', receivedToken);
+      localStorage.setItem('betterform_user', JSON.stringify(receivedUser));
     }
     return res.data;
   };
@@ -59,8 +67,8 @@ export const AuthProvider = ({ children }) => {
       const { token: receivedToken, user: receivedUser } = res.data;
       setToken(receivedToken);
       setUser(receivedUser);
-      localStorage.setItem('jobform_token', receivedToken);
-      localStorage.setItem('jobform_user', JSON.stringify(receivedUser));
+      localStorage.setItem('betterform_token', receivedToken);
+      localStorage.setItem('betterform_user', JSON.stringify(receivedUser));
     }
     return res.data;
   };
@@ -68,6 +76,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setToken(null);
     setUser(null);
+    localStorage.removeItem('betterform_token');
+    localStorage.removeItem('betterform_user');
     localStorage.removeItem('jobform_token');
     localStorage.removeItem('jobform_user');
   };

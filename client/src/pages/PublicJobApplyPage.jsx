@@ -196,7 +196,7 @@ const PublicJobApplyPage = () => {
             to="/"
             className="mt-6 inline-flex items-center text-xs font-semibold text-emerald-600 hover:text-emerald-700"
           >
-            JobForm Homepage &rarr;
+            BetterForm Homepage &rarr;
           </Link>
         </div>
       </div>
@@ -216,7 +216,7 @@ const PublicJobApplyPage = () => {
             to="/"
             className="mt-6 inline-flex items-center text-xs font-semibold text-emerald-600 hover:text-emerald-700"
           >
-            JobForm Homepage &rarr;
+            BetterForm Homepage &rarr;
           </Link>
         </div>
       </div>
@@ -256,7 +256,7 @@ const PublicJobApplyPage = () => {
 
           <div className="mt-8 pt-6 border-t border-gray-100">
             <p className="text-xs text-gray-400">
-              Powered by <span className="font-semibold text-gray-600">JobForm</span>
+              Powered by <span className="font-semibold text-gray-600">BetterForm</span>
             </p>
           </div>
         </div>
@@ -556,7 +556,7 @@ const PublicJobApplyPage = () => {
         </div>
 
         <div className="text-center text-xs text-gray-400 py-4">
-          Powered by <span className="font-semibold text-gray-600">JobForm</span> &bull; Hiring Made Simple
+          Powered by <span className="font-semibold text-gray-600">BetterForm</span> &bull; Hiring Made Simple
         </div>
       </div>
     </div>

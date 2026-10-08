@@ -38,7 +38,7 @@ const LoginPage = () => {
   };
 
   const handleFillDemo = () => {
-    setEmail('demo@jobform.local');
+    setEmail('demo@betterform.local');
     setPassword('Demo123456');
     setError('');
   };
@@ -51,7 +51,7 @@ const LoginPage = () => {
             <Briefcase className="w-5 h-5" />
           </div>
           <span className="font-bold text-2xl tracking-tight text-gray-900">
-            Job<span className="text-emerald-600">Form</span>
+            Better<span className="text-emerald-600">Form</span>
           </span>
         </Link>
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">
@@ -136,7 +136,7 @@ const LoginPage = () => {
               className="w-full text-xs text-gray-500 hover:text-emerald-700 bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-200 py-2 px-3 rounded-lg transition-colors flex items-center justify-center space-x-1"
             >
               <span>Quick fill demo credentials</span>
-              <span className="font-mono text-gray-400">(demo@jobform.local)</span>
+              <span className="font-mono text-gray-400">(demo@betterform.local)</span>
             </button>
           </div>
         </div>
