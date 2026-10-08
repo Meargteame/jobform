@@ -24,14 +24,14 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-paper text-ink font-sans flex flex-col selection:bg-signal selection:text-ink">
-      {/* Top Navigation */}
+      {/* Top Header */}
       <header className="border-b border-line bg-paper sticky top-0 z-30">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-12 h-18 flex items-center justify-between">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
           <Link to="/" className="inline-flex items-center">
-            <BetterFormLogo size={32} />
+            <BetterFormLogo height={32} />
           </Link>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
@@ -44,7 +44,7 @@ const LandingPage = () => {
               <>
                 <Link
                   to="/login"
-                  className="text-[14px] font-semibold text-ink hover:text-muted px-3 py-2 transition-colors"
+                  className="text-[14px] font-semibold text-ink hover:text-muted transition-colors px-2 py-2"
                 >
                   Sign in
                 </Link>
@@ -67,11 +67,14 @@ const LandingPage = () => {
           
           {/* Left Column: Editorial Headline & Copy */}
           <div className="lg:col-span-7 text-left">
-            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted mb-6">
-              The Minimalist Hiring Workflow
-            </p>
+            <div className="flex items-center gap-2.5 mb-6">
+              <span className="w-2 h-2 rounded-full bg-signal" />
+              <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
+                The Minimalist Hiring Workflow
+              </p>
+            </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[64px] font-bold tracking-[-0.04em] text-ink leading-[1.05]">
+            <h1 className="text-4xl sm:text-5xl lg:text-[68px] font-bold tracking-[-0.04em] text-ink leading-[1.03]">
               Create better job applications.
             </h1>
 
@@ -105,7 +108,7 @@ const LandingPage = () => {
               </div>
               <div>
                 <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Setup</p>
-                <p className="mt-1 text-[14px] font-semibold text-ink">Zero friction forms</p>
+                <p className="mt-1 text-[14px] font-semibold text-ink">Zero setup friction</p>
               </div>
               <div>
                 <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Distribution</p>
@@ -117,53 +120,52 @@ const LandingPage = () => {
           {/* Right Column: Architectural Form Structure Graphic echoing the Brand Mark */}
           <div className="lg:col-span-5">
             <div className="bg-white border border-line rounded-[12px] p-8 relative overflow-hidden">
-              {/* Brand motif header */}
               <div className="flex items-center justify-between pb-6 border-b border-line">
                 <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
-                  Live Application View
+                  Live Application Preview
                 </span>
-                <span className="w-2.5 h-2.5 rounded-full bg-signal" title="Signal: Active applicant" />
+                <span className="w-2.5 h-2.5 rounded-full bg-signal" title="Signal: Applicant dot" />
               </div>
 
               {/* Stepped Form Progress Motif */}
               <div className="mt-6 space-y-5">
                 <div>
                   <div className="flex justify-between items-center text-xs text-muted font-medium mb-1.5">
-                    <span>Role: Senior Frontend Engineer</span>
+                    <span className="text-ink font-semibold">Position Applied</span>
                     <span className="font-mono text-[11px] uppercase tracking-[0.12em]">Full-time</span>
                   </div>
-                  <div className="h-10 bg-paper rounded-[8px] border border-line px-3 flex items-center text-xs text-ink">
+                  <div className="h-[44px] bg-paper rounded-[8px] border border-line px-3.5 flex items-center text-xs text-ink font-medium">
+                    Senior Product Engineer
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between items-center text-xs text-muted font-medium mb-1.5">
+                    <span className="text-ink font-semibold">Applicant Name</span>
+                    <span className="font-mono text-[11px] uppercase tracking-[0.12em]">Required</span>
+                  </div>
+                  <div className="h-[44px] bg-paper rounded-[8px] border border-line px-3.5 flex items-center text-xs text-ink">
                     Sarah Jenkins
                   </div>
                 </div>
 
                 <div>
                   <div className="flex justify-between items-center text-xs text-muted font-medium mb-1.5">
-                    <span>Email & Contact</span>
-                    <span className="font-mono text-[11px] uppercase tracking-[0.12em]">Required</span>
+                    <span className="text-ink font-semibold">Curriculum Vitae (CV)</span>
+                    <span className="font-mono text-[11px] uppercase tracking-[0.12em]">PDF · 2.1 MB</span>
                   </div>
-                  <div className="h-10 bg-paper rounded-[8px] border border-line px-3 flex items-center text-xs text-ink">
-                    sarah@example.com
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between items-center text-xs text-muted font-medium mb-1.5">
-                    <span>Curriculum Vitae (CV)</span>
-                    <span className="font-mono text-[11px] uppercase tracking-[0.12em]">PDF / DOCX</span>
-                  </div>
-                  <div className="h-10 bg-paper rounded-[8px] border border-line border-dashed px-3 flex items-center justify-between text-xs text-muted">
+                  <div className="h-[44px] bg-paper rounded-[8px] border border-line border-dashed px-3.5 flex items-center justify-between text-xs text-muted">
                     <span className="text-ink font-medium">resume_sarah_jenkins.pdf</span>
-                    <span className="font-mono text-[11px]">2.1 MB</span>
+                    <span className="w-2 h-2 rounded-full bg-signal" />
                   </div>
                 </div>
 
                 {/* Status dot progression */}
                 <div className="pt-4 border-t border-line flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="w-2 h-2 rounded-full bg-signal" />
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-signal" />
                     <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink font-semibold">
-                      Qualified applicant
+                      Shortlisted applicant
                     </span>
                   </div>
                   <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
@@ -177,8 +179,56 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Structured 4-Step Process Section */}
-      <section className="py-20 border-t border-line bg-paper-2/60">
+      {/* Brand Identity Story Section: Three fields. One step up. */}
+      <section className="py-20 border-t border-line bg-paper-2/40">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Visual Symbol Display */}
+            <div className="lg:col-span-5 flex justify-center lg:justify-start">
+              <div className="w-[240px] h-[240px] bg-ink rounded-[32px] p-6 relative flex items-center justify-center">
+                <BetterFormLogo variant="symbol" theme="dark" height={192} />
+              </div>
+            </div>
+
+            {/* Brand Concept Narrative */}
+            <div className="lg:col-span-7 space-y-6">
+              <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
+                96 Grid &bull; Radii 12 / 48 &bull; Three Fields &bull; One Dot
+              </span>
+
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.03em] text-ink leading-[1.1]">
+                Three fields.<br />One step up.
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-line">
+                <div>
+                  <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">A &bull; Fields</span>
+                  <p className="mt-2 text-xs text-muted leading-relaxed">
+                    Three left-aligned rows cut from solid black: the grammar of every form, drawn as negative space.
+                  </p>
+                </div>
+                <div>
+                  <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">B &bull; Progression</span>
+                  <p className="mt-2 text-xs text-muted leading-relaxed">
+                    Each row runs longer than the last. An application gaining shape, a pipeline gaining clarity.
+                  </p>
+                </div>
+                <div>
+                  <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">C &bull; Candidate</span>
+                  <p className="mt-2 text-xs text-muted leading-relaxed">
+                    The green dot is the applicant, surfacing from the structure into the curve where a page would fold.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 4-Step Process Section */}
+      <section className="py-20 border-t border-line bg-paper">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
           <div className="max-w-[640px] mb-14 text-left">
             <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted mb-2">
@@ -228,8 +278,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Product Capabilities (Hairline Grid) */}
-      <section className="py-20 border-t border-line bg-paper">
+      {/* Product Capabilities */}
+      <section className="py-20 border-t border-line bg-paper-2/40">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
           <div className="max-w-[640px] mb-14 text-left">
             <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted mb-2">
@@ -312,7 +362,6 @@ const LandingPage = () => {
             </div>
 
             <div>
-              {/* Primary button on dark: green fill #13E884, ink text #0B0B0C */}
               <Link
                 to="/register"
                 className="inline-flex items-center justify-center gap-2 h-[44px] px-6 text-[15px] font-semibold text-ink bg-signal hover:bg-[#11d377] rounded-[8px] transition-colors"
@@ -325,7 +374,7 @@ const LandingPage = () => {
 
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-dark">
             <div className="flex items-center gap-3">
-              <BetterFormLogo theme="dark" size={24} />
+              <BetterFormLogo variant="symbol" theme="dark" height={24} />
               <span className="font-mono text-[11px] uppercase tracking-[0.12em]">
                 &copy; {new Date().getFullYear()} BetterForm
               </span>

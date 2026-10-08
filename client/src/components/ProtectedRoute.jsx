@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Loader2 } from 'lucide-react';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -8,10 +9,10 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-paper text-ink font-sans">
         <div className="flex flex-col items-center space-y-3">
-          <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm font-medium text-gray-500">Authenticating session...</p>
+          <Loader2 className="w-6 h-6 text-ink animate-spin stroke-[1.5]" />
+          <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">Authenticating session...</p>
         </div>
       </div>
     );
