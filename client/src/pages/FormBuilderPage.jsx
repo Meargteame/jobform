@@ -8,14 +8,9 @@ import {
   ChevronUp,
   ChevronDown,
   Edit2,
-  CheckCircle,
-  HelpCircle,
   ExternalLink,
   Loader2,
   AlertCircle,
-  FileText,
-  Eye,
-  Settings2,
   X,
 } from 'lucide-react';
 
@@ -152,7 +147,6 @@ const FormBuilderPage = () => {
       };
 
       if (editingQuestionId) {
-        // Update question
         const res = await api.put(`/questions/${editingQuestionId}`, payload);
         if (res.data.success) {
           setQuestions((prev) =>
@@ -161,7 +155,6 @@ const FormBuilderPage = () => {
           setShowModal(false);
         }
       } else {
-        // Add question
         const res = await api.post(`/jobs/${jobId}/questions`, payload);
         if (res.data.success) {
           setQuestions((prev) => [...prev, res.data.data]);
@@ -176,7 +169,7 @@ const FormBuilderPage = () => {
   };
 
   const handleDeleteQuestion = async (questionId) => {
-    if (!window.confirm('Are you sure you want to delete this question?')) {
+    if (!window.confirm('Delete this screening question?')) {
       return;
     }
 
@@ -203,183 +196,155 @@ const FormBuilderPage = () => {
 
   if (loading) {
     return (
-      <div className="py-20 flex flex-col items-center justify-center space-y-3">
-        <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
-        <p className="text-sm text-gray-500">Loading application form builder...</p>
+      <div className="py-20 flex flex-col items-center justify-center space-y-3 font-sans text-ink">
+        <Loader2 className="w-6 h-6 text-ink animate-spin stroke-[1.5]" />
+        <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
+          Loading builder...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 font-sans text-ink">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-3">
           <Link
             to="/dashboard"
-            className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 text-muted hover:text-ink hover:bg-paper-2 rounded-[8px] transition-colors"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 stroke-[1.5]" />
           </Link>
           <div>
-            <div className="flex items-center space-x-2">
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-                Application Form Builder
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-bold tracking-[-0.03em] text-ink">
+                Form builder
               </h1>
               {job?.status === 'published' && (
-                <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
+                <span className="font-mono text-[11px] uppercase tracking-[0.12em] bg-paper px-2 py-0.5 rounded-[4px] border border-line text-ink">
                   Published
                 </span>
               )}
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-              Customize candidate application questions for{' '}
-              <span className="font-semibold text-gray-800">{job?.title}</span>.
+            <p className="text-xs text-muted mt-1">
+              Custom application form for <strong className="text-ink font-semibold">{job?.title}</strong>
             </p>
           </div>
         </div>
 
-        {/* Action Pills */}
-        <div className="flex items-center space-x-2">
+        {/* View Switch & Public Link */}
+        <div className="flex items-center gap-2">
           {job?.slug && (
             <a
               href={`/apply/${job.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1.5 px-3 py-2 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg transition-colors shadow-sm"
+              className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold text-ink bg-white hover:bg-paper-2 border border-line rounded-[8px] transition-colors"
             >
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span>Candidate Link</span>
+              <ExternalLink className="w-3.5 h-3.5 stroke-[1.5]" />
+              <span>Public link</span>
             </a>
           )}
 
-          <div className="inline-flex rounded-lg border border-gray-200 bg-white p-1">
+          <div className="inline-flex rounded-[8px] border border-line bg-paper p-0.5">
             <button
               onClick={() => setActiveTab('builder')}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center space-x-1.5 ${
+              className={`h-[32px] px-3 rounded-[6px] text-xs font-semibold transition-colors ${
                 activeTab === 'builder'
-                  ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-ink text-paper'
+                  : 'text-muted hover:text-ink'
               }`}
             >
-              <Settings2 className="w-3.5 h-3.5" />
-              <span>Builder</span>
+              Builder
             </button>
             <button
               onClick={() => setActiveTab('preview')}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center space-x-1.5 ${
+              className={`h-[32px] px-3 rounded-[6px] text-xs font-semibold transition-colors ${
                 activeTab === 'preview'
-                  ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-ink text-paper'
+                  : 'text-muted hover:text-ink'
               }`}
             >
-              <Eye className="w-3.5 h-3.5" />
-              <span>Preview</span>
+              Preview
             </button>
           </div>
         </div>
       </div>
 
       {error && (
-        <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700 flex items-center space-x-2.5">
-          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+        <div className="p-4 rounded-[8px] bg-red-50/80 border border-red-200 text-xs text-red-800 flex items-center gap-2.5">
+          <AlertCircle className="w-4 h-4 text-red-700 shrink-0 stroke-[1.5]" />
           <span>{error}</span>
         </div>
       )}
 
       {activeTab === 'builder' ? (
         <div className="space-y-6">
-          {/* Section: Default Built-in Questions */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 sm:p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <div>
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-700 flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-600" />
-                  <span>Standard Application Questions (Always Included)</span>
-                </h3>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  These 4 essential fields are automatically captured on every candidate application.
-                </p>
-              </div>
+          {/* Section: Standard Built-in Fields */}
+          <div className="bg-white rounded-[12px] border border-line p-6 space-y-4">
+            <div className="pb-3 border-b border-line">
+              <h3 className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
+                Standard Questions (Included by Default)
+              </h3>
+              <p className="text-xs text-muted mt-1">
+                Captured automatically on every candidate application.
+              </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-800">Full Name</p>
-                  <p className="text-xs text-gray-400">Single Line Text</p>
+              {[
+                { title: 'Full Name', format: 'Single Line Text', required: true },
+                { title: 'Email Address', format: 'Email format', required: true },
+                { title: 'Phone Number', format: 'Phone format', required: true },
+                { title: 'Resume / CV', format: 'PDF, DOC, DOCX up to 5MB', required: true },
+              ].map((field, i) => (
+                <div key={i} className="p-3.5 bg-paper border border-line rounded-[8px] flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-semibold text-ink">{field.title}</p>
+                    <p className="font-mono text-[11px] text-muted mt-0.5">{field.format}</p>
+                  </div>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
+                    Required
+                  </span>
                 </div>
-                <span className="text-xs font-semibold px-2 py-0.5 bg-gray-200 text-gray-700 rounded">
-                  Required
-                </span>
-              </div>
-
-              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-800">Email Address</p>
-                  <p className="text-xs text-gray-400">Email format</p>
-                </div>
-                <span className="text-xs font-semibold px-2 py-0.5 bg-gray-200 text-gray-700 rounded">
-                  Required
-                </span>
-              </div>
-
-              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-800">Phone Number</p>
-                  <p className="text-xs text-gray-400">Phone format</p>
-                </div>
-                <span className="text-xs font-semibold px-2 py-0.5 bg-gray-200 text-gray-700 rounded">
-                  Required
-                </span>
-              </div>
-
-              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-800">Resume / CV File</p>
-                  <p className="text-xs text-gray-400">PDF, DOC, DOCX up to 5MB</p>
-                </div>
-                <span className="text-xs font-semibold px-2 py-0.5 bg-gray-200 text-gray-700 rounded">
-                  Required
-                </span>
-              </div>
+              ))}
             </div>
           </div>
 
           {/* Section: Custom Questions */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 sm:p-6 space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-gray-100">
+          <div className="bg-white rounded-[12px] border border-line p-6 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-line">
               <div>
-                <h3 className="text-base font-semibold text-gray-900">
-                  Custom Application Questions ({questions.length})
+                <h3 className="text-base font-bold text-ink">
+                  Custom Questions ({questions.length})
                 </h3>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  Add role-specific questions like experience, portfolios, tech stack, or screening essays.
+                <p className="text-xs text-muted mt-0.5">
+                  Tailored prompts: text, dropdown, radio, number, or portfolio links.
                 </p>
               </div>
 
               <button
                 onClick={openAddModal}
-                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors shadow-sm self-start sm:self-auto"
+                className="inline-flex items-center gap-1.5 h-[38px] px-4 bg-ink hover:bg-[#202022] text-paper text-xs font-semibold rounded-[8px] transition-colors"
               >
-                <Plus className="w-4 h-4" />
-                <span>Add Question</span>
+                <Plus className="w-4 h-4 stroke-[1.5]" />
+                <span>Add question</span>
               </button>
             </div>
 
             {questions.length === 0 ? (
-              <div className="py-12 px-4 text-center border-2 border-dashed border-gray-200 rounded-xl">
-                <FileText className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-700">No custom questions added yet</p>
-                <p className="text-xs text-gray-500 mt-1 max-w-sm mx-auto">
-                  Click "Add Question" to include customized prompts such as "Years of Experience", "GitHub URL", or screening queries.
+              <div className="py-12 px-4 text-center border border-dashed border-line rounded-[8px] bg-paper">
+                <p className="text-xs font-semibold text-ink">No custom questions added yet</p>
+                <p className="text-xs text-muted mt-1 max-w-sm mx-auto">
+                  Click below to add vacancy-specific questions like years of experience, work authorization, or portfolio URLs.
                 </p>
                 <button
                   onClick={openAddModal}
-                  className="mt-4 inline-flex items-center space-x-1.5 px-3.5 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors"
+                  className="mt-4 inline-flex items-center gap-1.5 h-[36px] px-4 text-xs font-semibold text-ink bg-white hover:bg-paper-2 border border-line rounded-[8px] transition-colors"
                 >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add First Question</span>
+                  <Plus className="w-3.5 h-3.5 stroke-[1.5]" />
+                  <span>Add first question</span>
                 </button>
               </div>
             ) : (
@@ -387,72 +352,64 @@ const FormBuilderPage = () => {
                 {questions.map((q, idx) => (
                   <div
                     key={q._id}
-                    className="p-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    className="p-4 rounded-[8px] border border-line bg-paper flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                   >
                     <div className="space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xs font-bold text-gray-400">#{idx + 1}</span>
-                        <h4 className="text-sm font-semibold text-gray-900">{q.label}</h4>
-                        {q.required ? (
-                          <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-200">
-                            Required
-                          </span>
-                        ) : (
-                          <span className="text-[10px] uppercase font-medium tracking-wider px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
-                            Optional
-                          </span>
-                        )}
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs text-muted">#{idx + 1}</span>
+                        <h4 className="text-xs font-semibold text-ink">{q.label}</h4>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
+                          {q.required ? '(Required)' : '(Optional)'}
+                        </span>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
-                        <span className="inline-block px-2 py-0.5 bg-gray-100 rounded text-gray-700 font-mono text-[11px]">
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.12em]">
                           type: {q.type}
                         </span>
                         {q.options && q.options.length > 0 && (
                           <span>
-                            Options: {q.options.slice(0, 3).join(', ')}
-                            {q.options.length > 3 ? ` (+${q.options.length - 3} more)` : ''}
+                            &bull; choices: {q.options.slice(0, 3).join(', ')}
+                            {q.options.length > 3 ? ` (+${q.options.length - 3})` : ''}
                           </span>
                         )}
                       </div>
                     </div>
 
-                    {/* Controls: Move Up, Move Down, Edit, Delete */}
-                    <div className="flex items-center space-x-1 self-end sm:self-auto">
+                    {/* Ordering, Edit, Delete */}
+                    <div className="flex items-center gap-1 self-end sm:self-auto">
                       <button
                         onClick={() => handleMoveOrder(q._id, 'up')}
                         disabled={idx === 0}
                         title="Move Up"
-                        className="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        className="p-1.5 text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
                       >
-                        <ChevronUp className="w-4 h-4" />
+                        <ChevronUp className="w-4 h-4 stroke-[1.5]" />
                       </button>
 
                       <button
                         onClick={() => handleMoveOrder(q._id, 'down')}
                         disabled={idx === questions.length - 1}
                         title="Move Down"
-                        className="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        className="p-1.5 text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
                       >
-                        <ChevronDown className="w-4 h-4" />
+                        <ChevronDown className="w-4 h-4 stroke-[1.5]" />
                       </button>
-
-                      <div className="w-px h-4 bg-gray-200 mx-1"></div>
 
                       <button
                         onClick={() => openEditModal(q)}
-                        title="Edit Question"
-                        className="p-1.5 text-gray-500 hover:text-emerald-700 hover:bg-emerald-50 rounded transition-colors"
+                        title="Edit question"
+                        className="p-1.5 text-muted hover:text-ink"
                       >
-                        <Edit2 className="w-4 h-4" />
+                        <Edit2 className="w-4 h-4 stroke-[1.5]" />
                       </button>
 
                       <button
                         onClick={() => handleDeleteQuestion(q._id)}
-                        title="Delete Question"
-                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                        title="Delete question"
+                        className="p-1.5 text-muted hover:text-red-700"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-4 h-4 stroke-[1.5]" />
                       </button>
                     </div>
                   </div>
@@ -462,115 +419,85 @@ const FormBuilderPage = () => {
           </div>
         </div>
       ) : (
-        /* Live Form Preview Section */
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 space-y-6">
-          <div className="border-b border-gray-100 pb-4">
-            <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">
+        /* Preview Tab */
+        <div className="bg-white rounded-[12px] border border-line p-8 space-y-6">
+          <div className="border-b border-line pb-4">
+            <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
               Live Preview
             </span>
-            <h2 className="text-xl font-bold text-gray-900 mt-1">
+            <h2 className="text-2xl font-bold text-ink mt-1">
               Apply for {job?.title || 'Position'}
             </h2>
-            <p className="text-xs text-gray-500">{job?.companyName} &bull; {job?.location}</p>
+            <p className="text-xs text-muted">{job?.companyName} &bull; {job?.location}</p>
           </div>
 
           <div className="space-y-5 opacity-90 pointer-events-none">
-            {/* Standard fields preview */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Full Name <span className="text-red-500">*</span>
+              <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                Full name <span className="text-red-600">*</span>
               </label>
               <input
                 type="text"
                 disabled
                 placeholder="Jane Doe"
-                className="mt-1 block w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm"
+                className="w-full h-[44px] px-3.5 bg-paper border border-line rounded-[8px] text-sm text-ink"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Email Address <span className="text-red-500">*</span>
+                <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                  Email address <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="email"
                   disabled
                   placeholder="jane@example.com"
-                  className="mt-1 block w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm"
+                  className="w-full h-[44px] px-3.5 bg-paper border border-line rounded-[8px] text-sm text-ink"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Phone Number <span className="text-red-500">*</span>
+                <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                  Phone number <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="tel"
                   disabled
                   placeholder="+1 (555) 000-0000"
-                  className="mt-1 block w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm"
+                  className="w-full h-[44px] px-3.5 bg-paper border border-line rounded-[8px] text-sm text-ink"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Resume / CV <span className="text-red-500">*</span>
+              <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                Resume / CV <span className="text-red-600">*</span>
               </label>
-              <div className="mt-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center bg-gray-50">
-                <p className="text-xs text-gray-500">PDF, DOC, DOCX up to 5MB</p>
+              <div className="border border-dashed border-line rounded-[8px] p-4 text-center bg-paper">
+                <p className="font-mono text-xs text-muted">PDF, DOC, DOCX up to 5MB</p>
               </div>
             </div>
 
-            {/* Custom questions preview */}
             {questions.map((q) => (
               <div key={q._id} className="pt-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  {q.label} {q.required && <span className="text-red-500">*</span>}
+                <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                  {q.label} {q.required && <span className="text-red-600">*</span>}
                 </label>
 
                 {q.type === 'textarea' ? (
                   <textarea
                     disabled
                     rows={3}
-                    className="mt-1 block w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm"
-                    placeholder="Candidate enters detailed response here..."
-                  ></textarea>
-                ) : q.type === 'select' ? (
-                  <select
-                    disabled
-                    className="mt-1 block w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm"
-                  >
-                    <option>Select an option...</option>
-                    {q.options?.map((opt, i) => (
-                      <option key={i}>{opt}</option>
-                    ))}
-                  </select>
-                ) : q.type === 'radio' ? (
-                  <div className="mt-2 space-y-2">
-                    {q.options?.map((opt, i) => (
-                      <label key={i} className="flex items-center space-x-2 text-sm text-gray-600">
-                        <input type="radio" disabled name={`preview_${q._id}`} />
-                        <span>{opt}</span>
-                      </label>
-                    ))}
-                  </div>
-                ) : q.type === 'checkbox' ? (
-                  <div className="mt-2 space-y-2">
-                    {q.options?.map((opt, i) => (
-                      <label key={i} className="flex items-center space-x-2 text-sm text-gray-600">
-                        <input type="checkbox" disabled />
-                        <span>{opt}</span>
-                      </label>
-                    ))}
-                  </div>
+                    className="w-full p-3 bg-paper border border-line rounded-[8px] text-sm text-ink"
+                    placeholder="Candidate response here..."
+                  />
                 ) : (
                   <input
                     type={q.type}
                     disabled
                     placeholder={`Enter ${q.label.toLowerCase()}...`}
-                    className="mt-1 block w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm"
+                    className="w-full h-[44px] px-3.5 bg-paper border border-line rounded-[8px] text-sm text-ink"
                   />
                 )}
               </div>
@@ -581,31 +508,31 @@ const FormBuilderPage = () => {
 
       {/* Modal: Add or Edit Question */}
       {showModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl max-w-lg w-full p-6 shadow-xl border border-gray-200 relative animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <h3 className="text-lg font-bold text-gray-900">
-                {editingQuestionId ? 'Edit Application Question' : 'Add Custom Question'}
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-ink/40 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[12px] max-w-lg w-full p-6 border border-line relative animate-in fade-in duration-150">
+            <div className="flex items-center justify-between pb-3 border-b border-line">
+              <h3 className="text-lg font-bold text-ink">
+                {editingQuestionId ? 'Edit Question' : 'Add Question'}
               </h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-gray-400 hover:text-gray-600 p-1 rounded-md"
+                className="text-muted hover:text-ink p-1 rounded"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 stroke-[1.5]" />
               </button>
             </div>
 
             {modalError && (
-              <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 flex items-center space-x-2">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <div className="mt-4 p-3 rounded-[8px] bg-red-50/80 border border-red-200 text-xs text-red-800 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 stroke-[1.5]" />
                 <span>{modalError}</span>
               </div>
             )}
 
             <form onSubmit={handleSaveQuestion} className="mt-4 space-y-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
-                  Question Label / Prompt <span className="text-red-500">*</span>
+                <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                  Question label <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="text"
@@ -615,20 +542,20 @@ const FormBuilderPage = () => {
                   onChange={(e) =>
                     setModalFormData({ ...modalFormData, label: e.target.value })
                   }
-                  className="mt-1.5 block w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
-                  Question Input Type <span className="text-red-500">*</span>
+                <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                  Question input type <span className="text-red-600">*</span>
                 </label>
                 <select
                   value={modalFormData.type}
                   onChange={(e) =>
                     setModalFormData({ ...modalFormData, type: e.target.value })
                   }
-                  className="mt-1.5 block w-full px-3 py-2 border border-gray-300 bg-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink"
                 >
                   {QUESTION_TYPES.map((t) => (
                     <option key={t.value} value={t.value}>
@@ -638,7 +565,7 @@ const FormBuilderPage = () => {
                 </select>
               </div>
 
-              <div className="flex items-center space-x-2 pt-1">
+              <div className="flex items-center gap-2 pt-1">
                 <input
                   type="checkbox"
                   id="requiredCheck"
@@ -646,47 +573,46 @@ const FormBuilderPage = () => {
                   onChange={(e) =>
                     setModalFormData({ ...modalFormData, required: e.target.checked })
                   }
-                  className="w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500"
+                  className="w-4 h-4 accent-[#0B0B0C] border-line rounded"
                 />
-                <label htmlFor="requiredCheck" className="text-sm font-medium text-gray-700">
-                  Candidate must answer this question (Required)
+                <label htmlFor="requiredCheck" className="text-xs font-semibold text-ink cursor-pointer">
+                  Required question
                 </label>
               </div>
 
-              {/* Options field for select, radio, checkbox */}
               {['select', 'radio', 'checkbox'].includes(modalFormData.type) && (
-                <div className="pt-2 border-t border-gray-100 space-y-2">
+                <div className="pt-3 border-t border-line space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
-                      Answer Choices / Options <span className="text-red-500">*</span>
+                    <label className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                      Choice Options
                     </label>
                     <button
                       type="button"
                       onClick={addOptionField}
-                      className="text-xs text-emerald-600 hover:text-emerald-700 font-medium"
+                      className="text-xs font-semibold text-ink hover:underline"
                     >
-                      + Add Option
+                      + Add choice
                     </button>
                   </div>
 
                   <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
                     {modalFormData.options.map((opt, i) => (
-                      <div key={i} className="flex items-center space-x-2">
+                      <div key={i} className="flex items-center gap-2">
                         <input
                           type="text"
                           required
                           value={opt}
                           onChange={(e) => handleOptionChange(i, e.target.value)}
                           placeholder={`Option ${i + 1}`}
-                          className="flex-1 px-3 py-1.5 border border-gray-300 rounded-md text-xs focus:ring-1 focus:ring-emerald-500"
+                          className="flex-1 h-[36px] px-3 border border-line rounded-[6px] text-xs focus:ring-1 focus:ring-signal"
                         />
                         {modalFormData.options.length > 1 && (
                           <button
                             type="button"
                             onClick={() => removeOptionField(i)}
-                            className="p-1 text-gray-400 hover:text-red-600 rounded"
+                            className="p-1 text-muted hover:text-red-700"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 className="w-3.5 h-3.5 stroke-[1.5]" />
                           </button>
                         )}
                       </div>
@@ -695,11 +621,11 @@ const FormBuilderPage = () => {
                 </div>
               )}
 
-              <div className="pt-4 border-t border-gray-100 flex items-center justify-end space-x-2">
+              <div className="pt-4 border-t border-line flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="h-[38px] px-4 text-xs font-semibold text-ink hover:bg-paper-2 rounded-[8px] transition-colors"
                 >
                   Cancel
                 </button>
@@ -707,10 +633,10 @@ const FormBuilderPage = () => {
                 <button
                   type="submit"
                   disabled={modalLoading}
-                  className="px-4 py-2 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors shadow-sm disabled:opacity-60 flex items-center space-x-1"
+                  className="h-[38px] px-5 text-xs font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors disabled:opacity-60 flex items-center gap-1.5"
                 >
-                  {modalLoading && <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" />}
-                  <span>{editingQuestionId ? 'Update Question' : 'Add Question'}</span>
+                  {modalLoading && <Loader2 className="w-3.5 h-3.5 animate-spin mr-1 stroke-[1.5]" />}
+                  <span>{editingQuestionId ? 'Update question' : 'Save question'}</span>
                 </button>
               </div>
             </form>

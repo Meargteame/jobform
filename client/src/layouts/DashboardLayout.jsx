@@ -1,25 +1,20 @@
 import React, { useState } from 'react';
-import { Link, NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import BetterFormLogo from '../components/BetterFormLogo';
 import {
-  Briefcase,
-  PlusCircle,
   LayoutDashboard,
+  Plus,
   LogOut,
-  Building2,
+  Building,
   Menu,
   X,
-  FileSpreadsheet,
-  Globe,
-  Sparkles,
   ChevronRight,
-  User,
 } from 'lucide-react';
 
 const DashboardLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -39,92 +34,80 @@ const DashboardLayout = () => {
 
   const navigation = [
     {
-      name: 'Dashboard Overview',
+      name: 'Overview',
       to: '/dashboard',
       icon: LayoutDashboard,
       end: true,
     },
     {
-      name: 'Post New Vacancy',
+      name: 'Create Job',
       to: '/dashboard/jobs/new',
-      icon: PlusCircle,
+      icon: Plus,
       end: false,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row font-sans text-slate-900 antialiased">
+    <div className="min-h-screen bg-paper flex flex-col md:flex-row font-sans text-ink antialiased">
       {/* Mobile Top Header */}
-      <div className="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-        <Link to="/dashboard" className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-xs">
-            <Briefcase className="w-4 h-4" />
-          </div>
-          <span className="font-extrabold text-lg tracking-tight text-slate-900">
-            Better<span className="text-emerald-600">Form</span>
-          </span>
+      <div className="md:hidden bg-white border-b border-line px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+        <Link to="/dashboard" className="flex items-center">
+          <BetterFormLogo size={28} />
         </Link>
 
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+          className="p-2 text-muted hover:text-ink hover:bg-paper-2 rounded-[8px] transition-colors"
+          aria-label="Toggle navigation menu"
         >
-          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {mobileMenuOpen ? <X className="w-5 h-5 stroke-[1.5]" /> : <Menu className="w-5 h-5 stroke-[1.5]" />}
         </button>
       </div>
 
       {/* Mobile Slide-down Backdrop */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-30 bg-slate-900/40 md:hidden"
+          className="fixed inset-0 z-30 bg-ink/40 md:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
       {/* FIXED PERMANENT LEFT SIDEBAR */}
       <aside
-        className={`fixed md:sticky top-0 z-40 h-screen w-64 bg-white border-r border-slate-200/90 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
+        className={`fixed md:sticky top-0 z-40 h-screen w-64 bg-white border-r border-line flex flex-col justify-between transition-transform duration-200 ease-out md:translate-x-0 ${
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Top: Logo & Workspace Info */}
+        {/* Top: Brand & Workspace */}
         <div>
-          <div className="p-6 border-b border-slate-100">
-            <Link to="/dashboard" className="flex items-center space-x-2.5 group">
-              <div className="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm shadow-emerald-600/30 group-hover:bg-emerald-700 transition-colors">
-                <Briefcase className="w-5 h-5" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-extrabold text-xl tracking-tight text-slate-900 leading-none">
-                  Better<span className="text-emerald-600">Form</span>
-                </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 mt-1">
-                  Recruiter Suite
-                </span>
-              </div>
+          <div className="p-6 border-b border-line">
+            <Link to="/dashboard" className="inline-block">
+              <BetterFormLogo size={32} />
             </Link>
 
-            {/* Current Workspace Badge */}
-            <div className="mt-5 p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between">
-              <div className="flex items-center space-x-2 min-w-0">
-                <div className="w-6 h-6 rounded-md bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
-                  <Building2 className="w-3.5 h-3.5" />
+            {/* Current Workspace Pill */}
+            <div className="mt-5 p-3 bg-paper border border-line rounded-[8px] flex items-center justify-between">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-6 h-6 rounded-[6px] bg-paper-2 text-ink flex items-center justify-center shrink-0">
+                  <Building className="w-3.5 h-3.5 stroke-[1.5]" />
                 </div>
                 <div className="truncate">
-                  <p className="text-xs font-bold text-slate-900 truncate">
-                    {user?.companyName || 'My Company'}
+                  <p className="text-xs font-semibold text-ink truncate leading-tight">
+                    {user?.companyName || 'My Workspace'}
                   </p>
-                  <p className="text-[10px] text-emerald-700 font-medium">Active Workspace</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted mt-0.5">
+                    Hiring Team
+                  </p>
                 </div>
               </div>
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></div>
+              <span className="w-2 h-2 rounded-full bg-signal shrink-0" title="Workspace Active" />
             </div>
           </div>
 
           {/* Navigation Links */}
-          <nav className="p-4 space-y-1.5">
-            <div className="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Navigation
+          <nav className="p-4 space-y-1">
+            <div className="px-3 pb-2 pt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+              Workspace
             </div>
 
             {navigation.map((item) => (
@@ -134,56 +117,56 @@ const DashboardLayout = () => {
                 end={item.end}
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                  `flex items-center justify-between px-3.5 py-2.5 rounded-[8px] text-[14px] font-semibold transition-colors ${
                     isActive
-                      ? 'bg-slate-900 text-white shadow-sm'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                      ? 'bg-ink text-paper'
+                      : 'text-muted hover:text-ink hover:bg-paper-2'
                   }`
                 }
               >
-                <div className="flex items-center space-x-2.5">
-                  <item.icon className="w-4 h-4 stroke-[2.2]" />
+                <div className="flex items-center gap-2.5">
+                  <item.icon className="w-4 h-4 stroke-[1.5]" />
                   <span>{item.name}</span>
                 </div>
-                <ChevronRight className="w-3.5 h-3.5 opacity-40" />
+                <ChevronRight className="w-3.5 h-3.5 opacity-40 stroke-[1.5]" />
               </NavLink>
             ))}
 
-            {/* Quick Action in Sidebar */}
+            {/* Quick Action Button */}
             <div className="pt-4">
               <Link
                 to="/dashboard/jobs/new"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full inline-flex items-center justify-center space-x-2 px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm"
+                className="w-full inline-flex items-center justify-center gap-2 h-[44px] px-4 bg-ink hover:bg-[#202022] text-paper rounded-[8px] text-[14px] font-semibold transition-colors"
               >
-                <PlusCircle className="w-4 h-4 stroke-[2.2]" />
-                <span>Create Job Role</span>
+                <Plus className="w-4 h-4 stroke-[1.5]" />
+                <span>Create Job</span>
               </Link>
             </div>
           </nav>
         </div>
 
-        {/* Bottom: User Profile Card & Logout */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+        {/* Bottom: User Card & Sign Out */}
+        <div className="p-4 border-t border-line bg-paper-2/40">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center flex-shrink-0">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-[6px] bg-ink text-paper font-semibold text-xs flex items-center justify-center shrink-0">
                 {getInitials(user?.name)}
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-bold text-slate-900 truncate">
+                <p className="text-xs font-semibold text-ink truncate">
                   {user?.name || 'Recruiter'}
                 </p>
-                <p className="text-[11px] text-slate-400 truncate">{user?.email}</p>
+                <p className="text-[11px] text-muted truncate">{user?.email}</p>
               </div>
             </div>
 
             <button
               onClick={handleLogout}
               title="Sign Out"
-              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors ml-2"
+              className="p-2 text-muted hover:text-ink hover:bg-paper-2 rounded-[6px] transition-colors ml-1"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-4 h-4 stroke-[1.5]" />
             </button>
           </div>
         </div>

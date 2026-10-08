@@ -4,11 +4,9 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import {
   ArrowLeft,
-  Briefcase,
   AlertCircle,
   Loader2,
   Check,
-  FileSpreadsheet,
 } from 'lucide-react';
 
 const EMPLOYMENT_TYPES = [
@@ -65,7 +63,6 @@ const JobCreatePage = () => {
 
       if (res.data.success) {
         const createdJob = res.data.data;
-        // Proceed directly to the Form Builder for this job
         navigate(`/dashboard/jobs/${createdJob._id}/form`);
       }
     } catch (err) {
@@ -77,65 +74,65 @@ const JobCreatePage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 font-sans text-ink">
       {/* Back button & Title */}
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center gap-3">
         <Link
           to="/dashboard"
-          className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-2 text-muted hover:text-ink hover:bg-paper-2 rounded-[8px] transition-colors"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-5 h-5 stroke-[1.5]" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-            Create Job Posting
+          <h1 className="text-2xl font-bold tracking-[-0.03em] text-ink">
+            Create job posting
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500">
-            Fill in the job details, then customize your application form in the next step.
+          <p className="text-xs text-muted mt-1">
+            Fill in the role details, then configure the application form in the next step.
           </p>
         </div>
       </div>
 
       {error && (
-        <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700 flex items-center space-x-2.5">
-          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+        <div className="p-4 rounded-[8px] bg-red-50/80 border border-red-200 text-xs text-red-800 flex items-center gap-2.5">
+          <AlertCircle className="w-4 h-4 text-red-700 shrink-0 stroke-[1.5]" />
           <span>{error}</span>
         </div>
       )}
 
       <form
         onSubmit={(e) => handleSubmit(e, formData.status)}
-        className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 space-y-6"
+        className="bg-white rounded-[12px] border border-line p-8 space-y-6"
       >
         {/* Job Title & Company */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Job Title <span className="text-red-500">*</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Job title <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
               name="title"
               required
-              placeholder="e.g. Senior Full-Stack Developer"
+              placeholder="e.g. Senior Frontend Engineer"
               value={formData.title}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Company Name <span className="text-red-500">*</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Company name <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
               name="companyName"
               required
-              placeholder="e.g. Yonile Digital"
+              placeholder="e.g. Acme Corp"
               value={formData.companyName}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
             />
           </div>
         </div>
@@ -143,29 +140,29 @@ const JobCreatePage = () => {
         {/* Location & Employment Type */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Location <span className="text-red-500">*</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Location <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
               name="location"
               required
-              placeholder="e.g. Addis Ababa / Remote / London"
+              placeholder="e.g. London / Remote"
               value={formData.location}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Employment Type <span className="text-red-500">*</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Employment type <span className="text-red-600">*</span>
             </label>
             <select
               name="employmentType"
               value={formData.employmentType}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 bg-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all"
             >
               {EMPLOYMENT_TYPES.map((type) => (
                 <option key={type} value={type}>
@@ -179,69 +176,69 @@ const JobCreatePage = () => {
         {/* Salary & Application Deadline */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Salary / Compensation <span className="text-xs text-gray-400 font-normal">(Optional)</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Salary / Compensation <span className="text-xs text-muted font-normal">(Optional)</span>
             </label>
             <input
               type="text"
               name="salary"
-              placeholder="e.g. $70,000 - $95,000 / year or Negotiable"
+              placeholder="e.g. $80,000 - $110,000 / year"
               value={formData.salary}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Application Deadline <span className="text-xs text-gray-400 font-normal">(Optional)</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Application deadline <span className="text-xs text-muted font-normal">(Optional)</span>
             </label>
             <input
               type="date"
               name="deadline"
               value={formData.deadline}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all"
             />
           </div>
         </div>
 
         {/* Job Description */}
         <div>
-          <label className="block text-sm font-semibold text-gray-800">
-            About the Role / Job Description <span className="text-red-500">*</span>
+          <label className="block text-[14px] font-semibold text-ink mb-1.5">
+            About the role / Description <span className="text-red-600">*</span>
           </label>
           <textarea
             name="description"
             required
             rows={5}
-            placeholder="Describe the mission, key responsibilities, team structure, and day-to-day impact..."
+            placeholder="Describe the mission, key responsibilities, team structure, and impact..."
             value={formData.description}
             onChange={handleChange}
-            className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-          ></textarea>
+            className="w-full p-3.5 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
+          />
         </div>
 
         {/* Requirements */}
         <div>
-          <label className="block text-sm font-semibold text-gray-800">
-            Requirements & Qualifications <span className="text-xs text-gray-400 font-normal">(Optional)</span>
+          <label className="block text-[14px] font-semibold text-ink mb-1.5">
+            Requirements & Qualifications <span className="text-xs text-muted font-normal">(Optional)</span>
           </label>
           <textarea
             name="requirements"
             rows={4}
-            placeholder="• 4+ years React and Node.js experience&#10;• Experience with MongoDB schema modeling&#10;• Strong communication and problem solving"
+            placeholder="• 4+ years React and Node.js experience&#10;• Experience with MongoDB modeling&#10;• Clear written and verbal communication"
             value={formData.requirements}
             onChange={handleChange}
-            className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-          ></textarea>
+            className="w-full p-3.5 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
+          />
         </div>
 
-        {/* Buttons / Actions */}
-        <div className="pt-4 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-end gap-3">
+        {/* Action Buttons */}
+        <div className="pt-4 border-t border-line flex flex-col sm:flex-row items-center justify-end gap-3">
           <Link
             to="/dashboard"
-            className="w-full sm:w-auto px-5 py-2.5 text-center text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg transition-colors"
+            className="w-full sm:w-auto h-[44px] px-5 flex items-center justify-center text-xs font-semibold text-ink hover:bg-paper-2 border border-line rounded-[8px] transition-colors"
           >
             Cancel
           </Link>
@@ -250,26 +247,26 @@ const JobCreatePage = () => {
             type="button"
             disabled={loading}
             onClick={(e) => handleSubmit(e, 'draft')}
-            className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg transition-colors disabled:opacity-60"
+            className="w-full sm:w-auto h-[44px] px-5 text-xs font-semibold text-ink bg-paper hover:bg-paper-2 border border-line rounded-[8px] transition-colors disabled:opacity-60"
           >
-            {loading ? 'Saving...' : 'Save as Draft & Build Form'}
+            {loading ? 'Saving...' : 'Save as draft & build form'}
           </button>
 
           <button
             type="button"
             disabled={loading}
             onClick={(e) => handleSubmit(e, 'published')}
-            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors disabled:opacity-60"
+            className="w-full sm:w-auto inline-flex items-center justify-center h-[44px] px-6 text-xs font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors disabled:opacity-60"
           >
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="w-4 h-4 mr-2 animate-spin stroke-[1.5]" />
                 Publishing...
               </>
             ) : (
               <>
-                <Check className="w-4 h-4 mr-2" />
-                Publish & Build Form
+                <Check className="w-4 h-4 mr-2 stroke-[1.5]" />
+                Publish & build form
               </>
             )}
           </button>

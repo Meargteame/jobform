@@ -5,7 +5,6 @@ import {
   ArrowLeft,
   AlertCircle,
   Loader2,
-  Save,
   FileSpreadsheet,
 } from 'lucide-react';
 
@@ -86,7 +85,7 @@ const JobEditPage = () => {
       setSaving(true);
       const res = await api.put(`/jobs/${id}`, formData);
       if (res.data.success) {
-        setSuccessMsg('Job posting updated successfully!');
+        setSuccessMsg('Job posting updated successfully.');
         setTimeout(() => {
           navigate('/dashboard');
         }, 1000);
@@ -100,63 +99,64 @@ const JobEditPage = () => {
 
   if (initialLoading) {
     return (
-      <div className="py-20 flex flex-col items-center justify-center space-y-3">
-        <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
-        <p className="text-sm text-gray-500">Loading job details...</p>
+      <div className="py-20 flex flex-col items-center justify-center space-y-3 font-sans text-ink">
+        <Loader2 className="w-6 h-6 text-ink animate-spin stroke-[1.5]" />
+        <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">Loading job details...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 font-sans text-ink">
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-3">
           <Link
             to="/dashboard"
-            className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 text-muted hover:text-ink hover:bg-paper-2 rounded-[8px] transition-colors"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 stroke-[1.5]" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-              Edit Job Posting
+            <h1 className="text-2xl font-bold tracking-[-0.03em] text-ink">
+              Edit job posting
             </h1>
-            <p className="text-xs sm:text-sm text-gray-500">
-              Update vacancy specifications and active status.
+            <p className="text-xs text-muted mt-1">
+              Update posting specifications and live status.
             </p>
           </div>
         </div>
 
         <Link
           to={`/dashboard/jobs/${id}/form`}
-          className="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition-colors"
+          className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold text-ink bg-white hover:bg-paper-2 rounded-[8px] border border-line transition-colors"
         >
-          <FileSpreadsheet className="w-4 h-4" />
-          <span>Edit Application Form</span>
+          <FileSpreadsheet className="w-3.5 h-3.5 stroke-[1.5]" />
+          <span>Edit application form</span>
         </Link>
       </div>
 
       {error && (
-        <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700 flex items-center space-x-2.5">
-          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+        <div className="p-4 rounded-[8px] bg-red-50/80 border border-red-200 text-xs text-red-800 flex items-center gap-2.5">
+          <AlertCircle className="w-4 h-4 text-red-700 shrink-0 stroke-[1.5]" />
           <span>{error}</span>
         </div>
       )}
 
       {successMsg && (
-        <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-sm text-emerald-700">
-          {successMsg}
+        <div className="p-3 bg-white border border-line text-ink text-xs font-medium rounded-[8px] flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-signal" />
+          <span>{successMsg}</span>
         </div>
       )}
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 space-y-6"
+        className="bg-white rounded-[12px] border border-line p-8 space-y-6"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Job Title <span className="text-red-500">*</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Job title <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
@@ -164,13 +164,13 @@ const JobEditPage = () => {
               required
               value={formData.title}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Company Name <span className="text-red-500">*</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Company name <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
@@ -178,15 +178,15 @@ const JobEditPage = () => {
               required
               value={formData.companyName}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Location <span className="text-red-500">*</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Location <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
@@ -194,19 +194,19 @@ const JobEditPage = () => {
               required
               value={formData.location}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Employment Type <span className="text-red-500">*</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Employment type <span className="text-red-600">*</span>
             </label>
             <select
               name="employmentType"
               value={formData.employmentType}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 bg-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
             >
               {EMPLOYMENT_TYPES.map((type) => (
                 <option key={type} value={type}>
@@ -217,52 +217,52 @@ const JobEditPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Publish Status
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Status
             </label>
             <select
               name="status"
               value={formData.status}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 bg-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
             >
               <option value="draft">Draft (Private)</option>
-              <option value="published">Published (Public)</option>
+              <option value="published">Published (Accepting)</option>
             </select>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Salary / Compensation <span className="text-xs text-gray-400 font-normal">(Optional)</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Salary / Compensation <span className="text-xs text-muted font-normal">(Optional)</span>
             </label>
             <input
               type="text"
               name="salary"
               value={formData.salary}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-800">
-              Application Deadline <span className="text-xs text-gray-400 font-normal">(Optional)</span>
+            <label className="block text-[14px] font-semibold text-ink mb-1.5">
+              Application deadline <span className="text-xs text-muted font-normal">(Optional)</span>
             </label>
             <input
               type="date"
               name="deadline"
               value={formData.deadline}
               onChange={handleChange}
-              className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-800">
-            About the Role / Job Description <span className="text-red-500">*</span>
+          <label className="block text-[14px] font-semibold text-ink mb-1.5">
+            About the role / Description <span className="text-red-600">*</span>
           </label>
           <textarea
             name="description"
@@ -270,27 +270,27 @@ const JobEditPage = () => {
             rows={5}
             value={formData.description}
             onChange={handleChange}
-            className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-          ></textarea>
+            className="w-full p-3.5 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
+          />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-800">
-            Requirements & Qualifications <span className="text-xs text-gray-400 font-normal">(Optional)</span>
+          <label className="block text-[14px] font-semibold text-ink mb-1.5">
+            Requirements & Qualifications <span className="text-xs text-muted font-normal">(Optional)</span>
           </label>
           <textarea
             name="requirements"
             rows={4}
             value={formData.requirements}
             onChange={handleChange}
-            className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-          ></textarea>
+            className="w-full p-3.5 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
+          />
         </div>
 
-        <div className="pt-4 border-t border-gray-200 flex items-center justify-end space-x-3">
+        <div className="pt-4 border-t border-line flex items-center justify-end gap-3">
           <Link
             to="/dashboard"
-            className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg transition-colors"
+            className="h-[44px] px-5 flex items-center justify-center text-xs font-semibold text-ink hover:bg-paper-2 border border-line rounded-[8px] transition-colors"
           >
             Cancel
           </Link>
@@ -298,18 +298,15 @@ const JobEditPage = () => {
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors disabled:opacity-60"
+            className="inline-flex items-center justify-center h-[44px] px-6 text-xs font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors disabled:opacity-60"
           >
             {saving ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="w-4 h-4 mr-2 animate-spin stroke-[1.5]" />
                 Saving...
               </>
             ) : (
-              <>
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
-              </>
+              <span>Save changes</span>
             )}
           </button>
         </div>

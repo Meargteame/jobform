@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
 import {
   ArrowLeft,
@@ -21,7 +21,6 @@ import {
 
 const JobDetailsPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -72,23 +71,23 @@ const JobDetailsPage = () => {
 
   if (loading) {
     return (
-      <div className="py-20 flex flex-col items-center justify-center space-y-3">
-        <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
-        <p className="text-sm text-gray-500">Loading job details...</p>
+      <div className="py-20 flex flex-col items-center justify-center space-y-3 font-sans text-ink">
+        <Loader2 className="w-6 h-6 text-ink animate-spin stroke-[1.5]" />
+        <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">Loading job details...</p>
       </div>
     );
   }
 
   if (error || !job) {
     return (
-      <div className="max-w-3xl mx-auto p-6 bg-red-50 border border-red-200 rounded-xl text-center space-y-4">
-        <AlertCircle className="w-8 h-8 text-red-500 mx-auto" />
-        <p className="text-base font-semibold text-red-700">{error || 'Job not found.'}</p>
+      <div className="max-w-3xl mx-auto p-6 bg-red-50/80 border border-red-200 rounded-[12px] text-center space-y-4 font-sans text-ink">
+        <AlertCircle className="w-8 h-8 text-red-700 mx-auto stroke-[1.5]" />
+        <p className="text-sm font-semibold text-red-800">{error || 'Job not found.'}</p>
         <Link
           to="/dashboard"
-          className="inline-flex items-center text-sm font-medium text-emerald-700 hover:underline"
+          className="inline-flex items-center text-xs font-semibold text-ink hover:underline"
         >
-          <ArrowLeft className="w-4 h-4 mr-1" />
+          <ArrowLeft className="w-4 h-4 mr-1 stroke-[1.5]" />
           Back to Dashboard
         </Link>
       </div>
@@ -98,35 +97,25 @@ const JobDetailsPage = () => {
   const isPublished = job.status === 'published';
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="max-w-5xl mx-auto space-y-6 font-sans text-ink">
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-3">
           <Link
             to="/dashboard"
-            className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 text-muted hover:text-ink hover:bg-paper-2 rounded-[8px] transition-colors"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 stroke-[1.5]" />
           </Link>
           <div>
-            <div className="flex items-center space-x-3">
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900">{job.title}</h1>
-              <span
-                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
-                  isPublished
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                    : 'bg-amber-50 text-amber-700 border-amber-200'
-                }`}
-              >
-                <span
-                  className={`w-1.5 h-1.5 mr-1.5 rounded-full ${
-                    isPublished ? 'bg-emerald-500' : 'bg-amber-500'
-                  }`}
-                ></span>
-                {isPublished ? 'Published' : 'Draft'}
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold tracking-[-0.03em] text-ink">{job.title}</h1>
+              <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-ink">
+                <span className={`w-2 h-2 rounded-full ${isPublished ? 'bg-signal' : 'bg-ink'}`} />
+                <span>{isPublished ? 'Published' : 'Draft'}</span>
               </span>
             </div>
-            <p className="text-sm text-gray-500 mt-0.5">{job.companyName}</p>
+            <p className="text-xs text-muted mt-0.5">{job.companyName}</p>
           </div>
         </div>
 
@@ -135,17 +124,17 @@ const JobDetailsPage = () => {
           {isPublished && (
             <button
               onClick={handleCopyLink}
-              className="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg transition-colors shadow-sm"
+              className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold bg-white hover:bg-paper-2 text-ink border border-line rounded-[8px] transition-colors"
             >
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-emerald-600" />
-                  <span className="text-emerald-700">Link Copied!</span>
+                  <Check className="w-4 h-4 text-ink stroke-[2]" />
+                  <span>Link copied</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-4 h-4 text-gray-500" />
-                  <span>Copy Public Link</span>
+                  <Copy className="w-4 h-4 stroke-[1.5]" />
+                  <span>Copy application link</span>
                 </>
               )}
             </button>
@@ -155,56 +144,56 @@ const JobDetailsPage = () => {
             href={`/apply/${job.slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg transition-colors shadow-sm"
+            className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold bg-white hover:bg-paper-2 text-ink border border-line rounded-[8px] transition-colors"
           >
-            <ExternalLink className="w-4 h-4 text-gray-500" />
-            <span>Open Candidate Page</span>
+            <ExternalLink className="w-3.5 h-3.5 stroke-[1.5]" />
+            <span>Open application page</span>
           </a>
 
           <Link
             to={`/dashboard/jobs/${job._id}/form`}
-            className="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-medium bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-lg transition-colors"
+            className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold bg-white hover:bg-paper-2 text-ink border border-line rounded-[8px] transition-colors"
           >
-            <FileSpreadsheet className="w-4 h-4" />
-            <span>Manage Form ({job.questionCount || 0} Questions)</span>
+            <FileSpreadsheet className="w-3.5 h-3.5 stroke-[1.5]" />
+            <span>Form ({job.questionCount || 0})</span>
           </Link>
 
           <Link
             to={`/dashboard/jobs/${job._id}/applications`}
-            className="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-medium bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg transition-colors"
+            className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold bg-white hover:bg-paper-2 text-ink border border-line rounded-[8px] transition-colors"
           >
-            <Users className="w-4 h-4" />
-            <span>Applications ({job.applicationCount || 0})</span>
+            <Users className="w-3.5 h-3.5 stroke-[1.5]" />
+            <span>Candidates ({job.applicationCount || 0})</span>
           </Link>
 
           <button
             onClick={handleTogglePublish}
             disabled={actionLoading}
-            className={`inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border transition-colors ${
+            className={`inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold rounded-[8px] transition-colors ${
               isPublished
-                ? 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
-                : 'bg-emerald-600 text-white border-transparent hover:bg-emerald-700'
+                ? 'bg-paper text-ink border border-line hover:bg-paper-2'
+                : 'bg-ink text-paper hover:bg-[#202022]'
             }`}
           >
             {isPublished ? (
               <>
-                <GlobeLock className="w-4 h-4" />
-                <span>Unpublish</span>
+                <GlobeLock className="w-3.5 h-3.5 stroke-[1.5]" />
+                <span>Revert to draft</span>
               </>
             ) : (
               <>
-                <Globe className="w-4 h-4" />
-                <span>Publish Job</span>
+                <Globe className="w-3.5 h-3.5 stroke-[1.5]" />
+                <span>Publish</span>
               </>
             )}
           </button>
 
           <Link
             to={`/dashboard/jobs/${job._id}/edit`}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors"
+            className="p-2 text-muted hover:text-ink hover:bg-paper rounded-[8px] border border-line transition-colors"
             title="Edit Details"
           >
-            <Edit className="w-4 h-4" />
+            <Edit className="w-4 h-4 stroke-[1.5]" />
           </Link>
         </div>
       </div>
@@ -212,23 +201,22 @@ const JobDetailsPage = () => {
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
-          {/* Main Job Description */}
-          <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-6">
+          <div className="bg-white p-7 rounded-[12px] border border-line space-y-6">
             <div>
-              <h2 className="text-base font-semibold text-gray-900 border-b border-gray-100 pb-2">
-                About the Role
+              <h2 className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted border-b border-line pb-2">
+                About the role
               </h2>
-              <div className="mt-3 text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+              <div className="mt-4 text-[15px] text-ink whitespace-pre-line leading-relaxed font-normal">
                 {job.description}
               </div>
             </div>
 
             {job.requirements && (
-              <div>
-                <h2 className="text-base font-semibold text-gray-900 border-b border-gray-100 pb-2">
+              <div className="pt-4 border-t border-line">
+                <h2 className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted border-b border-line pb-2">
                   Requirements & Qualifications
                 </h2>
-                <div className="mt-3 text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                <div className="mt-4 text-[15px] text-ink whitespace-pre-line leading-relaxed font-normal">
                   {job.requirements}
                 </div>
               </div>
@@ -238,42 +226,42 @@ const JobDetailsPage = () => {
 
         {/* Sidebar Info */}
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
-              Role Metadata
+          <div className="bg-white p-6 rounded-[12px] border border-line space-y-4">
+            <h3 className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
+              Role Parameters
             </h3>
 
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center text-gray-700">
-                <Briefcase className="w-4 h-4 mr-2.5 text-gray-400" />
-                <span className="font-medium">{job.employmentType}</span>
+            <div className="space-y-3 text-xs">
+              <div className="flex items-center text-ink gap-2.5">
+                <Briefcase className="w-4 h-4 text-muted stroke-[1.5]" />
+                <span className="font-semibold">{job.employmentType}</span>
               </div>
 
-              <div className="flex items-center text-gray-700">
-                <MapPin className="w-4 h-4 mr-2.5 text-gray-400" />
+              <div className="flex items-center text-ink gap-2.5">
+                <MapPin className="w-4 h-4 text-muted stroke-[1.5]" />
                 <span>{job.location}</span>
               </div>
 
               {job.salary && (
-                <div className="flex items-center text-gray-700">
-                  <DollarSign className="w-4 h-4 mr-2.5 text-gray-400" />
-                  <span>{job.salary}</span>
+                <div className="flex items-center text-ink gap-2.5">
+                  <DollarSign className="w-4 h-4 text-muted stroke-[1.5]" />
+                  <span className="font-mono">{job.salary}</span>
                 </div>
               )}
 
               {job.deadline && (
-                <div className="flex items-center text-gray-700">
-                  <Calendar className="w-4 h-4 mr-2.5 text-gray-400" />
-                  <span>Deadline: {new Date(job.deadline).toLocaleDateString()}</span>
+                <div className="flex items-center text-ink gap-2.5">
+                  <Calendar className="w-4 h-4 text-muted stroke-[1.5]" />
+                  <span className="font-mono">Deadline: {new Date(job.deadline).toLocaleDateString()}</span>
                 </div>
               )}
             </div>
 
-            <div className="pt-4 border-t border-gray-100">
-              <div className="text-xs text-gray-500">
-                <span>Public Slug:</span>
-                <p className="font-mono text-gray-800 mt-0.5 break-all">{job.slug}</p>
-              </div>
+            <div className="pt-4 border-t border-line">
+              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Public Link Slug</span>
+              <p className="font-mono text-xs text-ink mt-1 break-all bg-paper p-2 rounded-[6px] border border-line">
+                {job.slug}
+              </p>
             </div>
           </div>
         </div>

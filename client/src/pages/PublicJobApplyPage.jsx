@@ -2,18 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import {
-  Briefcase,
   MapPin,
   Clock,
-  DollarSign,
-  Calendar,
-  UploadCloud,
-  CheckCircle2,
   AlertCircle,
   Loader2,
-  FileText,
   FileCheck,
+  Upload,
 } from 'lucide-react';
+import BetterFormLogo from '../components/BetterFormLogo';
 
 const PublicJobApplyPage = () => {
   const { slug } = useParams();
@@ -90,14 +86,12 @@ const PublicJobApplyPage = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Check size limit: 5MB
     if (file.size > 5 * 1024 * 1024) {
       alert('File size exceeds the 5MB maximum limit. Please choose a smaller file.');
       e.target.value = '';
       return;
     }
 
-    // Check allowed format: PDF, DOC, DOCX
     const validExtensions = ['.pdf', '.doc', '.docx'];
     const fileExt = '.' + file.name.split('.').pop().toLowerCase();
     if (!validExtensions.includes(fileExt)) {
@@ -113,7 +107,6 @@ const PublicJobApplyPage = () => {
     e.preventDefault();
     setSubmitError('');
 
-    // Basic client validations
     if (!formData.fullName.trim() || !formData.email.trim() || !formData.phone.trim()) {
       setSubmitError('Please complete all standard required fields (Name, Email, Phone).');
       return;
@@ -124,7 +117,6 @@ const PublicJobApplyPage = () => {
       return;
     }
 
-    // Validate required custom questions
     for (const q of questions) {
       if (q.required) {
         const val = answers[q._id];
@@ -174,30 +166,35 @@ const PublicJobApplyPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-        <Loader2 className="w-8 h-8 text-emerald-600 animate-spin mb-3" />
-        <p className="text-sm font-medium text-gray-500">Loading job opportunity...</p>
+      <div className="min-h-screen bg-paper flex flex-col items-center justify-center p-6 font-sans text-ink">
+        <Loader2 className="w-6 h-6 text-ink animate-spin mb-3 stroke-[1.5]" />
+        <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">Loading posting...</p>
       </div>
     );
   }
 
   if (isUnpublished) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white p-8 rounded-xl border border-gray-200 text-center shadow-sm">
-          <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Clock className="w-6 h-6" />
+      <div className="min-h-screen bg-paper flex flex-col items-center justify-center p-6 font-sans text-ink">
+        <div className="max-w-md w-full bg-white p-8 rounded-[12px] border border-line text-left">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-2.5 h-2.5 rounded-full bg-ink" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+              Status Notice
+            </span>
           </div>
-          <h2 className="text-xl font-bold text-gray-900">Position Not Active</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            This job posting is currently not accepting applications. Please contact the company or check back later.
+          <h2 className="text-xl font-bold text-ink">Position is not currently active</h2>
+          <p className="mt-2 text-[14px] text-muted leading-relaxed">
+            This job posting is not accepting applications right now.
           </p>
-          <Link
-            to="/"
-            className="mt-6 inline-flex items-center text-xs font-semibold text-emerald-600 hover:text-emerald-700"
-          >
-            BetterForm Homepage &rarr;
-          </Link>
+          <div className="mt-6 pt-6 border-t border-line">
+            <Link
+              to="/"
+              className="inline-flex items-center text-xs font-semibold text-ink hover:underline"
+            >
+              BetterForm Home &rarr;
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -205,59 +202,65 @@ const PublicJobApplyPage = () => {
 
   if (error || !job) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white p-8 rounded-xl border border-gray-200 text-center shadow-sm">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-900">Posting Not Found</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            {error || 'The job application link you followed does not exist or has expired.'}
+      <div className="min-h-screen bg-paper flex flex-col items-center justify-center p-6 font-sans text-ink">
+        <div className="max-w-md w-full bg-white p-8 rounded-[12px] border border-line text-left">
+          <AlertCircle className="w-6 h-6 text-red-600 mb-3 stroke-[1.5]" />
+          <h2 className="text-xl font-bold text-ink">Posting not found</h2>
+          <p className="mt-2 text-[14px] text-muted leading-relaxed">
+            {error || 'This application link does not exist or has expired.'}
           </p>
-          <Link
-            to="/"
-            className="mt-6 inline-flex items-center text-xs font-semibold text-emerald-600 hover:text-emerald-700"
-          >
-            BetterForm Homepage &rarr;
-          </Link>
+          <div className="mt-6 pt-6 border-t border-line">
+            <Link
+              to="/"
+              className="inline-flex items-center text-xs font-semibold text-ink hover:underline"
+            >
+              BetterForm Home &rarr;
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
-  // Success Confirmation View
+  // Confirmation state
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-lg mx-auto bg-white p-8 sm:p-10 rounded-2xl border border-gray-200 shadow-sm text-center">
-          <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 className="w-10 h-10" />
+      <div className="min-h-screen bg-paper flex flex-col justify-center py-12 px-6 font-sans text-ink">
+        <div className="max-w-lg mx-auto w-full bg-white p-8 sm:p-10 rounded-[12px] border border-line text-left">
+          <div className="flex items-center gap-2.5 mb-6">
+            <span className="w-3 h-3 rounded-full bg-signal" />
+            <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-ink font-semibold">
+              Submission Received
+            </span>
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
-            Application Submitted Successfully!
+          <h1 className="text-2xl font-bold text-ink tracking-[-0.03em]">
+            Application submitted
           </h1>
 
-          <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-            Thank you, <span className="font-semibold text-gray-900">{formData.fullName}</span>. Your application for{' '}
-            <span className="font-semibold text-gray-900">{job.title}</span> at{' '}
-            <span className="font-semibold text-gray-900">{job.companyName}</span> has been received.
+          <p className="mt-3 text-[15px] text-muted leading-relaxed">
+            Thank you, <strong className="text-ink font-semibold">{formData.fullName}</strong>. Your application for{' '}
+            <strong className="text-ink font-semibold">{job.title}</strong> at{' '}
+            <strong className="text-ink font-semibold">{job.companyName}</strong> has been transmitted directly to the recruiter.
           </p>
 
-          <div className="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100 text-xs text-gray-500 text-left space-y-1.5">
+          <div className="mt-6 p-4 bg-paper rounded-[8px] border border-line text-xs text-muted space-y-1.5 font-mono">
             <div>
-              <span className="font-medium text-gray-700">Confirmation Sent To:</span> {formData.email}
+              <span className="text-ink">APPLICANT:</span> {formData.email}
             </div>
             <div>
-              <span className="font-medium text-gray-700">CV File:</span> {cvFile?.name}
+              <span className="text-ink">CV ATTACHMENT:</span> {cvFile?.name}
             </div>
             <div>
-              <span className="font-medium text-gray-700">Timestamp:</span> {new Date().toLocaleString()}
+              <span className="text-ink">TIMESTAMP:</span> {new Date().toLocaleString()}
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-gray-100">
-            <p className="text-xs text-gray-400">
-              Powered by <span className="font-semibold text-gray-600">BetterForm</span>
-            </p>
+          <div className="mt-8 pt-6 border-t border-line flex items-center justify-between">
+            <BetterFormLogo size={24} />
+            <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+              BetterForm
+            </span>
           </div>
         </div>
       </div>
@@ -265,59 +268,75 @@ const PublicJobApplyPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-paper py-12 px-6 lg:px-8 font-sans text-ink">
       <div className="max-w-3xl mx-auto space-y-8">
-        {/* Company & Role Header Card */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
-          <div className="flex items-center space-x-2 text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-2">
-            <Briefcase className="w-4 h-4" />
-            <span>{job.companyName}</span>
-          </div>
+        
+        {/* Top brand header */}
+        <div className="flex items-center justify-between pb-2">
+          <Link to="/" className="inline-block">
+            <BetterFormLogo size={28} />
+          </Link>
+          <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+            Candidate Application
+          </span>
+        </div>
 
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-            {job.title}
-          </h1>
-
-          {/* Badges / Meta */}
-          <div className="mt-4 flex flex-wrap items-center gap-3 text-xs sm:text-sm text-gray-600">
-            <div className="inline-flex items-center bg-gray-100 px-3 py-1 rounded-md">
-              <MapPin className="w-3.5 h-3.5 mr-1.5 text-gray-500" />
-              <span>{job.location}</span>
+        {/* Job Details Card */}
+        <div className="bg-white rounded-[12px] border border-line p-8 space-y-6">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2 h-2 rounded-full bg-signal" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                {job.companyName}
+              </span>
             </div>
 
-            <div className="inline-flex items-center bg-gray-100 px-3 py-1 rounded-md font-medium text-gray-800">
-              <Clock className="w-3.5 h-3.5 mr-1.5 text-gray-500" />
-              <span>{job.employmentType}</span>
+            <h1 className="text-3xl font-bold tracking-[-0.03em] text-ink">
+              {job.title}
+            </h1>
+
+            {/* Metadata Pills */}
+            <div className="mt-4 flex flex-wrap items-center gap-2.5 text-xs">
+              <span className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.12em] bg-paper px-2.5 py-1 rounded-[6px] border border-line">
+                <MapPin className="w-3.5 h-3.5 stroke-[1.5]" />
+                <span>{job.location}</span>
+              </span>
+
+              <span className="font-mono text-[11px] uppercase tracking-[0.12em] bg-paper px-2.5 py-1 rounded-[6px] border border-line">
+                {job.employmentType}
+              </span>
+
+              {job.salary && (
+                <span className="font-mono text-[11px] bg-paper px-2.5 py-1 rounded-[6px] border border-line text-ink">
+                  {job.salary}
+                </span>
+              )}
+
+              {job.deadline && (
+                <span className="font-mono text-[11px] bg-paper px-2.5 py-1 rounded-[6px] border border-line text-muted">
+                  Deadline: {new Date(job.deadline).toLocaleDateString()}
+                </span>
+              )}
             </div>
-
-            {job.salary && (
-              <div className="inline-flex items-center bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-md font-medium">
-                <DollarSign className="w-3.5 h-3.5 mr-1" />
-                <span>{job.salary}</span>
-              </div>
-            )}
-
-            {job.deadline && (
-              <div className="inline-flex items-center bg-amber-50 text-amber-800 border border-amber-200 px-3 py-1 rounded-md">
-                <Calendar className="w-3.5 h-3.5 mr-1.5" />
-                <span>Deadline: {new Date(job.deadline).toLocaleDateString()}</span>
-              </div>
-            )}
           </div>
 
-          {/* Role Details */}
-          <div className="mt-8 space-y-6 pt-6 border-t border-gray-100">
+          {/* Description & Requirements */}
+          <div className="pt-6 border-t border-line space-y-6 text-left">
             <div>
-              <h2 className="text-base font-bold text-gray-900 mb-2">About the Role</h2>
-              <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+              <h2 className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted mb-2">
+                About the role
+              </h2>
+              <div className="text-[15px] text-ink whitespace-pre-line leading-relaxed font-normal">
                 {job.description}
               </div>
             </div>
 
             {job.requirements && (
-              <div>
-                <h2 className="text-base font-bold text-gray-900 mb-2">Requirements</h2>
-                <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+              <div className="pt-4 border-t border-line">
+                <h2 className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted mb-2">
+                  Requirements
+                </h2>
+                <div className="text-[15px] text-ink whitespace-pre-line leading-relaxed font-normal">
                   {job.requirements}
                 </div>
               </div>
@@ -326,77 +345,79 @@ const PublicJobApplyPage = () => {
         </div>
 
         {/* Application Form Card */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 space-y-6">
-          <div className="border-b border-gray-100 pb-4">
-            <h2 className="text-xl font-bold text-gray-900">Apply for this position</h2>
-            <p className="text-xs sm:text-sm text-gray-500 mt-1">
-              Please submit your details and resume below. All fields marked with * are required.
+        <div className="bg-white rounded-[12px] border border-line p-8 space-y-6">
+          <div className="border-b border-line pb-4">
+            <h2 className="text-xl font-bold text-ink tracking-[-0.02em]">
+              Apply for this position
+            </h2>
+            <p className="text-xs text-muted mt-1">
+              Complete the structured fields below. All fields marked with * are required.
             </p>
           </div>
 
           {submitError && (
-            <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700 flex items-center space-x-2.5">
-              <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            <div className="p-3.5 rounded-[8px] bg-red-50/80 border border-red-200 text-xs text-red-800 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-red-700 shrink-0 stroke-[1.5]" />
               <span>{submitError}</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Standard Built-in Fields */}
+            {/* Standard Profile Fields */}
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-800">
-                  Full Name <span className="text-red-500">*</span>
+                <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                  Full name <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="text"
                   name="fullName"
                   required
-                  placeholder="e.g. Abebe Bekele"
+                  placeholder="Jane Doe"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-800">
-                    Email Address <span className="text-red-500">*</span>
+                  <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                    Email address <span className="text-red-600">*</span>
                   </label>
                   <input
                     type="email"
                     name="email"
                     required
-                    placeholder="e.g. abebe@example.com"
+                    placeholder="jane@example.com"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-800">
-                    Phone Number <span className="text-red-500">*</span>
+                  <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                    Phone number <span className="text-red-600">*</span>
                   </label>
                   <input
                     type="tel"
                     name="phone"
                     required
-                    placeholder="e.g. +251 91 123 4567"
+                    placeholder="+1 555 0192"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="mt-1.5 block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
                   />
                 </div>
               </div>
 
               {/* CV File Upload */}
               <div>
-                <label className="block text-sm font-semibold text-gray-800">
-                  CV / Resume <span className="text-red-500">*</span>
+                <label className="block text-[14px] font-semibold text-ink mb-1.5">
+                  Curriculum Vitae (CV) <span className="text-red-600">*</span>
                 </label>
-                <div className="mt-1.5 border-2 border-dashed border-gray-300 hover:border-emerald-500 rounded-xl p-5 text-center transition-colors bg-gray-50/50">
+                <div className="border border-dashed border-line hover:border-ink rounded-[8px] p-5 text-center transition-colors bg-paper">
                   <input
                     type="file"
                     id="cvUpload"
@@ -410,21 +431,21 @@ const PublicJobApplyPage = () => {
                     className="cursor-pointer flex flex-col items-center justify-center space-y-2"
                   >
                     {cvFile ? (
-                      <div className="flex items-center space-x-2 text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
-                        <FileCheck className="w-5 h-5 text-emerald-600" />
+                      <div className="flex items-center gap-2 text-ink bg-white px-3 py-1.5 rounded-[6px] border border-line">
+                        <FileCheck className="w-4 h-4 text-ink stroke-[1.5]" />
                         <span className="text-xs font-semibold">{cvFile.name}</span>
-                        <span className="text-[10px] text-gray-400">
+                        <span className="font-mono text-[10px] text-muted">
                           ({(cvFile.size / (1024 * 1024)).toFixed(2)} MB)
                         </span>
                       </div>
                     ) : (
                       <>
-                        <UploadCloud className="w-8 h-8 text-gray-400" />
-                        <span className="text-xs font-medium text-emerald-600 hover:underline">
-                          Click to upload your CV
+                        <Upload className="w-5 h-5 text-muted stroke-[1.5]" />
+                        <span className="text-xs font-semibold text-ink underline underline-offset-2">
+                          Attach resume file
                         </span>
-                        <span className="text-[11px] text-gray-400">
-                          PDF, DOC, or DOCX formats accepted (max 5MB)
+                        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
+                          PDF, DOC, DOCX (Max 5MB)
                         </span>
                       </>
                     )}
@@ -435,18 +456,18 @@ const PublicJobApplyPage = () => {
 
             {/* Custom Questions Section */}
             {questions.length > 0 && (
-              <div className="pt-6 border-t border-gray-100 space-y-5">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-gray-700">
-                  Additional Screening Questions
+              <div className="pt-6 border-t border-line space-y-5">
+                <h3 className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
+                  Screening Questions
                 </h3>
 
                 {questions.map((q) => {
                   const currentValue = answers[q._id];
 
                   return (
-                    <div key={q._id} className="space-y-1.5">
-                      <label className="block text-sm font-semibold text-gray-800">
-                        {q.label} {q.required && <span className="text-red-500">*</span>}
+                    <div key={q._id} className="space-y-1.5 text-left">
+                      <label className="block text-[14px] font-semibold text-ink">
+                        {q.label} {q.required && <span className="text-red-600">*</span>}
                       </label>
 
                       {q.type === 'textarea' ? (
@@ -456,16 +477,16 @@ const PublicJobApplyPage = () => {
                           value={currentValue || ''}
                           onChange={(e) => handleAnswerChange(q._id, e.target.value)}
                           placeholder="Type your response..."
-                          className="block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                        ></textarea>
+                          className="w-full p-3 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
+                        />
                       ) : q.type === 'select' ? (
                         <select
                           required={q.required}
                           value={currentValue || ''}
                           onChange={(e) => handleAnswerChange(q._id, e.target.value)}
-                          className="block w-full px-3.5 py-2.5 border border-gray-300 bg-white rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                          className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all"
                         >
-                          <option value="">Select an option...</option>
+                          <option value="">Select option...</option>
                           {q.options?.map((opt, i) => (
                             <option key={i} value={opt}>
                               {opt}
@@ -477,7 +498,7 @@ const PublicJobApplyPage = () => {
                           {q.options?.map((opt, i) => (
                             <label
                               key={i}
-                              className="flex items-center space-x-2.5 text-sm text-gray-700 cursor-pointer"
+                              className="flex items-center gap-2.5 text-[14px] text-ink cursor-pointer"
                             >
                               <input
                                 type="radio"
@@ -485,7 +506,7 @@ const PublicJobApplyPage = () => {
                                 required={q.required}
                                 checked={currentValue === opt}
                                 onChange={() => handleAnswerChange(q._id, opt)}
-                                className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                                className="w-4 h-4 text-ink accent-[#0B0B0C] border-line focus:ring-signal"
                               />
                               <span>{opt}</span>
                             </label>
@@ -498,18 +519,18 @@ const PublicJobApplyPage = () => {
                             return (
                               <label
                                 key={i}
-                                className="flex items-center space-x-2.5 text-sm text-gray-700 cursor-pointer"
+                                className="flex items-center gap-2.5 text-[14px] text-ink cursor-pointer"
                               >
                                 <input
-                                type="checkbox"
-                                checked={isChecked}
-                                onChange={(e) =>
-                                  handleCheckboxAnswer(q._id, opt, e.target.checked)
-                                }
-                                className="w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500"
-                              />
-                              <span>{opt}</span>
-                            </label>
+                                  type="checkbox"
+                                  checked={isChecked}
+                                  onChange={(e) =>
+                                    handleCheckboxAnswer(q._id, opt, e.target.checked)
+                                  }
+                                  className="w-4 h-4 rounded text-ink accent-[#0B0B0C] border-line focus:ring-signal"
+                                />
+                                <span>{opt}</span>
+                              </label>
                             );
                           })}
                         </div>
@@ -526,7 +547,7 @@ const PublicJobApplyPage = () => {
                               ? 'e.g. 5'
                               : 'Your answer...'
                           }
-                          className="block w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                          className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
                         />
                       )}
                     </div>
@@ -535,28 +556,29 @@ const PublicJobApplyPage = () => {
               </div>
             )}
 
-            {/* Submit Button */}
-            <div className="pt-6 border-t border-gray-100">
+            {/* Primary Submit Button: ink fill / paper text */}
+            <div className="pt-6 border-t border-line">
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full flex justify-center items-center py-3.5 px-6 border border-transparent rounded-xl shadow-sm text-base font-semibold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                className="w-full flex justify-center items-center h-[44px] px-5 rounded-[8px] text-[15px] font-semibold text-paper bg-ink hover:bg-[#202022] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
               >
                 {submitting ? (
                   <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Submitting application...
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin stroke-[1.5]" />
+                    <span>Submitting application...</span>
                   </>
                 ) : (
-                  'Submit Application'
+                  <span>Submit application</span>
                 )}
               </button>
             </div>
           </form>
         </div>
 
-        <div className="text-center text-xs text-gray-400 py-4">
-          Powered by <span className="font-semibold text-gray-600">BetterForm</span> &bull; Hiring Made Simple
+        {/* Footer */}
+        <div className="text-center font-mono text-[11px] uppercase tracking-[0.12em] text-muted py-4">
+          Powered by BetterForm &bull; Create better job applications
         </div>
       </div>
     </div>

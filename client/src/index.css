@@ -5,17 +5,25 @@
 @layer base {
   body {
     margin: 0;
-    font-family: 'Space Grotesk', 'Outfit', system-ui, -apple-system, sans-serif;
-    color: #0f172a;
-    background-color: #f8fafc;
+    font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    color: #0B0B0C;
+    background-color: #F2F1EC;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    letter-spacing: -0.02em;
+    font-weight: 500;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
-    letter-spacing: -0.035em;
+    font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 700;
+  }
+
+  .font-mono-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 400;
   }
 }
 

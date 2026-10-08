@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import CandidateStatusBadge from '../components/CandidateStatus';
 import {
   ArrowLeft,
-  FileText,
   Mail,
   Phone,
-  User,
   Calendar,
-  Download,
   ExternalLink,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Briefcase,
   AlertCircle,
   Loader2,
+  FileCheck,
 } from 'lucide-react';
 
 const ApplicationDetailsPage = () => {
@@ -67,24 +62,24 @@ const ApplicationDetailsPage = () => {
 
   if (loading) {
     return (
-      <div className="py-20 flex flex-col items-center justify-center space-y-3">
-        <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
-        <p className="text-sm text-gray-500">Loading candidate application...</p>
+      <div className="py-20 flex flex-col items-center justify-center space-y-3 font-sans text-ink">
+        <Loader2 className="w-6 h-6 text-ink animate-spin stroke-[1.5]" />
+        <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">Loading candidate details...</p>
       </div>
     );
   }
 
   if (error || !application) {
     return (
-      <div className="max-w-3xl mx-auto p-6 bg-red-50 border border-red-200 rounded-xl text-center space-y-4">
-        <AlertCircle className="w-8 h-8 text-red-500 mx-auto" />
-        <p className="text-base font-semibold text-red-700">{error || 'Application not found.'}</p>
+      <div className="max-w-3xl mx-auto p-6 bg-red-50/80 border border-red-200 rounded-[12px] text-center space-y-4">
+        <AlertCircle className="w-8 h-8 text-red-600 mx-auto stroke-[1.5]" />
+        <p className="text-sm font-semibold text-red-800">{error || 'Application not found.'}</p>
         <button
           onClick={() => navigate(-1)}
-          className="inline-flex items-center text-sm font-medium text-emerald-700 hover:underline"
+          className="inline-flex items-center text-xs font-semibold text-ink hover:underline"
         >
-          <ArrowLeft className="w-4 h-4 mr-1" />
-          Go Back
+          <ArrowLeft className="w-4 h-4 mr-1 stroke-[1.5]" />
+          Return to previous view
         </button>
       </div>
     );
@@ -99,23 +94,26 @@ const ApplicationDetailsPage = () => {
     : `${backendBase}${application.cvUrl}`;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Top Breadcrumb & Navigation */}
+    <div className="max-w-4xl mx-auto space-y-6 font-sans text-ink">
+      {/* Top Header & Navigation */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-3">
           <Link
             to={application.job ? `/dashboard/jobs/${application.job._id}/applications` : '/dashboard'}
-            className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 text-muted hover:text-ink hover:bg-paper-2 rounded-[8px] transition-colors"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 stroke-[1.5]" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-              {application.fullName}
-            </h1>
-            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold tracking-[-0.03em] text-ink">
+                {application.fullName}
+              </h1>
+              <CandidateStatusBadge status={application.status} />
+            </div>
+            <p className="text-xs text-muted mt-1">
               Applicant for{' '}
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-ink">
                 {application.job?.title || 'Job Posting'}
               </span>
             </p>
@@ -123,18 +121,15 @@ const ApplicationDetailsPage = () => {
         </div>
 
         {/* Status Pipeline Controls */}
-        <div className="flex items-center space-x-2 self-start sm:self-auto">
-          <span className="text-xs font-semibold text-gray-500 mr-1 uppercase tracking-wider">
-            Status:
-          </span>
-          <div className="inline-flex rounded-lg border border-gray-200 bg-white p-1 shadow-sm">
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <div className="inline-flex rounded-[8px] border border-line bg-paper p-1 gap-1">
             <button
               onClick={() => handleStatusChange('applied')}
               disabled={updatingStatus}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+              className={`h-[34px] px-3.5 rounded-[6px] text-xs font-semibold transition-colors ${
                 application.status === 'applied'
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-ink text-paper'
+                  : 'text-muted hover:text-ink hover:bg-paper-2'
               }`}
             >
               Applied
@@ -143,164 +138,136 @@ const ApplicationDetailsPage = () => {
             <button
               onClick={() => handleStatusChange('shortlisted')}
               disabled={updatingStatus}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1 ${
+              className={`h-[34px] px-3.5 rounded-[6px] text-xs font-semibold transition-colors ${
                 application.status === 'shortlisted'
-                  ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-emerald-700'
+                  ? 'bg-signal text-ink font-bold'
+                  : 'text-muted hover:text-ink hover:bg-paper-2'
               }`}
             >
-              <CheckCircle className="w-3 h-3" />
-              <span>Shortlist</span>
+              Shortlist
             </button>
 
             <button
               onClick={() => handleStatusChange('rejected')}
               disabled={updatingStatus}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors flex items-center space-x-1 ${
+              className={`h-[34px] px-3.5 rounded-[6px] text-xs font-semibold transition-colors ${
                 application.status === 'rejected'
-                  ? 'bg-red-600 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-red-700'
+                  ? 'bg-white border border-line text-ink'
+                  : 'text-muted hover:text-red-700 hover:bg-paper-2'
               }`}
             >
-              <XCircle className="w-3 h-3" />
-              <span>Reject</span>
+              Reject
             </button>
           </div>
         </div>
       </div>
 
       {statusFeedback && (
-        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium rounded-lg flex items-center space-x-2">
-          <CheckCircle className="w-4 h-4 text-emerald-600" />
+        <div className="p-3 bg-white border border-line text-ink text-xs font-medium rounded-[8px] flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-signal" />
           <span>{statusFeedback}</span>
         </div>
       )}
 
       {/* Candidate Profile Card */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-4">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500 pb-2 border-b border-gray-100">
-          Candidate Details
+      <div className="bg-white rounded-[12px] border border-line p-6 space-y-6">
+        <h2 className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted pb-3 border-b border-line">
+          Contact Details
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
-              <User className="w-4 h-4" />
-            </div>
-            <div>
-              <p className="text-xs text-gray-400">Full Name</p>
-              <p className="font-semibold text-gray-900">{application.fullName}</p>
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Email</p>
+            <a
+              href={`mailto:${application.email}`}
+              className="font-medium text-ink hover:underline break-all mt-1 inline-flex items-center gap-1.5"
+            >
+              <Mail className="w-3.5 h-3.5 text-muted stroke-[1.5]" />
+              <span>{application.email}</span>
+            </a>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
-              <Mail className="w-4 h-4" />
-            </div>
-            <div>
-              <p className="text-xs text-gray-400">Email Address</p>
-              <a
-                href={`mailto:${application.email}`}
-                className="font-medium text-emerald-600 hover:underline break-all"
-              >
-                {application.email}
-              </a>
-            </div>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Phone</p>
+            <p className="font-medium text-ink mt-1 flex items-center gap-1.5 font-mono text-xs">
+              <Phone className="w-3.5 h-3.5 text-muted stroke-[1.5]" />
+              <span>{application.phone}</span>
+            </p>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
-              <Phone className="w-4 h-4" />
-            </div>
-            <div>
-              <p className="text-xs text-gray-400">Phone</p>
-              <p className="font-medium text-gray-800">{application.phone}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
-              <Calendar className="w-4 h-4" />
-            </div>
-            <div>
-              <p className="text-xs text-gray-400">Submitted At</p>
-              <p className="font-medium text-gray-800">
-                {new Date(application.submittedAt).toLocaleDateString()}
-              </p>
-            </div>
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Date Applied</p>
+            <p className="font-medium text-ink mt-1 flex items-center gap-1.5 font-mono text-xs">
+              <Calendar className="w-3.5 h-3.5 text-muted stroke-[1.5]" />
+              <span>{new Date(application.submittedAt).toLocaleDateString()}</span>
+            </p>
           </div>
         </div>
 
-        {/* CV Download / Preview Row */}
-        <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <FileText className="w-5 h-5 text-emerald-600" />
-            <span className="text-sm font-medium text-gray-800">
-              Uploaded Resume / CV Document
-            </span>
+        {/* CV Document Box */}
+        <div className="pt-6 border-t border-line flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-[6px] bg-paper flex items-center justify-center text-ink border border-line">
+              <FileCheck className="w-4 h-4 stroke-[1.5]" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-ink">Curriculum Vitae</p>
+              <p className="font-mono text-[11px] text-muted">Attached by candidate</p>
+            </div>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <a
               href={fullCvUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors"
+              className="inline-flex items-center gap-1.5 h-[36px] px-4 text-xs font-semibold text-ink bg-paper hover:bg-paper-2 border border-line rounded-[6px] transition-colors"
             >
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span>Open / View CV</span>
-            </a>
-
-            <a
-              href={fullCvUrl}
-              download
-              className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Download</span>
+              <ExternalLink className="w-3.5 h-3.5 stroke-[1.5]" />
+              <span>Open CV document</span>
             </a>
           </div>
         </div>
       </div>
 
-      {/* Application Answers */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-5">
-        <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-          <h2 className="text-base font-semibold text-gray-900">
-            Candidate Application Responses ({application.answers?.length || 0})
+      {/* Screening Questions Card */}
+      <div className="bg-white rounded-[12px] border border-line p-6 space-y-6">
+        <div className="flex items-center justify-between pb-3 border-b border-line">
+          <h2 className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
+            Screening Answers ({application.answers?.length || 0})
           </h2>
         </div>
 
         {(!application.answers || application.answers.length === 0) ? (
-          <p className="text-sm text-gray-500 py-4 text-center">
-            No custom question answers submitted for this application.
+          <p className="text-xs text-muted py-4 text-center">
+            No custom screening answers recorded for this candidate.
           </p>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {application.answers.map((ans, idx) => {
               const isUrl = ans.type === 'url' || String(ans.answer).startsWith('http');
               const isArray = Array.isArray(ans.answer);
 
               return (
-                <div key={idx} className="p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
+                <div key={idx} className="p-4 bg-paper rounded-[8px] border border-line space-y-2 text-left">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                      Question #{idx + 1}
+                    <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                      Question {idx + 1}
                     </span>
-                    <span className="text-[11px] font-mono text-gray-400 bg-white px-2 py-0.5 rounded border border-gray-200">
+                    <span className="font-mono text-[10px] text-muted uppercase tracking-[0.12em]">
                       {ans.type}
                     </span>
                   </div>
 
-                  <h3 className="text-sm font-bold text-gray-900">{ans.label}</h3>
+                  <h3 className="text-sm font-semibold text-ink">{ans.label}</h3>
 
-                  <div className="text-sm text-gray-800 pt-1">
+                  <div className="text-sm text-ink pt-1">
                     {isArray ? (
                       <div className="flex flex-wrap gap-1.5">
                         {ans.answer.map((item, i) => (
                           <span
                             key={i}
-                            className="inline-block px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-xs font-medium rounded-full"
+                            className="font-mono text-xs px-2.5 py-1 bg-white border border-line text-ink rounded-[4px]"
                           >
                             {item}
                           </span>
@@ -311,13 +278,13 @@ const ApplicationDetailsPage = () => {
                         href={ans.answer}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center text-emerald-600 hover:text-emerald-700 hover:underline font-medium space-x-1"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-ink hover:underline"
                       >
                         <span>{ans.answer}</span>
-                        <ExternalLink className="w-3.5 h-3.5 ml-1 inline" />
+                        <ExternalLink className="w-3.5 h-3.5 stroke-[1.5]" />
                       </a>
                     ) : (
-                      <p className="whitespace-pre-line leading-relaxed font-normal text-gray-700 bg-white p-3 rounded border border-gray-200">
+                      <p className="whitespace-pre-line leading-relaxed text-xs text-ink bg-white p-3 rounded-[6px] border border-line">
                         {ans.answer !== undefined && ans.answer !== '' ? String(ans.answer) : '(No response provided)'}
                       </p>
                     )}

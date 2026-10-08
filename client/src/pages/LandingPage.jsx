@@ -1,17 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  Briefcase,
-  ArrowRight,
-  CheckCircle2,
-  FileText,
-  Share2,
-  Users,
-  Sparkles,
-  ShieldCheck,
-  UploadCloud,
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import BetterFormLogo from '../components/BetterFormLogo';
 
 const LandingPage = () => {
   const { isAuthenticated, login } = useAuth();
@@ -32,42 +23,37 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans flex flex-col">
+    <div className="min-h-screen bg-paper text-ink font-sans flex flex-col selection:bg-signal selection:text-ink">
       {/* Top Navigation */}
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2.5">
-            <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-sm">
-              <Briefcase className="w-5 h-5" />
-            </div>
-            <span className="font-bold text-xl tracking-tight text-gray-900">
-              Better<span className="text-emerald-600">Form</span>
-            </span>
+      <header className="border-b border-line bg-paper sticky top-0 z-30">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-12 h-18 flex items-center justify-between">
+          <Link to="/" className="inline-flex items-center">
+            <BetterFormLogo size={32} />
           </Link>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-4">
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
-                className="inline-flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 h-[44px] px-5 text-[14px] font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors"
               >
-                <span>Go to Dashboard</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>Dashboard</span>
+                <ArrowRight className="w-4 h-4 stroke-[1.5]" />
               </Link>
             ) : (
               <>
                 <Link
                   to="/login"
-                  className="text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-2 transition-colors"
+                  className="text-[14px] font-semibold text-ink hover:text-muted px-3 py-2 transition-colors"
                 >
-                  Sign In
+                  Sign in
                 </Link>
                 <Link
                   to="/register"
-                  className="inline-flex items-center space-x-1.5 px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors shadow-sm"
+                  className="inline-flex items-center gap-2 h-[44px] px-5 text-[14px] font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors"
                 >
-                  <span>Get Started</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>Get started</span>
+                  <ArrowRight className="w-4 h-4 stroke-[1.5]" />
                 </Link>
               </>
             )}
@@ -76,199 +62,280 @@ const LandingPage = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold uppercase tracking-wider mb-8">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>The Minimalist Hiring Workflow for Modern Teams</span>
-        </div>
+      <section className="pt-16 pb-20 md:pt-24 md:pb-28 px-6 lg:px-12 max-w-[1280px] mx-auto w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          
+          {/* Left Column: Editorial Headline & Copy */}
+          <div className="lg:col-span-7 text-left">
+            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted mb-6">
+              The Minimalist Hiring Workflow
+            </p>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-gray-900 leading-tight md:leading-[1.15]">
-          Create better job applications.
-        </h1>
+            <h1 className="text-4xl sm:text-5xl lg:text-[64px] font-bold tracking-[-0.04em] text-ink leading-[1.05]">
+              Create better job applications.
+            </h1>
 
-        <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Build professional application forms, share one link, and manage candidates from one simple dashboard.
-        </p>
+            <p className="mt-6 text-[18px] text-muted max-w-[580px] leading-[1.5] font-normal">
+              BetterForm is a minimalist hiring workflow that lets companies create professional job application forms, share one application link, and manage candidates from one simple dashboard.
+            </p>
 
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            to="/register"
-            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 text-base font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors group"
-          >
-            <span>Create your first job</span>
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+            {/* CTAs */}
+            <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <Link
+                to="/register"
+                className="inline-flex items-center justify-center gap-2 h-[44px] px-6 text-[15px] font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors"
+              >
+                <span>Create your first job</span>
+                <ArrowRight className="w-4 h-4 stroke-[1.5]" />
+              </Link>
 
-          <button
-            onClick={handleDemoLogin}
-            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 text-base font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-200"
-          >
-            <span>View demo</span>
-          </button>
-        </div>
+              <button
+                onClick={handleDemoLogin}
+                className="inline-flex items-center justify-center h-[44px] px-6 text-[15px] font-semibold text-ink bg-transparent hover:bg-paper-2 border border-ink rounded-[8px] transition-colors"
+              >
+                View demo workspace
+              </button>
+            </div>
 
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs sm:text-sm text-gray-500">
-          <span className="flex items-center">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 mr-1.5" />
-            No candidate account required
-          </span>
-          <span className="flex items-center">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 mr-1.5" />
-            Zero setup friction
-          </span>
-          <span className="flex items-center">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 mr-1.5" />
-            Instant public application link
-          </span>
+            {/* Badges / Micro-rules */}
+            <div className="mt-12 pt-8 border-t border-line grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Candidates</p>
+                <p className="mt-1 text-[14px] font-semibold text-ink">No account required</p>
+              </div>
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Setup</p>
+                <p className="mt-1 text-[14px] font-semibold text-ink">Zero friction forms</p>
+              </div>
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Distribution</p>
+                <p className="mt-1 text-[14px] font-semibold text-ink">One link to share</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Architectural Form Structure Graphic echoing the Brand Mark */}
+          <div className="lg:col-span-5">
+            <div className="bg-white border border-line rounded-[12px] p-8 relative overflow-hidden">
+              {/* Brand motif header */}
+              <div className="flex items-center justify-between pb-6 border-b border-line">
+                <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
+                  Live Application View
+                </span>
+                <span className="w-2.5 h-2.5 rounded-full bg-signal" title="Signal: Active applicant" />
+              </div>
+
+              {/* Stepped Form Progress Motif */}
+              <div className="mt-6 space-y-5">
+                <div>
+                  <div className="flex justify-between items-center text-xs text-muted font-medium mb-1.5">
+                    <span>Role: Senior Frontend Engineer</span>
+                    <span className="font-mono text-[11px] uppercase tracking-[0.12em]">Full-time</span>
+                  </div>
+                  <div className="h-10 bg-paper rounded-[8px] border border-line px-3 flex items-center text-xs text-ink">
+                    Sarah Jenkins
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between items-center text-xs text-muted font-medium mb-1.5">
+                    <span>Email & Contact</span>
+                    <span className="font-mono text-[11px] uppercase tracking-[0.12em]">Required</span>
+                  </div>
+                  <div className="h-10 bg-paper rounded-[8px] border border-line px-3 flex items-center text-xs text-ink">
+                    sarah@example.com
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between items-center text-xs text-muted font-medium mb-1.5">
+                    <span>Curriculum Vitae (CV)</span>
+                    <span className="font-mono text-[11px] uppercase tracking-[0.12em]">PDF / DOCX</span>
+                  </div>
+                  <div className="h-10 bg-paper rounded-[8px] border border-line border-dashed px-3 flex items-center justify-between text-xs text-muted">
+                    <span className="text-ink font-medium">resume_sarah_jenkins.pdf</span>
+                    <span className="font-mono text-[11px]">2.1 MB</span>
+                  </div>
+                </div>
+
+                {/* Status dot progression */}
+                <div className="pt-4 border-t border-line flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-signal" />
+                    <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink font-semibold">
+                      Qualified applicant
+                    </span>
+                  </div>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                    Ready for review
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section className="py-16 bg-gray-50 border-y border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
-              How it works
+      {/* Structured 4-Step Process Section */}
+      <section className="py-20 border-t border-line bg-paper-2/60">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
+          <div className="max-w-[640px] mb-14 text-left">
+            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted mb-2">
+              The Hiring Loop
+            </p>
+            <h2 className="text-3xl lg:text-4xl font-bold tracking-[-0.03em] text-ink">
+              How BetterForm works.
             </h2>
-            <p className="mt-3 text-gray-600 text-sm sm:text-base">
-              A frictionless 4-step pipeline designed to get jobs published and candidates reviewed in minutes.
+            <p className="mt-3 text-[16px] text-muted leading-relaxed">
+              A linear, structured workflow designed to get roles published and candidate submissions organized without clutter.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative">
-              <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-sm mb-4">
-                1
-              </div>
-              <h3 className="font-semibold text-gray-900 text-lg mb-2">Create a job</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Add role details, company info, employment type, salary, and requirements.
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-7 rounded-[12px] border border-line">
+              <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">01</span>
+              <h3 className="mt-4 text-[18px] font-bold tracking-[-0.02em] text-ink">Create job</h3>
+              <p className="mt-2 text-[14px] text-muted leading-relaxed">
+                Define title, description, employment type, location, and compensation parameters.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative">
-              <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-sm mb-4">
-                2
-              </div>
-              <h3 className="font-semibold text-gray-900 text-lg mb-2">Build your form</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Default applicant fields are ready. Add custom questions with dropdowns, radios, or text.
+            <div className="bg-white p-7 rounded-[12px] border border-line">
+              <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">02</span>
+              <h3 className="mt-4 text-[18px] font-bold tracking-[-0.02em] text-ink">Build application form</h3>
+              <p className="mt-2 text-[14px] text-muted leading-relaxed">
+                Add custom questions tailored to the vacancy: text, dropdowns, radios, or file uploads.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative">
-              <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-sm mb-4">
-                3
-              </div>
-              <h3 className="font-semibold text-gray-900 text-lg mb-2">Share your link</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Publish with one click and share your custom job URL across LinkedIn, Twitter, or job boards.
+            <div className="bg-white p-7 rounded-[12px] border border-line">
+              <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">03</span>
+              <h3 className="mt-4 text-[18px] font-bold tracking-[-0.02em] text-ink">Share one public link</h3>
+              <p className="mt-2 text-[14px] text-muted leading-relaxed">
+                Publish instantly and share a clean application page across your hiring channels.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative">
-              <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-sm mb-4">
-                4
-              </div>
-              <h3 className="font-semibold text-gray-900 text-lg mb-2">Review candidates</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                View submitted CVs, read custom answers, and shortlist or reject candidates from your dashboard.
+            <div className="bg-white p-7 rounded-[12px] border border-line">
+              <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">04</span>
+              <h3 className="mt-4 text-[18px] font-bold tracking-[-0.02em] text-ink">Review candidate answers</h3>
+              <p className="mt-2 text-[14px] text-muted leading-relaxed">
+                Inspect candidate answers and CVs, and transition status between Applied, Shortlisted, and Rejected.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
-            Engineered for clarity and speed
-          </h2>
-          <p className="mt-3 text-gray-600 text-sm sm:text-base">
-            Everything you need to hire efficiently without cluttered menus or bloated software.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-6 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
-              <FileText className="w-5 h-5" />
-            </div>
-            <h3 className="font-semibold text-gray-900 text-lg mb-2">Custom application forms</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Create specific questions tailored to the vacancy: text, dropdown, phone, URL, radio, or checkboxes.
+      {/* Product Capabilities (Hairline Grid) */}
+      <section className="py-20 border-t border-line bg-paper">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-12">
+          <div className="max-w-[640px] mb-14 text-left">
+            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted mb-2">
+              Core Capabilities
+            </p>
+            <h2 className="text-3xl lg:text-4xl font-bold tracking-[-0.03em] text-ink">
+              Quiet structure, zero fluff.
+            </h2>
+            <p className="mt-3 text-[16px] text-muted leading-relaxed">
+              Every detail is designed for speed, clarity, and ease of review.
             </p>
           </div>
 
-          <div className="p-6 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
-              <UploadCloud className="w-5 h-5" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-7 rounded-[12px] border border-line text-left">
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Questions</p>
+              <h3 className="mt-2 text-[18px] font-bold text-ink">Custom form builder</h3>
+              <p className="mt-2 text-[14px] text-muted leading-relaxed">
+                Form questions support single-line text, textarea, select menus, radio buttons, numbers, URLs, and phone formats.
+              </p>
             </div>
-            <h3 className="font-semibold text-gray-900 text-lg mb-2">CV collection</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Reliable file upload for PDF, DOC, and DOCX resumes up to 5MB with safe storage and one-click preview.
-            </p>
-          </div>
 
-          <div className="p-6 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
-              <Users className="w-5 h-5" />
+            <div className="bg-white p-7 rounded-[12px] border border-line text-left">
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Resumes</p>
+              <h3 className="mt-2 text-[18px] font-bold text-ink">Secure CV attachments</h3>
+              <p className="mt-2 text-[14px] text-muted leading-relaxed">
+                Reliable uploads for PDF, DOC, and DOCX resumes with size validation and preview links for the hiring team.
+              </p>
             </div>
-            <h3 className="font-semibold text-gray-900 text-lg mb-2">Candidate management</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Search by candidate name or email and filter applications by status across your entire pipeline.
-            </p>
-          </div>
 
-          <div className="p-6 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
-              <Share2 className="w-5 h-5" />
+            <div className="bg-white p-7 rounded-[12px] border border-line text-left">
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Pipeline</p>
+              <h3 className="mt-2 text-[18px] font-bold text-ink">Applicant status dot</h3>
+              <p className="mt-2 text-[14px] text-muted leading-relaxed">
+                Clear status markers: ink dot for new applications, signal green for shortlisted candidates, hollow ring for rejected.
+              </p>
             </div>
-            <h3 className="font-semibold text-gray-900 text-lg mb-2">Simple hiring pipeline</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Review individual answers and quickly move applicants between Applied, Shortlisted, and Rejected.
-            </p>
-          </div>
 
-          <div className="p-6 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
-              <CheckCircle2 className="w-5 h-5" />
+            <div className="bg-white p-7 rounded-[12px] border border-line text-left">
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Experience</p>
+              <h3 className="mt-2 text-[18px] font-bold text-ink">Frictionless applicant flow</h3>
+              <p className="mt-2 text-[14px] text-muted leading-relaxed">
+                Candidates never need an account. They open the link, answer the form, upload their CV, and submit in seconds.
+              </p>
             </div>
-            <h3 className="font-semibold text-gray-900 text-lg mb-2">No candidate account required</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Candidates can submit their applications directly without passwords or signup friction.
-            </p>
-          </div>
 
-          <div className="p-6 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
-              <ShieldCheck className="w-5 h-5" />
+            <div className="bg-white p-7 rounded-[12px] border border-line text-left">
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Governance</p>
+              <h3 className="mt-2 text-[18px] font-bold text-ink">Recruiter data isolation</h3>
+              <p className="mt-2 text-[14px] text-muted leading-relaxed">
+                Strict company workspace separation. Recruiters only see, edit, and manage candidate submissions for their own postings.
+              </p>
             </div>
-            <h3 className="font-semibold text-gray-900 text-lg mb-2">Secure & Private</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              JWT authentication, encrypted passwords, rate-limiting, and strict recruiter ownership validation.
-            </p>
+
+            <div className="bg-white p-7 rounded-[12px] border border-line text-left">
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Control</p>
+              <h3 className="mt-2 text-[18px] font-bold text-ink">Publish & unpublish anytime</h3>
+              <p className="mt-2 text-[14px] text-muted leading-relaxed">
+                Toggle jobs between draft and published. Unpublished roles immediately stop receiving submissions.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Footer CTA */}
-      <section className="bg-emerald-900 text-white py-16 px-4 sm:px-6 lg:px-8 text-center mt-auto">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold tracking-tight mb-4">Ready to streamline your job applications?</h2>
-          <p className="text-emerald-200 text-base mb-8">
-            Create an account in 30 seconds and start receiving structured candidate submissions today.
-          </p>
-          <Link
-            to="/register"
-            className="inline-flex items-center space-x-2 px-6 py-3 bg-white text-emerald-900 hover:bg-emerald-50 rounded-lg font-semibold text-base transition-colors shadow-sm"
-          >
-            <span>Create your first job</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+      {/* Dark Footer CTA Section (ink background, green signal CTA) */}
+      <footer className="bg-ink text-paper py-20 px-6 lg:px-12 mt-auto border-t border-line">
+        <div className="max-w-[1280px] mx-auto">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 pb-16 border-b border-line-dark">
+            <div className="max-w-[620px] text-left">
+              <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted-dark mb-3">
+                Start Today
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[-0.03em] text-paper leading-[1.1]">
+                Ready to build better job applications?
+              </h2>
+              <p className="mt-4 text-[16px] text-muted-dark">
+                Create an account in 30 seconds and share your first application link today.
+              </p>
+            </div>
+
+            <div>
+              {/* Primary button on dark: green fill #13E884, ink text #0B0B0C */}
+              <Link
+                to="/register"
+                className="inline-flex items-center justify-center gap-2 h-[44px] px-6 text-[15px] font-semibold text-ink bg-signal hover:bg-[#11d377] rounded-[8px] transition-colors"
+              >
+                <span>Create your first job</span>
+                <ArrowRight className="w-4 h-4 stroke-[1.5]" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-dark">
+            <div className="flex items-center gap-3">
+              <BetterFormLogo theme="dark" size={24} />
+              <span className="font-mono text-[11px] uppercase tracking-[0.12em]">
+                &copy; {new Date().getFullYear()} BetterForm
+              </span>
+            </div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.12em]">
+              Swiss editorial structure &bull; Minimalist hiring
+            </p>
+          </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 };

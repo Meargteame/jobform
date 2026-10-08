@@ -3,11 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import {
-  Briefcase,
-  Users,
-  CheckCircle2,
   Plus,
-  ExternalLink,
   Edit,
   Trash2,
   FileSpreadsheet,
@@ -16,17 +12,12 @@ import {
   Copy,
   Check,
   AlertCircle,
-  Clock,
   MapPin,
   Loader2,
   Search,
   LayoutGrid,
   List,
-  Sparkles,
   ArrowUpRight,
-  TrendingUp,
-  Building2,
-  Filter,
 } from 'lucide-react';
 
 const DashboardPage = () => {
@@ -100,11 +91,10 @@ const DashboardPage = () => {
         );
         showToast(
           updatedStatus === 'published'
-            ? 'Job published to candidate portal!'
-            : 'Job switched to private draft.'
+            ? 'Job published to candidate link.'
+            : 'Job reverted to private draft.'
         );
 
-        // Refresh summary metrics
         const statsRes = await api.get('/jobs/stats/summary');
         if (statsRes.data.success) setStats(statsRes.data.data);
       }
@@ -118,7 +108,7 @@ const DashboardPage = () => {
   const handleDeleteJob = async (jobId, title) => {
     if (
       !window.confirm(
-        `Are you sure you want to delete "${title}"? This will permanently delete its custom application form and candidate submissions.`
+        `Delete "${title}"? This permanently removes its application form and candidate submissions.`
       )
     ) {
       return;
@@ -144,7 +134,7 @@ const DashboardPage = () => {
     const fullUrl = `${window.location.origin}/apply/${slug}`;
     navigator.clipboard.writeText(fullUrl);
     setCopiedSlug(slug);
-    showToast('Public application link copied to clipboard!');
+    showToast('Application link copied.');
     setTimeout(() => setCopiedSlug(null), 2500);
   };
 
@@ -153,24 +143,21 @@ const DashboardPage = () => {
       setLoading(true);
       const res = await api.post('/jobs/seed-demo');
       if (res.data.success) {
-        showToast('Sample job posting & applicants loaded!');
+        showToast('Sample posting and candidate data loaded.');
         await fetchDashboardData();
       }
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to load demo role.');
+      alert(err.response?.data?.message || 'Failed to load demo data.');
     } finally {
       setLoading(false);
     }
   };
 
-  // Filter & Sort Logic
   const filteredJobs = useMemo(() => {
     return jobs
       .filter((job) => {
-        // Status filter
         if (statusFilter !== 'all' && job.status !== statusFilter) return false;
 
-        // Search query filter
         if (searchQuery.trim()) {
           const q = searchQuery.toLowerCase();
           const matchTitle = job.title?.toLowerCase().includes(q);
@@ -190,148 +177,124 @@ const DashboardPage = () => {
   }, [jobs, statusFilter, searchQuery, sortBy]);
 
   return (
-    <div className="space-y-8 pb-12 font-sans">
+    <div className="space-y-8 pb-16 font-sans text-ink">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 text-sm border border-slate-800 animate-in fade-in slide-in-from-bottom-3 duration-200">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 bg-ink text-paper px-4 py-3 rounded-[8px] flex items-center gap-2.5 text-xs font-semibold border border-line animate-in fade-in duration-150">
+          <span className="w-2 h-2 rounded-full bg-signal" />
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Top Banner / Welcome Header */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="space-y-1.5">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-xs font-semibold">
-            <Building2 className="w-3.5 h-3.5" />
-            <span>{user?.companyName || 'Hiring Workspace'}</span>
+      {/* Header Banner */}
+      <div className="bg-white rounded-[12px] border border-line p-7 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-2 h-2 rounded-full bg-signal" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+              {user?.companyName || 'Hiring Workspace'}
+            </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Welcome back, {user?.name?.split(' ')[0] || 'Recruiter'}
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-[-0.03em] text-ink">
+            Recruiter Overview
           </h1>
-          <p className="text-sm text-slate-500 max-w-xl">
-            You currently have <strong className="text-slate-800 font-semibold">{stats.publishedJobs} active postings</strong> receiving applications. Monitor candidates and pipeline statuses below.
+          <p className="text-[14px] text-muted mt-1 max-w-xl">
+            {stats.publishedJobs} active postings receiving submissions. Manage candidates and custom forms below.
           </p>
         </div>
 
-        <div className="flex items-center space-x-3 self-start md:self-auto">
+        <div className="flex items-center gap-3">
           <Link
             to="/dashboard/jobs/new"
-            className="inline-flex items-center justify-center space-x-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow active:scale-[0.99]"
+            className="inline-flex items-center justify-center gap-2 h-[44px] px-5 bg-ink hover:bg-[#202022] text-paper rounded-[8px] text-[14px] font-semibold transition-colors"
           >
-            <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>Post New Job</span>
+            <Plus className="w-4 h-4 stroke-[1.5]" />
+            <span>Create job</span>
           </Link>
         </div>
       </div>
 
       {error && (
-        <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700 flex items-center space-x-3">
-          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+        <div className="p-4 rounded-[8px] bg-red-50/80 border border-red-200 text-xs text-red-800 flex items-center gap-2.5">
+          <AlertCircle className="w-4 h-4 text-red-700 shrink-0 stroke-[1.5]" />
           <span>{error}</span>
         </div>
       )}
 
-      {/* KPI Metrics Row (4 Cards) */}
+      {/* KPI Metrics: 4 Structured Clean Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total Jobs */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden group hover:border-slate-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Total Postings
-            </span>
-            <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-              <Briefcase className="w-4 h-4" />
-            </div>
+        {/* Total Postings */}
+        <div className="bg-white p-5 rounded-[12px] border border-line">
+          <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+            Total Postings
+          </span>
+          <div className="mt-3 text-3xl font-bold tracking-[-0.03em] text-ink">
+            {stats.totalJobs}
           </div>
-          <div className="mt-3">
-            <span className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              {stats.totalJobs}
-            </span>
-          </div>
-          <div className="mt-2 text-xs text-slate-500 flex items-center space-x-1.5">
-            <span className="font-medium text-emerald-600">{stats.publishedJobs} active</span>
+          <div className="mt-2 text-xs text-muted flex items-center gap-1.5">
+            <span className="font-semibold text-ink">{stats.publishedJobs} published</span>
             <span>&bull;</span>
-            <span className="font-medium text-slate-500">{stats.draftJobs || 0} drafts</span>
+            <span>{stats.draftJobs || 0} drafts</span>
           </div>
         </div>
 
         {/* Total Applicants */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden group hover:border-slate-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Total Applicants
-            </span>
-            <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
-              <Users className="w-4 h-4" />
-            </div>
+        <div className="bg-white p-5 rounded-[12px] border border-line">
+          <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+            Total Candidates
+          </span>
+          <div className="mt-3 text-3xl font-bold tracking-[-0.03em] text-ink">
+            {stats.totalApplications}
           </div>
-          <div className="mt-3">
-            <span className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              {stats.totalApplications}
-            </span>
-          </div>
-          <div className="mt-2 text-xs text-slate-500 flex items-center space-x-1.5">
-            <span className="font-medium text-purple-600">{stats.reviewPendingCount || 0} applied</span>
+          <div className="mt-2 text-xs text-muted flex items-center gap-1.5">
+            <span className="font-semibold text-ink">{stats.reviewPendingCount || 0} applied</span>
             <span>&bull;</span>
             <span>across all roles</span>
           </div>
         </div>
 
         {/* Shortlisted */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden group hover:border-slate-300 transition-colors">
+        <div className="bg-white p-5 rounded-[12px] border border-line">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
               Shortlisted
             </span>
-            <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <CheckCircle2 className="w-4 h-4" />
-            </div>
+            <span className="w-2 h-2 rounded-full bg-signal" title="Qualified state" />
           </div>
-          <div className="mt-3">
-            <span className="text-3xl font-extrabold text-emerald-600 tracking-tight">
-              {stats.shortlistedCount || 0}
-            </span>
+          <div className="mt-3 text-3xl font-bold tracking-[-0.03em] text-ink">
+            {stats.shortlistedCount || 0}
           </div>
-          <div className="mt-2 text-xs text-slate-500 flex items-center space-x-1.5">
-            <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
-            <span className="font-semibold text-emerald-700">{stats.shortlistRate || 0}%</span>
+          <div className="mt-2 text-xs text-muted flex items-center gap-1.5">
+            <span className="font-semibold text-ink">{stats.shortlistRate || 0}%</span>
             <span>qualification rate</span>
           </div>
         </div>
 
-        {/* Live Published Share */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden group hover:border-slate-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Public Acceptance
-            </span>
-            <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
-              <Globe className="w-4 h-4" />
-            </div>
+        {/* Status */}
+        <div className="bg-white p-5 rounded-[12px] border border-line">
+          <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+            Public Submissions
+          </span>
+          <div className="mt-3 text-3xl font-bold tracking-[-0.03em] text-ink">
+            {stats.publishedJobs > 0 ? 'Accepting' : 'Paused'}
           </div>
-          <div className="mt-3">
-            <span className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              {stats.publishedJobs > 0 ? 'Active' : 'Paused'}
-            </span>
-          </div>
-          <div className="mt-2 text-xs text-slate-500">
+          <div className="mt-2 text-xs text-muted flex items-center gap-1.5">
             {stats.publishedJobs > 0 ? (
-              <span className="text-emerald-600 font-medium flex items-center">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block mr-1.5 animate-pulse"></span>
-                Accepting submissions
-              </span>
+              <>
+                <span className="w-2 h-2 rounded-full bg-signal" />
+                <span className="font-semibold text-ink">Links active</span>
+              </>
             ) : (
-              <span className="text-slate-400">No published links</span>
+              <span>No published links</span>
             )}
           </div>
         </div>
       </div>
 
-      {/* Controls Bar: Filter, Search, Sort & View Mode */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      {/* Control Bar: Filters, Search, Sort & View Mode */}
+      <div className="bg-white p-4 rounded-[12px] border border-line flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
         {/* Status Pills */}
-        <div className="flex items-center space-x-1 overflow-x-auto pb-1 md:pb-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
           {[
             { key: 'all', label: 'All Jobs', count: jobs.length },
             { key: 'published', label: 'Published', count: jobs.filter((j) => j.status === 'published').length },
@@ -340,16 +303,16 @@ const DashboardPage = () => {
             <button
               key={tab.key}
               onClick={() => setStatusFilter(tab.key)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center space-x-1.5 whitespace-nowrap ${
+              className={`h-[36px] px-3.5 rounded-[8px] text-xs font-semibold transition-colors flex items-center gap-2 whitespace-nowrap ${
                 statusFilter === tab.key
-                  ? 'bg-slate-900 text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'bg-ink text-paper'
+                  : 'text-muted hover:text-ink hover:bg-paper-2'
               }`}
             >
               <span>{tab.label}</span>
               <span
-                className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                  statusFilter === tab.key ? 'bg-slate-700 text-white' : 'bg-slate-200/70 text-slate-600'
+                className={`font-mono text-[10px] px-1.5 py-0.2 rounded-[4px] ${
+                  statusFilter === tab.key ? 'bg-[#202022] text-paper' : 'bg-paper-2 text-muted'
                 }`}
               >
                 {tab.count}
@@ -359,53 +322,50 @@ const DashboardPage = () => {
         </div>
 
         {/* Search, Sort, View Toggle */}
-        <div className="flex items-center space-x-2.5">
-          {/* Live Search */}
+        <div className="flex items-center gap-2.5">
           <div className="relative flex-1 md:w-64">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-muted absolute left-3.5 top-3 stroke-[1.5]" />
             <input
               type="text"
-              placeholder="Search by title, location..."
+              placeholder="Search postings..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-slate-400"
+              className="w-full h-[40px] pl-9 pr-3 rounded-[8px] border border-line bg-paper text-ink text-xs focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all placeholder-muted"
             />
           </div>
 
-          {/* Sort Selector */}
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium"
+            className="h-[40px] text-xs bg-paper border border-line rounded-[8px] px-3 text-ink focus:outline-none focus:ring-2 focus:ring-signal font-medium"
           >
-            <option value="newest">Newest First</option>
-            <option value="applications">Most Applicants</option>
-            <option value="title">Alphabetical</option>
+            <option value="newest">Newest first</option>
+            <option value="applications">Most candidates</option>
+            <option value="title">Title (A-Z)</option>
           </select>
 
-          {/* View Toggle */}
-          <div className="flex items-center rounded-lg border border-slate-200 p-0.5 bg-slate-50">
+          <div className="flex items-center rounded-[8px] border border-line p-0.5 bg-paper">
             <button
               onClick={() => setViewMode('grid')}
-              title="Card Grid View"
-              className={`p-1.5 rounded-md transition-colors ${
+              title="Grid view"
+              className={`p-2 rounded-[6px] transition-colors ${
                 viewMode === 'grid'
-                  ? 'bg-white shadow-xs text-slate-900'
-                  : 'text-slate-400 hover:text-slate-700'
+                  ? 'bg-white text-ink'
+                  : 'text-muted hover:text-ink'
               }`}
             >
-              <LayoutGrid className="w-3.5 h-3.5" />
+              <LayoutGrid className="w-3.5 h-3.5 stroke-[1.5]" />
             </button>
             <button
               onClick={() => setViewMode('table')}
-              title="Dense Table View"
-              className={`p-1.5 rounded-md transition-colors ${
+              title="Table view"
+              className={`p-2 rounded-[6px] transition-colors ${
                 viewMode === 'table'
-                  ? 'bg-white shadow-xs text-slate-900'
-                  : 'text-slate-400 hover:text-slate-700'
+                  ? 'bg-white text-ink'
+                  : 'text-muted hover:text-ink'
               }`}
             >
-              <List className="w-3.5 h-3.5" />
+              <List className="w-3.5 h-3.5 stroke-[1.5]" />
             </button>
           </div>
         </div>
@@ -413,50 +373,48 @@ const DashboardPage = () => {
 
       {/* Main Content Area */}
       {loading ? (
-        <div className="py-24 flex flex-col items-center justify-center space-y-3 bg-white rounded-2xl border border-slate-200/80">
-          <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
-          <p className="text-sm font-medium text-slate-500">Loading your vacancies...</p>
+        <div className="py-24 flex flex-col items-center justify-center space-y-3 bg-white rounded-[12px] border border-line">
+          <Loader2 className="w-6 h-6 text-ink animate-spin stroke-[1.5]" />
+          <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
+            Loading postings...
+          </p>
         </div>
       ) : filteredJobs.length === 0 ? (
-        <div className="py-20 px-6 text-center max-w-md mx-auto bg-white rounded-2xl border border-slate-200/80 shadow-sm">
-          <div className="w-12 h-12 mx-auto rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
-            <Briefcase className="w-6 h-6" />
-          </div>
-          <h3 className="text-base font-bold text-slate-900">
-            {jobs.length === 0 ? 'No job postings yet' : 'No matching jobs found'}
+        <div className="py-20 px-6 text-center max-w-md mx-auto bg-white rounded-[12px] border border-line">
+          <h3 className="text-base font-bold text-ink">
+            {jobs.length === 0 ? 'No job postings yet' : 'No matching jobs'}
           </h3>
-          <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+          <p className="mt-2 text-xs text-muted leading-relaxed">
             {jobs.length === 0
-              ? 'Create your first job posting to start receiving structured candidate submissions.'
+              ? 'Create your first job posting to generate an application link and receive candidate submissions.'
               : 'Try clearing your search query or switching your status filter.'}
           </p>
-          <div className="mt-6">
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             {jobs.length === 0 ? (
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5">
+              <>
                 <Link
                   to="/dashboard/jobs/new"
-                  className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2.5 text-xs font-bold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center h-[44px] px-5 text-xs font-semibold rounded-[8px] text-paper bg-ink hover:bg-[#202022] transition-colors"
                 >
-                  <Plus className="w-4 h-4 mr-1.5" />
-                  Post Your First Job
+                  <Plus className="w-4 h-4 mr-1.5 stroke-[1.5]" />
+                  Create job
                 </Link>
                 <button
                   onClick={handleSeedDemo}
-                  className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2.5 text-xs font-bold rounded-xl text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center h-[44px] px-5 text-xs font-semibold rounded-[8px] text-ink bg-paper hover:bg-paper-2 border border-line transition-colors"
                 >
-                  <Sparkles className="w-4 h-4 mr-1.5 text-emerald-600" />
-                  Load Sample Role & Applicants
+                  Load sample roles
                 </button>
-              </div>
+              </>
             ) : (
               <button
                 onClick={() => {
                   setSearchQuery('');
                   setStatusFilter('all');
                 }}
-                className="inline-flex items-center px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
+                className="inline-flex items-center h-[40px] px-4 text-xs font-semibold rounded-[8px] text-ink bg-paper hover:bg-paper-2 border border-line transition-colors"
               >
-                Reset Filters
+                Reset filters
               </button>
             )}
           </div>
@@ -471,81 +429,75 @@ const DashboardPage = () => {
             return (
               <div
                 key={job._id}
-                className="bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group"
+                className="bg-white rounded-[12px] border border-line flex flex-col justify-between overflow-hidden"
               >
-                {/* Card Header & Badges */}
-                <div className="p-5 space-y-3.5">
-                  <div className="flex items-start justify-between gap-2">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-                        isPublished
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                          : 'bg-amber-50 text-amber-700 border-amber-200'
-                      }`}
-                    >
+                {/* Card Top */}
+                <div className="p-6 space-y-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] font-medium text-ink">
                       <span
-                        className={`w-1.5 h-1.5 mr-1.5 rounded-full ${
-                          isPublished ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                        className={`w-2 h-2 rounded-full ${
+                          isPublished ? 'bg-signal' : 'bg-ink'
                         }`}
-                      ></span>
-                      {isPublished ? 'Published' : 'Draft'}
+                      />
+                      <span>{isPublished ? 'Published' : 'Draft'}</span>
                     </span>
 
-                    <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
+                    <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
                       {job.employmentType}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="font-bold text-base text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-1">
-                      <Link to={`/dashboard/jobs/${job._id}`}>{job.title}</Link>
+                    <h3 className="font-bold text-[17px] text-ink line-clamp-1">
+                      <Link to={`/dashboard/jobs/${job._id}`} className="hover:underline">
+                        {job.title}
+                      </Link>
                     </h3>
-                    <p className="text-xs text-slate-500 mt-0.5 flex items-center">
-                      <MapPin className="w-3 h-3 mr-1 text-slate-400" />
+                    <p className="text-xs text-muted mt-1 flex items-center">
+                      <MapPin className="w-3.5 h-3.5 mr-1 text-muted stroke-[1.5]" />
                       <span>{job.location}</span>
                     </p>
                   </div>
 
                   {job.salary && (
-                    <div className="text-xs font-medium text-emerald-800 bg-emerald-50/70 border border-emerald-100 px-2.5 py-1 rounded-md inline-block">
+                    <div className="font-mono text-xs text-ink bg-paper border border-line px-2.5 py-1 rounded-[6px] inline-block">
                       {job.salary}
                     </div>
                   )}
 
-                  {/* Applicant Metrics Badge */}
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <div className="pt-3 border-t border-line flex items-center justify-between text-xs">
                     <Link
                       to={`/dashboard/jobs/${job._id}/applications`}
-                      className="font-semibold text-slate-800 hover:text-emerald-700 flex items-center space-x-1.5 group/btn"
+                      className="font-semibold text-ink hover:underline flex items-center gap-1.5"
                     >
-                      <Users className="w-3.5 h-3.5 text-slate-400 group-hover/btn:text-emerald-600" />
                       <span>
-                        <strong className="text-emerald-700 font-bold">{job.applicationCount || 0}</strong>{' '}
+                        <strong>{job.applicationCount || 0}</strong>{' '}
                         {job.applicationCount === 1 ? 'applicant' : 'applicants'}
                       </span>
-                      <ArrowUpRight className="w-3 h-3 text-slate-400 group-hover/btn:translate-x-0.5 transition-transform" />
+                      <ArrowUpRight className="w-3.5 h-3.5 text-muted stroke-[1.5]" />
                     </Link>
 
-                    <span className="text-[11px] text-slate-400">
+                    <span className="font-mono text-[11px] text-muted">
                       {new Date(job.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
 
-                {/* Card Action Footer */}
-                <div className="px-5 py-3 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
-                  <div className="flex items-center space-x-1">
-                    {/* Copy Link Button */}
+                {/* Card Actions Footer */}
+                <div className="px-6 py-3 bg-paper-2/40 border-t border-line flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    {/* Copy Link */}
                     {isPublished && (
                       <button
                         onClick={() => handleCopyLink(job.slug)}
-                        title="Copy Public Link"
-                        className="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                        title="Copy application URL"
+                        className="p-2 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
                       >
                         {copiedSlug === job.slug ? (
-                          <Check className="w-4 h-4 text-emerald-600" />
+                          <Check className="w-4 h-4 text-ink stroke-[2]" />
                         ) : (
-                          <Copy className="w-4 h-4" />
+                          <Copy className="w-4 h-4 stroke-[1.5]" />
                         )}
                       </button>
                     )}
@@ -553,48 +505,44 @@ const DashboardPage = () => {
                     {/* Form Builder */}
                     <Link
                       to={`/dashboard/jobs/${job._id}/form`}
-                      title="Manage Application Form"
-                      className="p-1.5 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                      title="Manage form questions"
+                      className="p-2 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
                     >
-                      <FileSpreadsheet className="w-4 h-4" />
+                      <FileSpreadsheet className="w-4 h-4 stroke-[1.5]" />
                     </Link>
 
-                    {/* Edit */}
+                    {/* Edit Details */}
                     <Link
                       to={`/dashboard/jobs/${job._id}/edit`}
-                      title="Edit Job Details"
-                      className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-200/60 rounded-lg transition-colors"
+                      title="Edit posting"
+                      className="p-2 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
                     >
-                      <Edit className="w-4 h-4" />
+                      <Edit className="w-4 h-4 stroke-[1.5]" />
                     </Link>
 
-                    {/* Toggle publish */}
+                    {/* Toggle Publish */}
                     <button
                       onClick={() => handleTogglePublish(job._id, job.status)}
                       disabled={isActionLoading}
-                      title={isPublished ? 'Unpublish (Switch to draft)' : 'Publish job'}
-                      className={`p-1.5 rounded-lg transition-colors ${
-                        isPublished
-                          ? 'text-amber-600 hover:bg-amber-50'
-                          : 'text-emerald-600 hover:bg-emerald-50'
-                      }`}
+                      title={isPublished ? 'Revert to draft' : 'Publish application link'}
+                      className="p-2 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
                     >
                       {isPublished ? (
-                        <GlobeLock className="w-4 h-4" />
+                        <GlobeLock className="w-4 h-4 stroke-[1.5]" />
                       ) : (
-                        <Globe className="w-4 h-4" />
+                        <Globe className="w-4 h-4 stroke-[1.5]" />
                       )}
                     </button>
                   </div>
 
-                  {/* Delete Button */}
+                  {/* Delete */}
                   <button
                     onClick={() => handleDeleteJob(job._id, job.title)}
                     disabled={isActionLoading}
-                    title="Delete Job"
-                    className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Delete job"
+                    className="p-2 text-muted hover:text-red-700 hover:bg-red-50 rounded-[6px] transition-colors"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-4 h-4 stroke-[1.5]" />
                   </button>
                 </div>
               </div>
@@ -602,126 +550,123 @@ const DashboardPage = () => {
           })}
         </div>
       ) : (
-        /* DENSE TABLE VIEW */
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        /* TABLE VIEW */
+        <div className="bg-white rounded-[12px] border border-line overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-left">
-              <thead className="bg-slate-50 text-[11px] font-bold uppercase text-slate-500 tracking-wider">
+            <table className="min-w-full divide-y divide-line text-left">
+              <thead className="bg-paper text-[11px] font-mono uppercase tracking-[0.12em] text-muted">
                 <tr>
-                  <th className="py-3.5 px-6">Role Title & Company</th>
-                  <th className="py-3.5 px-4">Location & Type</th>
-                  <th className="py-3.5 px-4">Status</th>
-                  <th className="py-3.5 px-4 text-center">Applicants</th>
-                  <th className="py-3.5 px-4">Created Date</th>
-                  <th className="py-3.5 px-6 text-right">Actions</th>
+                  <th className="py-3.5 px-6 font-normal">Job Title & Company</th>
+                  <th className="py-3.5 px-4 font-normal">Location & Type</th>
+                  <th className="py-3.5 px-4 font-normal">Status</th>
+                  <th className="py-3.5 px-4 text-center font-normal">Candidates</th>
+                  <th className="py-3.5 px-4 font-normal">Created</th>
+                  <th className="py-3.5 px-6 text-right font-normal">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200/80 text-sm">
+              <tbody className="divide-y divide-line text-[14px]">
                 {filteredJobs.map((job) => {
                   const isPublished = job.status === 'published';
                   const isActionLoading = actionLoadingId === job._id;
 
                   return (
-                    <tr key={job._id} className="hover:bg-slate-50/80 transition-colors">
+                    <tr key={job._id} className="hover:bg-paper/50 transition-colors">
                       <td className="py-4 px-6">
                         <Link
                           to={`/dashboard/jobs/${job._id}`}
-                          className="font-bold text-slate-900 hover:text-emerald-700"
+                          className="font-bold text-ink hover:underline"
                         >
                           {job.title}
                         </Link>
-                        <div className="text-xs text-slate-400 mt-0.5">{job.companyName}</div>
+                        <div className="text-xs text-muted mt-0.5">{job.companyName}</div>
                       </td>
 
                       <td className="py-4 px-4 whitespace-nowrap">
-                        <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+                        <span className="font-mono text-xs text-ink bg-paper px-2 py-0.5 rounded-[4px] border border-line">
                           {job.employmentType}
                         </span>
-                        <div className="text-xs text-slate-400 flex items-center mt-1">
-                          <MapPin className="w-3 h-3 mr-1" />
+                        <div className="text-xs text-muted flex items-center mt-1">
+                          <MapPin className="w-3.5 h-3.5 mr-1 stroke-[1.5]" />
                           <span>{job.location}</span>
                         </div>
                       </td>
 
                       <td className="py-4 px-4 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-                            isPublished
-                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                              : 'bg-amber-50 text-amber-700 border-amber-200'
-                          }`}
-                        >
+                        <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-ink">
                           <span
-                            className={`w-1.5 h-1.5 mr-1.5 rounded-full ${
-                              isPublished ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                            className={`w-2 h-2 rounded-full ${
+                              isPublished ? 'bg-signal' : 'bg-ink'
                             }`}
-                          ></span>
-                          {isPublished ? 'Published' : 'Draft'}
+                          />
+                          <span>{isPublished ? 'Published' : 'Draft'}</span>
                         </span>
                       </td>
 
                       <td className="py-4 px-4 text-center whitespace-nowrap">
                         <Link
                           to={`/dashboard/jobs/${job._id}/applications`}
-                          className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 transition-colors"
+                          className="inline-flex items-center px-2.5 py-1 rounded-[6px] text-xs font-semibold bg-paper hover:bg-paper-2 border border-line text-ink transition-colors"
                         >
-                          <Users className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
                           <span>{job.applicationCount || 0}</span>
                         </Link>
                       </td>
 
-                      <td className="py-4 px-4 whitespace-nowrap text-xs text-slate-400">
+                      <td className="py-4 px-4 whitespace-nowrap font-mono text-xs text-muted">
                         {new Date(job.createdAt).toLocaleDateString()}
                       </td>
 
                       <td className="py-4 px-6 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end space-x-1.5">
+                        <div className="flex items-center justify-end gap-1">
                           {isPublished && (
                             <button
                               onClick={() => handleCopyLink(job.slug)}
-                              title="Copy Public URL"
-                              className="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                              title="Copy application link"
+                              className="p-1.5 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
                             >
                               {copiedSlug === job.slug ? (
-                                <Check className="w-4 h-4 text-emerald-600" />
+                                <Check className="w-4 h-4 text-ink stroke-[2]" />
                               ) : (
-                                <Copy className="w-4 h-4" />
+                                <Copy className="w-4 h-4 stroke-[1.5]" />
                               )}
                             </button>
                           )}
 
                           <Link
                             to={`/dashboard/jobs/${job._id}/form`}
-                            title="Manage Form"
-                            className="p-1.5 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                            title="Manage form questions"
+                            className="p-1.5 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
                           >
-                            <FileSpreadsheet className="w-4 h-4" />
+                            <FileSpreadsheet className="w-4 h-4 stroke-[1.5]" />
                           </Link>
 
                           <Link
                             to={`/dashboard/jobs/${job._id}/edit`}
-                            title="Edit"
-                            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+                            title="Edit posting"
+                            className="p-1.5 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
                           >
-                            <Edit className="w-4 h-4" />
+                            <Edit className="w-4 h-4 stroke-[1.5]" />
                           </Link>
 
                           <button
                             onClick={() => handleTogglePublish(job._id, job.status)}
                             disabled={isActionLoading}
-                            title={isPublished ? 'Unpublish' : 'Publish'}
-                            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+                            title={isPublished ? 'Revert to draft' : 'Publish application link'}
+                            className="p-1.5 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
                           >
-                            {isPublished ? <GlobeLock className="w-4 h-4 text-amber-600" /> : <Globe className="w-4 h-4 text-emerald-600" />}
+                            {isPublished ? (
+                              <GlobeLock className="w-4 h-4 stroke-[1.5]" />
+                            ) : (
+                              <Globe className="w-4 h-4 stroke-[1.5]" />
+                            )}
                           </button>
 
                           <button
                             onClick={() => handleDeleteJob(job._id, job.title)}
                             disabled={isActionLoading}
                             title="Delete"
-                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            className="p-1.5 text-muted hover:text-red-700 hover:bg-red-50 rounded-[6px] transition-colors"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-4 h-4 stroke-[1.5]" />
                           </button>
                         </div>
                       </td>
