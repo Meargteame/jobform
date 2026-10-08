@@ -128,9 +128,9 @@ const JobEditPage = () => {
 
         <Link
           to={`/dashboard/jobs/${id}/form`}
-          className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold text-ink bg-white hover:bg-paper-2 rounded-[8px] border border-line transition-colors"
+          className="btn-secondary"
         >
-          <FileSpreadsheet className="w-3.5 h-3.5 stroke-[1.5]" />
+          <FileSpreadsheet className="w-4 h-4 stroke-[1.5]" />
           <span>Edit application form</span>
         </Link>
       </div>
@@ -290,7 +290,7 @@ const JobEditPage = () => {
         <div className="pt-4 border-t border-line flex items-center justify-end gap-3">
           <Link
             to="/dashboard"
-            className="h-[44px] px-5 flex items-center justify-center text-xs font-semibold text-ink hover:bg-paper-2 border border-line rounded-[8px] transition-colors"
+            className="btn-tertiary"
           >
             Cancel
           </Link>
@@ -298,12 +298,12 @@ const JobEditPage = () => {
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center justify-center h-[44px] px-6 text-xs font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors disabled:opacity-60"
+            className="btn-primary"
           >
             {saving ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin stroke-[1.5]" />
-                Saving...
+                <span>Saving...</span>
               </>
             ) : (
               <span>Save changes</span>

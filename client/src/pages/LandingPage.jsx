@@ -35,7 +35,7 @@ const LandingPage = () => {
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
-                className="inline-flex items-center gap-2 h-[44px] px-5 text-[14px] font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors"
+                className="btn-primary"
               >
                 <span>Dashboard</span>
                 <ArrowRight className="w-4 h-4 stroke-[1.5]" />
@@ -50,7 +50,7 @@ const LandingPage = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className="inline-flex items-center gap-2 h-[44px] px-5 text-[14px] font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors"
+                  className="btn-primary"
                 >
                   <span>Get started</span>
                   <ArrowRight className="w-4 h-4 stroke-[1.5]" />
@@ -86,7 +86,7 @@ const LandingPage = () => {
             <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
               <Link
                 to="/register"
-                className="inline-flex items-center justify-center gap-2 h-[44px] px-6 text-[15px] font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors"
+                className="btn-primary"
               >
                 <span>Create your first job</span>
                 <ArrowRight className="w-4 h-4 stroke-[1.5]" />
@@ -94,7 +94,7 @@ const LandingPage = () => {
 
               <button
                 onClick={handleDemoLogin}
-                className="inline-flex items-center justify-center h-[44px] px-6 text-[15px] font-semibold text-ink bg-transparent hover:bg-paper-2 border border-ink rounded-[8px] transition-colors"
+                className="btn-secondary"
               >
                 View demo workspace
               </button>
@@ -364,7 +364,7 @@ const LandingPage = () => {
             <div>
               <Link
                 to="/register"
-                className="inline-flex items-center justify-center gap-2 h-[44px] px-6 text-[15px] font-semibold text-ink bg-signal hover:bg-[#11d377] rounded-[8px] transition-colors"
+                className="btn-primary-dark"
               >
                 <span>Create your first job</span>
                 <ArrowRight className="w-4 h-4 stroke-[1.5]" />

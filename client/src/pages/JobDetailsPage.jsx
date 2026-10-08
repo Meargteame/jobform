@@ -124,7 +124,7 @@ const JobDetailsPage = () => {
           {isPublished && (
             <button
               onClick={handleCopyLink}
-              className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold bg-white hover:bg-paper-2 text-ink border border-line rounded-[8px] transition-colors"
+              className="btn-secondary btn-compact"
             >
               {copied ? (
                 <>
@@ -144,7 +144,7 @@ const JobDetailsPage = () => {
             href={`/apply/${job.slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold bg-white hover:bg-paper-2 text-ink border border-line rounded-[8px] transition-colors"
+            className="btn-secondary btn-compact"
           >
             <ExternalLink className="w-3.5 h-3.5 stroke-[1.5]" />
             <span>Open application page</span>
@@ -152,7 +152,7 @@ const JobDetailsPage = () => {
 
           <Link
             to={`/dashboard/jobs/${job._id}/form`}
-            className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold bg-white hover:bg-paper-2 text-ink border border-line rounded-[8px] transition-colors"
+            className="btn-secondary btn-compact"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 stroke-[1.5]" />
             <span>Form ({job.questionCount || 0})</span>
@@ -160,7 +160,7 @@ const JobDetailsPage = () => {
 
           <Link
             to={`/dashboard/jobs/${job._id}/applications`}
-            className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold bg-white hover:bg-paper-2 text-ink border border-line rounded-[8px] transition-colors"
+            className="btn-secondary btn-compact"
           >
             <Users className="w-3.5 h-3.5 stroke-[1.5]" />
             <span>Candidates ({job.applicationCount || 0})</span>
@@ -169,11 +169,7 @@ const JobDetailsPage = () => {
           <button
             onClick={handleTogglePublish}
             disabled={actionLoading}
-            className={`inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold rounded-[8px] transition-colors ${
-              isPublished
-                ? 'bg-paper text-ink border border-line hover:bg-paper-2'
-                : 'bg-ink text-paper hover:bg-[#202022]'
-            }`}
+            className={isPublished ? 'btn-secondary btn-compact' : 'btn-primary btn-compact'}
           >
             {isPublished ? (
               <>
@@ -190,7 +186,7 @@ const JobDetailsPage = () => {
 
           <Link
             to={`/dashboard/jobs/${job._id}/edit`}
-            className="p-2 text-muted hover:text-ink hover:bg-paper rounded-[8px] border border-line transition-colors"
+            className="btn-secondary btn-compact !px-2.5"
             title="Edit Details"
           >
             <Edit className="w-4 h-4 stroke-[1.5]" />

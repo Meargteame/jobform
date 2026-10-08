@@ -240,7 +240,7 @@ const FormBuilderPage = () => {
               href={`/apply/${job.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 h-[36px] px-3.5 text-xs font-semibold text-ink bg-white hover:bg-paper-2 border border-line rounded-[8px] transition-colors"
+              className="btn-secondary btn-compact"
             >
               <ExternalLink className="w-3.5 h-3.5 stroke-[1.5]" />
               <span>Public link</span>
@@ -250,7 +250,7 @@ const FormBuilderPage = () => {
           <div className="inline-flex rounded-[8px] border border-line bg-paper p-0.5">
             <button
               onClick={() => setActiveTab('builder')}
-              className={`h-[32px] px-3 rounded-[6px] text-xs font-semibold transition-colors ${
+              className={`h-[32px] px-3 rounded-[6px] text-xs font-semibold transition-colors cursor-pointer ${
                 activeTab === 'builder'
                   ? 'bg-ink text-paper'
                   : 'text-muted hover:text-ink'
@@ -260,7 +260,7 @@ const FormBuilderPage = () => {
             </button>
             <button
               onClick={() => setActiveTab('preview')}
-              className={`h-[32px] px-3 rounded-[6px] text-xs font-semibold transition-colors ${
+              className={`h-[32px] px-3 rounded-[6px] text-xs font-semibold transition-colors cursor-pointer ${
                 activeTab === 'preview'
                   ? 'bg-ink text-paper'
                   : 'text-muted hover:text-ink'
@@ -326,7 +326,7 @@ const FormBuilderPage = () => {
 
               <button
                 onClick={openAddModal}
-                className="inline-flex items-center gap-1.5 h-[38px] px-4 bg-ink hover:bg-[#202022] text-paper text-xs font-semibold rounded-[8px] transition-colors"
+                className="btn-primary btn-compact"
               >
                 <Plus className="w-4 h-4 stroke-[1.5]" />
                 <span>Add question</span>
@@ -341,7 +341,7 @@ const FormBuilderPage = () => {
                 </p>
                 <button
                   onClick={openAddModal}
-                  className="mt-4 inline-flex items-center gap-1.5 h-[36px] px-4 text-xs font-semibold text-ink bg-white hover:bg-paper-2 border border-line rounded-[8px] transition-colors"
+                  className="mt-4 btn-secondary btn-compact"
                 >
                   <Plus className="w-3.5 h-3.5 stroke-[1.5]" />
                   <span>Add first question</span>
@@ -542,7 +542,7 @@ const FormBuilderPage = () => {
                   onChange={(e) =>
                     setModalFormData({ ...modalFormData, label: e.target.value })
                   }
-                  className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all"
+                  className="bf-input w-full"
                 />
               </div>
 
@@ -555,7 +555,7 @@ const FormBuilderPage = () => {
                   onChange={(e) =>
                     setModalFormData({ ...modalFormData, type: e.target.value })
                   }
-                  className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink"
+                  className="bf-input w-full cursor-pointer"
                 >
                   {QUESTION_TYPES.map((t) => (
                     <option key={t.value} value={t.value}>
@@ -589,7 +589,7 @@ const FormBuilderPage = () => {
                     <button
                       type="button"
                       onClick={addOptionField}
-                      className="text-xs font-semibold text-ink hover:underline"
+                      className="text-xs font-semibold text-ink hover:underline cursor-pointer"
                     >
                       + Add choice
                     </button>
@@ -604,13 +604,13 @@ const FormBuilderPage = () => {
                           value={opt}
                           onChange={(e) => handleOptionChange(i, e.target.value)}
                           placeholder={`Option ${i + 1}`}
-                          className="flex-1 h-[36px] px-3 border border-line rounded-[6px] text-xs focus:ring-1 focus:ring-signal"
+                          className="bf-input h-[36px] text-xs flex-1"
                         />
                         {modalFormData.options.length > 1 && (
                           <button
                             type="button"
                             onClick={() => removeOptionField(i)}
-                            className="p-1 text-muted hover:text-red-700"
+                            className="p-1 text-muted hover:text-red-700 cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5 stroke-[1.5]" />
                           </button>
@@ -625,7 +625,7 @@ const FormBuilderPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="h-[38px] px-4 text-xs font-semibold text-ink hover:bg-paper-2 rounded-[8px] transition-colors"
+                  className="btn-tertiary btn-compact"
                 >
                   Cancel
                 </button>
@@ -633,7 +633,7 @@ const FormBuilderPage = () => {
                 <button
                   type="submit"
                   disabled={modalLoading}
-                  className="h-[38px] px-5 text-xs font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors disabled:opacity-60 flex items-center gap-1.5"
+                  className="btn-primary btn-compact"
                 >
                   {modalLoading && <Loader2 className="w-3.5 h-3.5 animate-spin mr-1 stroke-[1.5]" />}
                   <span>{editingQuestionId ? 'Update question' : 'Save question'}</span>

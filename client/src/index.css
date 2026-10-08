@@ -27,6 +27,40 @@
   }
 }
 
+@layer components {
+  /* BetterForm Design System Buttons (Section 5) */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 h-[44px] px-[20px] rounded-[8px] font-sans font-semibold text-[14px] leading-none bg-ink text-paper border border-ink transition-colors hover:bg-[#202022] active:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer;
+  }
+
+  .btn-primary-dark {
+    @apply inline-flex items-center justify-center gap-2 h-[44px] px-[20px] rounded-[8px] font-sans font-semibold text-[14px] leading-none bg-signal text-ink border border-signal transition-colors hover:bg-[#11d377] active:bg-[#0fc26d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 h-[44px] px-[20px] rounded-[8px] font-sans font-semibold text-[14px] leading-none bg-transparent text-ink border border-ink transition-colors hover:bg-ink/5 active:bg-ink/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer;
+  }
+
+  .btn-tertiary {
+    @apply inline-flex items-center justify-center gap-2 h-[44px] px-[20px] rounded-[8px] font-sans font-semibold text-[14px] leading-none bg-transparent text-muted border border-line transition-colors hover:text-ink hover:bg-paper-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer;
+  }
+
+  .btn-compact {
+    @apply h-[36px] px-[14px] text-[13px];
+  }
+
+  /* Form Fields (Section 5): 44px, 8px radius, 1px line, focus 2px green ring offset 2px with inner border */
+  .bf-input {
+    @apply h-[44px] px-[14px] rounded-[8px] border border-line bg-white text-ink text-[15px] transition-all placeholder:text-muted/60;
+  }
+
+  .bf-input:focus {
+    outline: none;
+    border-color: #0B0B0C;
+    box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px #13E884;
+  }
+}
+
 /* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
@@ -36,9 +70,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(11, 11, 12, 0.15);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(11, 11, 12, 0.25);
 }

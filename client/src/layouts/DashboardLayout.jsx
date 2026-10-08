@@ -137,7 +137,7 @@ const DashboardLayout = () => {
               <Link
                 to="/dashboard/jobs/new"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full inline-flex items-center justify-center gap-2 h-[44px] px-4 bg-ink hover:bg-[#202022] text-paper rounded-[8px] text-[14px] font-semibold transition-colors"
+                className="btn-primary w-full"
               >
                 <Plus className="w-4 h-4 stroke-[1.5]" />
                 <span>Create Job</span>

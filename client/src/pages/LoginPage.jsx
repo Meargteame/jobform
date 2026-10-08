@@ -81,7 +81,7 @@ const LoginPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="recruiter@company.com"
-                className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] placeholder-muted/60 focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all"
+                className="bf-input w-full"
               />
             </div>
 
@@ -95,7 +95,7 @@ const LoginPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] placeholder-muted/60 focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all"
+                className="bf-input w-full"
               />
             </div>
 
@@ -103,12 +103,12 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center h-[44px] px-5 rounded-[8px] text-[15px] font-semibold text-paper bg-ink hover:bg-[#202022] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                className="btn-primary w-full"
               >
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin stroke-[1.5]" />
-                    Signing in...
+                    <span>Signing in...</span>
                   </>
                 ) : (
                   <>
@@ -125,7 +125,7 @@ const LoginPage = () => {
             <button
               type="button"
               onClick={handleFillDemo}
-              className="w-full h-[38px] text-xs font-semibold text-ink bg-paper hover:bg-paper-2 border border-line rounded-[8px] transition-colors flex items-center justify-center gap-2"
+              className="btn-secondary w-full text-xs font-semibold"
             >
               <span>Fill demo credentials</span>
               <span className="font-mono text-[11px] text-muted">(demo@betterform.local)</span>

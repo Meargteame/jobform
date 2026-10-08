@@ -126,37 +126,40 @@ const ApplicationDetailsPage = () => {
             <button
               onClick={() => handleStatusChange('applied')}
               disabled={updatingStatus}
-              className={`h-[34px] px-3.5 rounded-[6px] text-xs font-semibold transition-colors ${
+              className={`h-[34px] px-3.5 inline-flex items-center gap-1.5 rounded-[6px] text-xs font-semibold transition-colors cursor-pointer ${
                 application.status === 'applied'
-                  ? 'bg-ink text-paper'
-                  : 'text-muted hover:text-ink hover:bg-paper-2'
+                  ? 'bg-ink text-paper border border-ink'
+                  : 'text-muted hover:text-ink hover:bg-paper-2 border border-transparent'
               }`}
             >
-              Applied
+              <span className={`w-2 h-2 rounded-full ${application.status === 'applied' ? 'bg-paper' : 'bg-ink'}`} />
+              <span>Applied</span>
             </button>
 
             <button
               onClick={() => handleStatusChange('shortlisted')}
               disabled={updatingStatus}
-              className={`h-[34px] px-3.5 rounded-[6px] text-xs font-semibold transition-colors ${
+              className={`h-[34px] px-3.5 inline-flex items-center gap-1.5 rounded-[6px] text-xs font-semibold transition-colors cursor-pointer ${
                 application.status === 'shortlisted'
-                  ? 'bg-signal text-ink font-bold'
-                  : 'text-muted hover:text-ink hover:bg-paper-2'
+                  ? 'bg-signal text-ink border border-signal font-bold'
+                  : 'text-muted hover:text-ink hover:bg-paper-2 border border-transparent'
               }`}
             >
-              Shortlist
+              <span className={`w-2 h-2 rounded-full ${application.status === 'shortlisted' ? 'bg-ink' : 'bg-signal'}`} />
+              <span>Shortlist</span>
             </button>
 
             <button
               onClick={() => handleStatusChange('rejected')}
               disabled={updatingStatus}
-              className={`h-[34px] px-3.5 rounded-[6px] text-xs font-semibold transition-colors ${
+              className={`h-[34px] px-3.5 inline-flex items-center gap-1.5 rounded-[6px] text-xs font-semibold transition-colors cursor-pointer ${
                 application.status === 'rejected'
-                  ? 'bg-white border border-line text-ink'
-                  : 'text-muted hover:text-red-700 hover:bg-paper-2'
+                  ? 'bg-white border border-ink text-ink'
+                  : 'text-muted hover:text-red-700 hover:bg-paper-2 border border-transparent'
               }`}
             >
-              Reject
+              <span className="w-2 h-2 rounded-full border border-current bg-transparent" />
+              <span>Reject</span>
             </button>
           </div>
         </div>
@@ -221,7 +224,7 @@ const ApplicationDetailsPage = () => {
               href={fullCvUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 h-[36px] px-4 text-xs font-semibold text-ink bg-paper hover:bg-paper-2 border border-line rounded-[6px] transition-colors"
+              className="btn-secondary btn-compact"
             >
               <ExternalLink className="w-3.5 h-3.5 stroke-[1.5]" />
               <span>Open CV document</span>

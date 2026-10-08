@@ -88,7 +88,7 @@ const RegisterPage = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Jane Doe"
-                className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] placeholder-muted/60 focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all"
+                className="bf-input w-full"
               />
             </div>
 
@@ -103,7 +103,7 @@ const RegisterPage = () => {
                 value={formData.companyName}
                 onChange={handleChange}
                 placeholder="Acme Corp"
-                className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] placeholder-muted/60 focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all"
+                className="bf-input w-full"
               />
             </div>
 
@@ -118,7 +118,7 @@ const RegisterPage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="jane@company.com"
-                className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] placeholder-muted/60 focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all"
+                className="bf-input w-full"
               />
             </div>
 
@@ -134,7 +134,7 @@ const RegisterPage = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] placeholder-muted/60 focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all"
+                className="bf-input w-full"
               />
             </div>
 
@@ -142,12 +142,12 @@ const RegisterPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center h-[44px] px-5 rounded-[8px] text-[15px] font-semibold text-paper bg-ink hover:bg-[#202022] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                className="btn-primary w-full"
               >
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin stroke-[1.5]" />
-                    Creating account...
+                    <span>Creating account...</span>
                   </>
                 ) : (
                   <>

@@ -238,7 +238,7 @@ const JobCreatePage = () => {
         <div className="pt-4 border-t border-line flex flex-col sm:flex-row items-center justify-end gap-3">
           <Link
             to="/dashboard"
-            className="w-full sm:w-auto h-[44px] px-5 flex items-center justify-center text-xs font-semibold text-ink hover:bg-paper-2 border border-line rounded-[8px] transition-colors"
+            className="btn-tertiary w-full sm:w-auto"
           >
             Cancel
           </Link>
@@ -247,7 +247,7 @@ const JobCreatePage = () => {
             type="button"
             disabled={loading}
             onClick={(e) => handleSubmit(e, 'draft')}
-            className="w-full sm:w-auto h-[44px] px-5 text-xs font-semibold text-ink bg-paper hover:bg-paper-2 border border-line rounded-[8px] transition-colors disabled:opacity-60"
+            className="btn-secondary w-full sm:w-auto"
           >
             {loading ? 'Saving...' : 'Save as draft & build form'}
           </button>
@@ -256,17 +256,17 @@ const JobCreatePage = () => {
             type="button"
             disabled={loading}
             onClick={(e) => handleSubmit(e, 'published')}
-            className="w-full sm:w-auto inline-flex items-center justify-center h-[44px] px-6 text-xs font-semibold text-paper bg-ink hover:bg-[#202022] rounded-[8px] transition-colors disabled:opacity-60"
+            className="btn-primary w-full sm:w-auto"
           >
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin stroke-[1.5]" />
-                Publishing...
+                <span>Publishing...</span>
               </>
             ) : (
               <>
-                <Check className="w-4 h-4 mr-2 stroke-[1.5]" />
-                Publish & build form
+                <Check className="w-4 h-4 stroke-[1.5]" />
+                <span>Publish & build form</span>
               </>
             )}
           </button>

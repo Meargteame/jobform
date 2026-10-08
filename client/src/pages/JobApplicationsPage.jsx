@@ -119,7 +119,7 @@ const JobApplicationsPage = () => {
         {data.job?.slug && (
           <button
             onClick={handleCopyPublicLink}
-            className="inline-flex items-center gap-2 h-[40px] px-4 text-xs font-semibold bg-white hover:bg-paper-2 text-ink border border-line rounded-[8px] transition-colors self-start sm:self-auto"
+            className="btn-secondary btn-compact self-start sm:self-auto"
           >
             {copied ? (
               <>
@@ -181,7 +181,7 @@ const JobApplicationsPage = () => {
             placeholder="Search candidate or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full h-[36px] pl-9 pr-3 rounded-[8px] border border-line bg-paper text-ink text-xs focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink placeholder-muted"
+            className="bf-input h-[36px] pl-9 pr-3 text-xs w-full"
           />
           <Search className="w-3.5 h-3.5 text-muted absolute left-3 top-2.5 stroke-[1.5]" />
         </form>
@@ -206,9 +206,9 @@ const JobApplicationsPage = () => {
               <div className="mt-5">
                 <button
                   onClick={handleCopyPublicLink}
-                  className="inline-flex items-center h-[40px] px-4 text-xs font-semibold rounded-[8px] text-paper bg-ink hover:bg-[#202022] transition-colors"
+                  className="btn-primary btn-compact"
                 >
-                  <Copy className="w-3.5 h-3.5 mr-1.5 stroke-[1.5]" />
+                  <Copy className="w-3.5 h-3.5 stroke-[1.5]" />
                   <span>Copy application link</span>
                 </button>
               </div>
@@ -264,7 +264,7 @@ const JobApplicationsPage = () => {
                         <div className="flex items-center justify-end gap-2">
                           <Link
                             to={`/dashboard/applications/${app._id}`}
-                            className="inline-flex items-center gap-1.5 h-[34px] px-3 text-xs font-semibold text-ink bg-paper hover:bg-paper-2 border border-line rounded-[6px] transition-colors"
+                            className="btn-secondary btn-compact"
                           >
                             <Eye className="w-3.5 h-3.5 stroke-[1.5]" />
                             <span>View</span>
@@ -275,7 +275,7 @@ const JobApplicationsPage = () => {
                               onClick={() => handleStatusUpdate(app._id, 'shortlisted')}
                               disabled={isUpdating}
                               title="Shortlist applicant"
-                              className="inline-flex items-center gap-1.5 h-[34px] px-3 text-xs font-semibold text-ink bg-signal hover:bg-[#11d377] rounded-[6px] transition-colors disabled:opacity-50"
+                              className="btn-primary-dark btn-compact"
                             >
                               <span>Shortlist</span>
                             </button>
@@ -286,7 +286,7 @@ const JobApplicationsPage = () => {
                               onClick={() => handleStatusUpdate(app._id, 'rejected')}
                               disabled={isUpdating}
                               title="Reject applicant"
-                              className="inline-flex items-center gap-1.5 h-[34px] px-3 text-xs font-semibold text-muted hover:text-red-700 bg-white hover:bg-red-50 border border-line rounded-[6px] transition-colors disabled:opacity-50"
+                              className="btn-secondary btn-compact text-muted hover:text-red-700 hover:border-red-600"
                             >
                               <span>Reject</span>
                             </button>

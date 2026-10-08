@@ -206,7 +206,7 @@ const DashboardPage = () => {
         <div className="flex items-center gap-3">
           <Link
             to="/dashboard/jobs/new"
-            className="inline-flex items-center justify-center gap-2 h-[44px] px-5 bg-ink hover:bg-[#202022] text-paper rounded-[8px] text-[14px] font-semibold transition-colors"
+            className="btn-primary"
           >
             <Plus className="w-4 h-4 stroke-[1.5]" />
             <span>Create job</span>
@@ -324,20 +324,20 @@ const DashboardPage = () => {
         {/* Search, Sort, View Toggle */}
         <div className="flex items-center gap-2.5">
           <div className="relative flex-1 md:w-64">
-            <Search className="w-4 h-4 text-muted absolute left-3.5 top-3 stroke-[1.5]" />
+            <Search className="w-4 h-4 text-muted absolute left-3.5 top-[14px] stroke-[1.5]" />
             <input
               type="text"
               placeholder="Search postings..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-[40px] pl-9 pr-3 rounded-[8px] border border-line bg-paper text-ink text-xs focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all placeholder-muted"
+              className="bf-input w-full pl-9 text-xs"
             />
           </div>
 
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="h-[40px] text-xs bg-paper border border-line rounded-[8px] px-3 text-ink focus:outline-none focus:ring-2 focus:ring-signal font-medium"
+            className="bf-input text-xs px-3 font-medium cursor-pointer"
           >
             <option value="newest">Newest first</option>
             <option value="applications">Most candidates</option>
@@ -394,14 +394,14 @@ const DashboardPage = () => {
               <>
                 <Link
                   to="/dashboard/jobs/new"
-                  className="w-full sm:w-auto inline-flex items-center justify-center h-[44px] px-5 text-xs font-semibold rounded-[8px] text-paper bg-ink hover:bg-[#202022] transition-colors"
+                  className="btn-primary w-full sm:w-auto"
                 >
-                  <Plus className="w-4 h-4 mr-1.5 stroke-[1.5]" />
-                  Create job
+                  <Plus className="w-4 h-4 stroke-[1.5]" />
+                  <span>Create job</span>
                 </Link>
                 <button
                   onClick={handleSeedDemo}
-                  className="w-full sm:w-auto inline-flex items-center justify-center h-[44px] px-5 text-xs font-semibold rounded-[8px] text-ink bg-paper hover:bg-paper-2 border border-line transition-colors"
+                  className="btn-secondary w-full sm:w-auto"
                 >
                   Load sample roles
                 </button>
@@ -412,7 +412,7 @@ const DashboardPage = () => {
                   setSearchQuery('');
                   setStatusFilter('all');
                 }}
-                className="inline-flex items-center h-[40px] px-4 text-xs font-semibold rounded-[8px] text-ink bg-paper hover:bg-paper-2 border border-line transition-colors"
+                className="btn-secondary w-full sm:w-auto"
               >
                 Reset filters
               </button>

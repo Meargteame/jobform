@@ -376,7 +376,7 @@ const PublicJobApplyPage = () => {
                   placeholder="Jane Doe"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
+                  className="bf-input w-full"
                 />
               </div>
 
@@ -392,7 +392,7 @@ const PublicJobApplyPage = () => {
                     placeholder="jane@example.com"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
+                    className="bf-input w-full"
                   />
                 </div>
 
@@ -407,7 +407,7 @@ const PublicJobApplyPage = () => {
                     placeholder="+1 555 0192"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
+                    className="bf-input w-full"
                   />
                 </div>
               </div>
@@ -477,14 +477,14 @@ const PublicJobApplyPage = () => {
                           value={currentValue || ''}
                           onChange={(e) => handleAnswerChange(q._id, e.target.value)}
                           placeholder="Type your response..."
-                          className="w-full p-3 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
+                          className="w-full p-3.5 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink transition-all placeholder:text-muted/60"
                         />
                       ) : q.type === 'select' ? (
                         <select
                           required={q.required}
                           value={currentValue || ''}
                           onChange={(e) => handleAnswerChange(q._id, e.target.value)}
-                          className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all"
+                          className="bf-input w-full cursor-pointer"
                         >
                           <option value="">Select option...</option>
                           {q.options?.map((opt, i) => (
@@ -547,7 +547,7 @@ const PublicJobApplyPage = () => {
                               ? 'e.g. 5'
                               : 'Your answer...'
                           }
-                          className="w-full h-[44px] px-3.5 rounded-[8px] border border-line bg-white text-ink text-[14px] focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 focus:border-ink transition-all placeholder-muted/60"
+                          className="bf-input w-full"
                         />
                       )}
                     </div>
@@ -561,7 +561,7 @@ const PublicJobApplyPage = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full flex justify-center items-center h-[44px] px-5 rounded-[8px] text-[15px] font-semibold text-paper bg-ink hover:bg-[#202022] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                className="btn-primary w-full"
               >
                 {submitting ? (
                   <>
