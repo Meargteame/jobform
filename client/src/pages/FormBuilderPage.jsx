@@ -27,6 +27,45 @@ const QUESTION_TYPES = [
   { value: 'file', label: 'Additional File Attachment (file)' },
 ];
 
+const QUESTION_PRESETS = [
+  {
+    label: 'Years of Professional Experience',
+    type: 'number',
+    required: true,
+    options: [],
+  },
+  {
+    label: 'Notice Period',
+    type: 'select',
+    required: true,
+    options: ['Immediate', '2 Weeks', '1 Month', '2+ Months'],
+  },
+  {
+    label: 'Work Authorization',
+    type: 'radio',
+    required: true,
+    options: ['Citizen / Permanent Resident', 'Work Visa', 'Sponsorship Required'],
+  },
+  {
+    label: 'Portfolio or GitHub URL',
+    type: 'url',
+    required: false,
+    options: [],
+  },
+  {
+    label: 'LinkedIn Profile',
+    type: 'url',
+    required: false,
+    options: [],
+  },
+  {
+    label: 'Salary Expectation (Annual)',
+    type: 'text',
+    required: false,
+    options: [],
+  },
+];
+
 const FormBuilderPage = () => {
   const { jobId } = useParams();
 
@@ -82,6 +121,18 @@ const FormBuilderPage = () => {
       type: 'text',
       required: false,
       options: ['Option 1', 'Option 2'],
+    });
+    setModalError('');
+    setShowModal(true);
+  };
+
+  const handleApplyPreset = (preset) => {
+    setEditingQuestionId(null);
+    setModalFormData({
+      label: preset.label,
+      type: preset.type,
+      required: preset.required,
+      options: preset.options && preset.options.length > 0 ? [...preset.options] : ['Option 1', 'Option 2'],
     });
     setModalError('');
     setShowModal(true);
@@ -331,6 +382,26 @@ const FormBuilderPage = () => {
                 <Plus className="w-4 h-4 stroke-[1.5]" />
                 <span>Add question</span>
               </button>
+            </div>
+
+            {/* Quick Question Presets Chips */}
+            <div className="p-3.5 bg-paper rounded-[8px] border border-line space-y-2">
+              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted block">
+                Quick Question Presets (Click to add)
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {QUESTION_PRESETS.map((preset, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleApplyPreset(preset)}
+                    className="h-[30px] px-2.5 rounded-[6px] text-xs font-semibold bg-white hover:bg-paper-2 border border-line text-ink transition-colors flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Plus className="w-3 h-3 stroke-[1.5] text-muted" />
+                    <span>{preset.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {questions.length === 0 ? (

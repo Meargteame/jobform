@@ -194,6 +194,52 @@ const JobDetailsPage = () => {
         </div>
       </div>
 
+      {/* Distribution & Public Link Banner */}
+      {isPublished && (
+        <div className="bg-white p-6 rounded-[12px] border border-line flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-signal" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                Public Application Link Active
+              </span>
+            </div>
+            <p className="font-mono text-xs text-ink break-all">
+              {`${window.location.origin}/apply/${job.slug}`}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={handleCopyLink}
+              className="btn-primary btn-compact"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 stroke-[2]" />
+                  <span>Link Copied</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5 stroke-[1.5]" />
+                  <span>Copy Link</span>
+                </>
+              )}
+            </button>
+
+            <a
+              href={`/apply/${job.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary btn-compact"
+            >
+              <ExternalLink className="w-3.5 h-3.5 stroke-[1.5]" />
+              <span>Preview Form</span>
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">

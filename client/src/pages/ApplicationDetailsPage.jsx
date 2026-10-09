@@ -22,6 +22,14 @@ const ApplicationDetailsPage = () => {
   const [error, setError] = useState('');
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [statusFeedback, setStatusFeedback] = useState('');
+  const [notes, setNotes] = useState(() => localStorage.getItem(`bf_notes_${id}`) || '');
+  const [notesSaved, setNotesSaved] = useState(false);
+
+  const handleSaveNotes = () => {
+    localStorage.setItem(`bf_notes_${id}`, notes);
+    setNotesSaved(true);
+    setTimeout(() => setNotesSaved(false), 2500);
+  };
 
   const fetchApplication = async () => {
     try {
@@ -221,6 +229,14 @@ const ApplicationDetailsPage = () => {
 
           <div className="flex items-center gap-2">
             <a
+              href={`mailto:${application.email}?subject=Regarding your application for ${encodeURIComponent(application.job?.title || 'position')} at ${encodeURIComponent(application.job?.companyName || 'BetterForm')}`}
+              className="btn-secondary btn-compact"
+            >
+              <Mail className="w-3.5 h-3.5 stroke-[1.5]" />
+              <span>Email candidate</span>
+            </a>
+
+            <a
               href={fullCvUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -297,6 +313,42 @@ const ApplicationDetailsPage = () => {
             })}
           </div>
         )}
+      </div>
+
+      {/* Internal Recruiter Notes Card */}
+      <div className="bg-white rounded-[12px] border border-line p-6 space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-line">
+          <div>
+            <h2 className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted">
+              Internal Evaluation Notes
+            </h2>
+            <p className="text-xs text-muted mt-0.5">Private to hiring team. Not visible to candidate.</p>
+          </div>
+          {notesSaved && (
+            <span className="font-mono text-[11px] text-ink uppercase tracking-[0.12em] flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-signal" />
+              <span>Notes saved</span>
+            </span>
+          )}
+        </div>
+
+        <textarea
+          rows={4}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Jot down interview assessment, salary discussion, impressions, or hiring team feedback..."
+          className="w-full p-3.5 rounded-[8px] border border-line bg-paper text-ink text-sm focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink placeholder:text-muted/60"
+        />
+
+        <div className="flex items-center justify-end">
+          <button
+            type="button"
+            onClick={handleSaveNotes}
+            className="btn-primary btn-compact"
+          >
+            Save evaluation notes
+          </button>
+        </div>
       </div>
     </div>
   );
