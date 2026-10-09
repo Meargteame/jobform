@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
 import CandidateStatusBadge from '../components/CandidateStatus';
+import { exportCandidatesCsv } from '../utils/exportCsv';
 import {
   ArrowLeft,
   Search,
@@ -10,6 +11,7 @@ import {
   Loader2,
   Copy,
   Check,
+  Download,
 } from 'lucide-react';
 
 const JobApplicationsPage = () => {
@@ -116,24 +118,37 @@ const JobApplicationsPage = () => {
           </div>
         </div>
 
-        {data.job?.slug && (
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
           <button
-            onClick={handleCopyPublicLink}
-            className="btn-secondary btn-compact self-start sm:self-auto"
+            type="button"
+            onClick={() => exportCandidatesCsv(data.applications, `${(data.job?.title || 'job').toLowerCase().replace(/\s+/g, '_')}_candidates.csv`)}
+            disabled={!data.applications || data.applications.length === 0}
+            className="btn-secondary btn-compact"
+            title="Download candidates spreadsheet"
           >
-            {copied ? (
-              <>
-                <Check className="w-4 h-4 text-ink stroke-[2]" />
-                <span>Link copied</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-4 h-4 stroke-[1.5]" />
-                <span>Copy application link</span>
-              </>
-            )}
+            <Download className="w-4 h-4 stroke-[1.5]" />
+            <span>Export CSV</span>
           </button>
-        )}
+
+          {data.job?.slug && (
+            <button
+              onClick={handleCopyPublicLink}
+              className="btn-secondary btn-compact"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4 text-ink stroke-[2]" />
+                  <span>Link copied</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4 stroke-[1.5]" />
+                  <span>Copy application link</span>
+                </>
+              )}
+            </button>
+          )}
+        </div>
       </div>
 
       {error && (

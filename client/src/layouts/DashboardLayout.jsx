@@ -11,6 +11,9 @@ import {
   X,
   ChevronRight,
   Users,
+  Settings,
+  Globe,
+  ExternalLink,
 } from 'lucide-react';
 
 const DashboardLayout = () => {
@@ -50,6 +53,12 @@ const DashboardLayout = () => {
       name: 'Create Job',
       to: '/dashboard/jobs/new',
       icon: Plus,
+      end: false,
+    },
+    {
+      name: 'Settings',
+      to: '/dashboard/settings',
+      icon: Settings,
       end: false,
     },
   ];
@@ -139,8 +148,8 @@ const DashboardLayout = () => {
               </NavLink>
             ))}
 
-            {/* Quick Action Button */}
-            <div className="pt-4">
+            {/* Quick Action Button & Careers Portal Link */}
+            <div className="pt-4 space-y-2">
               <Link
                 to="/dashboard/jobs/new"
                 onClick={() => setMobileMenuOpen(false)}
@@ -148,6 +157,21 @@ const DashboardLayout = () => {
               >
                 <Plus className="w-4 h-4 stroke-[1.5]" />
                 <span>Create Job</span>
+              </Link>
+
+              <Link
+                to="/careers"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3.5 py-2.5 rounded-[8px] text-xs font-semibold text-muted hover:text-ink hover:bg-paper-2 transition-colors border border-line bg-white"
+                title="View your public company careers board"
+              >
+                <div className="flex items-center gap-2">
+                  <Globe className="w-3.5 h-3.5 stroke-[1.5]" />
+                  <span>Careers Portal</span>
+                </div>
+                <ExternalLink className="w-3 h-3 opacity-60 stroke-[1.5]" />
               </Link>
             </div>
           </nav>

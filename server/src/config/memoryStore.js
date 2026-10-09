@@ -38,6 +38,12 @@ class MemoryUser {
     return candidatePassword === this.password;
   }
 
+  async save() {
+    const idx = store.users.findIndex((u) => u._id === this._id);
+    if (idx !== -1) store.users[idx] = this;
+    return this;
+  }
+
   toObject() {
     return { ...this };
   }
@@ -213,6 +219,9 @@ const memoryJob = {
     let list = [...store.jobs];
     if (query.recruiter) {
       list = list.filter((j) => j.recruiter.toString() === query.recruiter.toString());
+    }
+    if (query.status) {
+      list = list.filter((j) => j.status === query.status);
     }
     return new QueryHelper(list.map((j) => new MemoryJob(j)));
   },

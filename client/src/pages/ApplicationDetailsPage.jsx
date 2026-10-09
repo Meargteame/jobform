@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import CandidateStatusBadge from '../components/CandidateStatus';
 import {
   ArrowLeft,
@@ -11,11 +12,16 @@ import {
   AlertCircle,
   Loader2,
   FileCheck,
+  X,
+  Send,
+  Copy,
+  Check,
 } from 'lucide-react';
 
 const ApplicationDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [application, setApplication] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,6 +30,13 @@ const ApplicationDetailsPage = () => {
   const [statusFeedback, setStatusFeedback] = useState('');
   const [notes, setNotes] = useState(() => localStorage.getItem(`bf_notes_${id}`) || '');
   const [notesSaved, setNotesSaved] = useState(false);
+
+  // Outreach Modal State
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState('interview');
+  const [emailSubject, setEmailSubject] = useState('');
+  const [emailBody, setEmailBody] = useState('');
+  const [emailCopied, setEmailCopied] = useState(false);
 
   const handleSaveNotes = () => {
     localStorage.setItem(`bf_notes_${id}`, notes);
@@ -66,6 +79,49 @@ const ApplicationDetailsPage = () => {
     } finally {
       setUpdatingStatus(false);
     }
+  };
+
+  const applyEmailTemplate = (templateKey, app = application) => {
+    setSelectedTemplate(templateKey);
+    const candidateName = app?.fullName || 'Candidate';
+    const jobTitle = app?.job?.title || 'the open role';
+    const company = app?.job?.companyName || user?.companyName || 'our company';
+    const recruiterName = user?.name || 'The Hiring Team';
+
+    if (templateKey === 'interview') {
+      setEmailSubject(`Invitation to Interview: ${jobTitle} at ${company}`);
+      setEmailBody(
+        `Hi ${candidateName},\n\n` +
+        `Thank you for applying for the ${jobTitle} role at ${company}.\n\n` +
+        `We were very impressed by your background and experience, and would like to invite you to an introductory 30-minute screening conversation with our team.\n\n` +
+        `Please let us know what times later this week or next week work well for you.\n\n` +
+        `We look forward to speaking with you!\n\n` +
+        `Best regards,\n${recruiterName}\n${company}`
+      );
+    } else if (templateKey === 'assessment') {
+      setEmailSubject(`Next Steps: Technical Evaluation for ${jobTitle} - ${company}`);
+      setEmailBody(
+        `Hi ${candidateName},\n\n` +
+        `Thank you for your application for the ${jobTitle} position at ${company}.\n\n` +
+        `We'd love to proceed to the next stage of our evaluation process. Could you please share links to relevant projects or portfolio repositories you have worked on?\n\n` +
+        `Feel free to reach out if you have any questions.\n\n` +
+        `Best regards,\n${recruiterName}\n${company}`
+      );
+    } else if (templateKey === 'rejection') {
+      setEmailSubject(`Update regarding your application for ${jobTitle} at ${company}`);
+      setEmailBody(
+        `Dear ${candidateName},\n\n` +
+        `Thank you for taking the time to apply for the ${jobTitle} role at ${company} and for your interest in joining our team.\n\n` +
+        `After reviewing your application alongside other candidates, we have decided to move forward with applicants whose experience more closely matches our immediate requirements.\n\n` +
+        `We truly appreciate your interest and wish you the very best in your search.\n\n` +
+        `Sincerely,\n${recruiterName}\n${company}`
+      );
+    }
+  };
+
+  const handleOpenEmailModal = (initialTemplate = 'interview') => {
+    applyEmailTemplate(initialTemplate, application);
+    setEmailModalOpen(true);
   };
 
   if (loading) {
@@ -228,13 +284,15 @@ const ApplicationDetailsPage = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <a
-              href={`mailto:${application.email}?subject=Regarding your application for ${encodeURIComponent(application.job?.title || 'position')} at ${encodeURIComponent(application.job?.companyName || 'BetterForm')}`}
+            <button
+              type="button"
+              onClick={() => handleOpenEmailModal('interview')}
               className="btn-secondary btn-compact"
+              title="Compose message or interview invite with templates"
             >
               <Mail className="w-3.5 h-3.5 stroke-[1.5]" />
               <span>Email candidate</span>
-            </a>
+            </button>
 
             <a
               href={fullCvUrl}
@@ -350,6 +408,131 @@ const ApplicationDetailsPage = () => {
           </button>
         </div>
       </div>
+
+      {/* Candidate Email Outreach Modal */}
+      {emailModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40 backdrop-blur-xs">
+          <div className="bg-white rounded-[12px] border border-line max-w-xl w-full p-6 space-y-5 shadow-xl relative animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between pb-3 border-b border-line">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-signal" />
+                  <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                    Candidate Communication
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold tracking-[-0.02em] text-ink mt-1">
+                  Email {application.fullName}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEmailModalOpen(false)}
+                className="p-1.5 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
+              >
+                <X className="w-5 h-5 stroke-[1.5]" />
+              </button>
+            </div>
+
+            {/* Template Selector Pills */}
+            <div className="space-y-1.5">
+              <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted block">
+                Quick Template
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { id: 'interview', label: 'Interview Invitation' },
+                  { id: 'assessment', label: 'Technical / Portfolio' },
+                  { id: 'rejection', label: 'Polite Rejection' },
+                ].map((tpl) => (
+                  <button
+                    key={tpl.id}
+                    type="button"
+                    onClick={() => applyEmailTemplate(tpl.id)}
+                    className={`h-[32px] px-3 rounded-[6px] text-xs font-semibold transition-colors ${
+                      selectedTemplate === tpl.id
+                        ? 'bg-ink text-paper'
+                        : 'bg-paper hover:bg-paper-2 text-ink border border-line'
+                    }`}
+                  >
+                    {tpl.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Subject */}
+            <div className="space-y-1.5">
+              <label className="block font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                Subject
+              </label>
+              <input
+                type="text"
+                value={emailSubject}
+                onChange={(e) => setEmailSubject(e.target.value)}
+                className="bf-input w-full text-xs font-medium"
+              />
+            </div>
+
+            {/* Body */}
+            <div className="space-y-1.5">
+              <label className="block font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                Email Message Body
+              </label>
+              <textarea
+                rows={7}
+                value={emailBody}
+                onChange={(e) => setEmailBody(e.target.value)}
+                className="w-full p-3 font-sans text-xs bg-paper text-ink rounded-[8px] border border-line focus:outline-none focus:ring-2 focus:ring-signal focus:border-ink leading-relaxed"
+              />
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="pt-3 border-t border-line flex flex-wrap items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(`Subject: ${emailSubject}\n\n${emailBody}`);
+                  setEmailCopied(true);
+                  setTimeout(() => setEmailCopied(false), 2500);
+                }}
+                className="btn-secondary btn-compact"
+              >
+                {emailCopied ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 stroke-[2]" />
+                    <span>Message copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5 stroke-[1.5]" />
+                    <span>Copy message</span>
+                  </>
+                )}
+              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEmailModalOpen(false)}
+                  className="btn-secondary btn-compact"
+                >
+                  Cancel
+                </button>
+
+                <a
+                  href={`mailto:${application.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`}
+                  onClick={() => setEmailModalOpen(false)}
+                  className="btn-primary btn-compact"
+                >
+                  <Send className="w-3.5 h-3.5 stroke-[1.5]" />
+                  <span>Open in email app</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

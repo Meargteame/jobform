@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { CandidateDot } from '../components/CandidateStatus';
+import { exportCandidatesCsv } from '../utils/exportCsv';
 import {
   Plus,
   Search,
@@ -14,6 +15,7 @@ import {
   FileCheck,
   Users,
   Briefcase,
+  Download,
 } from 'lucide-react';
 
 const PipelinePage = () => {
@@ -165,7 +167,18 @@ const PipelinePage = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => exportCandidatesCsv(filteredCandidates, `candidates_pipeline_${new Date().toISOString().split('T')[0]}.csv`)}
+            disabled={filteredCandidates.length === 0}
+            className="btn-secondary"
+            title="Download candidate spreadsheet"
+          >
+            <Download className="w-4 h-4 stroke-[1.5]" />
+            <span>Export CSV ({filteredCandidates.length})</span>
+          </button>
+
           <Link
             to="/dashboard/jobs/new"
             className="btn-primary"

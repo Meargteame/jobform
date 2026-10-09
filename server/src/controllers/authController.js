@@ -128,8 +128,37 @@ const getMe = async (req, res, next) => {
   }
 };
 
+// @desc    Update recruiter profile and company name
+// @route   PUT /api/auth/profile
+// @access  Private (Recruiter)
+const updateProfile = async (req, res, next) => {
+  try {
+    const { name, companyName } = req.body;
+    const user = req.user;
+
+    if (name) user.name = name.trim();
+    if (companyName) user.companyName = companyName.trim();
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Workspace settings updated successfully.',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        companyName: user.companyName,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   register,
   login,
   getMe,
+  updateProfile,
 };

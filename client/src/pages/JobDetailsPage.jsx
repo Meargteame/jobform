@@ -17,6 +17,9 @@ import {
   Briefcase,
   AlertCircle,
   Loader2,
+  Share2,
+  Code2,
+  X,
 } from 'lucide-react';
 
 const JobDetailsPage = () => {
@@ -26,6 +29,8 @@ const JobDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  const [embedCopied, setEmbedCopied] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
   const fetchJob = async () => {
@@ -139,6 +144,16 @@ const JobDetailsPage = () => {
               )}
             </button>
           )}
+
+          <button
+            type="button"
+            onClick={() => setShareModalOpen(true)}
+            className="btn-secondary btn-compact"
+            title="Share or embed application form"
+          >
+            <Share2 className="w-3.5 h-3.5 stroke-[1.5]" />
+            <span>Share & Embed</span>
+          </button>
 
           <a
             href={`/apply/${job.slug}`}
@@ -308,6 +323,139 @@ const JobDetailsPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Share & Embed Modal */}
+      {shareModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40 backdrop-blur-xs">
+          <div className="bg-white rounded-[12px] border border-line max-w-lg w-full p-6 space-y-5 shadow-xl relative animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between pb-3 border-b border-line">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-signal" />
+                  <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                    Distribution & Embed
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold tracking-[-0.02em] text-ink mt-1">
+                  Share & Embed Application
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShareModalOpen(false)}
+                className="p-1.5 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
+              >
+                <X className="w-5 h-5 stroke-[1.5]" />
+              </button>
+            </div>
+
+            {/* Direct URL */}
+            <div className="space-y-1.5">
+              <label className="block font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                Direct Applicant URL
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={`${window.location.origin}/apply/${job.slug}`}
+                  className="bf-input flex-1 text-xs font-mono select-all bg-paper"
+                />
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  className="btn-secondary whitespace-nowrap"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-4 h-4 stroke-[2]" />
+                      <span>Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4 stroke-[1.5]" />
+                      <span>Copy link</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Iframe Embed Code */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="block font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                  Embed HTML Iframe Snippet
+                </label>
+                <span className="text-[10px] text-muted font-sans">
+                  Webflow, Notion, WordPress
+                </span>
+              </div>
+              <textarea
+                readOnly
+                rows={3}
+                value={`<iframe src="${window.location.origin}/apply/${job.slug}" width="100%" height="780" frameborder="0" style="border: 1px solid #E4E3DD; border-radius: 8px;"></iframe>`}
+                className="w-full p-2.5 font-mono text-xs bg-paper text-ink rounded-[8px] border border-line select-all"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const snippet = `<iframe src="${window.location.origin}/apply/${job.slug}" width="100%" height="780" frameborder="0" style="border: 1px solid #E4E3DD; border-radius: 8px;"></iframe>`;
+                  navigator.clipboard.writeText(snippet);
+                  setEmbedCopied(true);
+                  setTimeout(() => setEmbedCopied(false), 2500);
+                }}
+                className="btn-primary w-full"
+              >
+                {embedCopied ? (
+                  <>
+                    <Check className="w-4 h-4 stroke-[2]" />
+                    <span>Embed snippet copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Code2 className="w-4 h-4 stroke-[1.5]" />
+                    <span>Copy HTML embed code</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Social Sharing Quick Actions */}
+            <div className="pt-2 border-t border-line space-y-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted block">
+                Share to Hiring Channels
+              </span>
+              <div className="flex items-center gap-2">
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${window.location.origin}/apply/${job.slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary btn-compact flex-1 text-center"
+                >
+                  LinkedIn
+                </a>
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`We are hiring! Apply for ${job.title} at ${job.companyName}: `)}&url=${encodeURIComponent(`${window.location.origin}/apply/${job.slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary btn-compact flex-1 text-center"
+                >
+                  Twitter / X
+                </a>
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out this role: ${job.title} at ${job.companyName} ${window.location.origin}/apply/${job.slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary btn-compact flex-1 text-center"
+                >
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
