@@ -201,56 +201,7 @@ const submitApplication = async (req, res, next) => {
   }
 };
 
-// @desc    Get all public published jobs (Company Careers Board)
-// @route   GET /api/public/jobs
-// @access  Public
-const getPublicJobs = async (req, res, next) => {
-  try {
-    const jobs = await Job.find({ status: 'published' }).sort({ createdAt: -1 });
-
-    let filtered = jobs;
-    if (req.query.company) {
-      const comp = req.query.company.toLowerCase();
-      filtered = filtered.filter((j) => j.companyName?.toLowerCase().includes(comp));
-    }
-
-    if (req.query.search) {
-      const q = req.query.search.toLowerCase();
-      filtered = filtered.filter(
-        (j) =>
-          j.title?.toLowerCase().includes(q) ||
-          j.companyName?.toLowerCase().includes(q) ||
-          j.location?.toLowerCase().includes(q)
-      );
-    }
-
-    if (req.query.type && req.query.type !== 'all') {
-      filtered = filtered.filter((j) => j.employmentType === req.query.type);
-    }
-
-    return res.status(200).json({
-      success: true,
-      count: filtered.length,
-      data: filtered.map((j) => ({
-        _id: j._id,
-        title: j.title,
-        companyName: j.companyName,
-        location: j.location,
-        employmentType: j.employmentType,
-        salary: j.salary,
-        description: j.description,
-        slug: j.slug,
-        deadline: j.deadline,
-        createdAt: j.createdAt,
-      })),
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
 module.exports = {
   getPublicJob,
-  getPublicJobs,
   submitApplication,
 };

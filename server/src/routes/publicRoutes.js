@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
-const { getPublicJob, getPublicJobs, submitApplication } = require('../controllers/publicController');
+const { getPublicJob, submitApplication } = require('../controllers/publicController');
 const { upload } = require('../services/uploadService');
 
 // Rate limiter for public job application submission (e.g., max 20 submissions per 15 minutes per IP)
@@ -15,9 +15,6 @@ const submissionLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-
-// View public company careers / open jobs
-router.get('/jobs', getPublicJobs);
 
 // View public job details
 router.get('/jobs/:slug', getPublicJob);

@@ -16,7 +16,6 @@ import FormBuilderPage from './pages/FormBuilderPage';
 import JobApplicationsPage from './pages/JobApplicationsPage';
 import ApplicationDetailsPage from './pages/ApplicationDetailsPage';
 import PublicJobApplyPage from './pages/PublicJobApplyPage';
-import PublicCareersPage from './pages/PublicCareersPage';
 import SettingsPage from './pages/SettingsPage';
 
 function App() {
@@ -26,7 +25,6 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/careers" element={<PublicCareersPage />} />
       <Route path="/apply/:slug" element={<PublicJobApplyPage />} />
 
       {/* Protected Recruiter Dashboard Routes */}
