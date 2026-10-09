@@ -4,12 +4,16 @@ const {
   getJobApplications,
   getApplicationById,
   updateApplicationStatus,
+  getAllApplications,
 } = require('../controllers/applicationController');
 const { protect } = require('../middleware/auth');
 
 router.use(protect);
 
-// Nested route for applications under a job
+// Recruiter pipeline applications route
+router.get('/applications', getAllApplications);
+
+// Nested route for applications under a specific job
 router.get('/jobs/:jobId/applications', getJobApplications);
 
 // Direct application routes

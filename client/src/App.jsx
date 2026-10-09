@@ -35,6 +35,7 @@ function App() {
         }
       >
         <Route index element={<DashboardPage />} />
+        <Route path="pipeline" element={<DashboardPage defaultTab="pipeline" />} />
         <Route path="jobs/new" element={<JobCreatePage />} />
         <Route path="jobs/:id" element={<JobDetailsPage />} />
         <Route path="jobs/:id/edit" element={<JobEditPage />} />

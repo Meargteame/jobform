@@ -10,6 +10,7 @@ import {
   Menu,
   X,
   ChevronRight,
+  Users,
 } from 'lucide-react';
 
 const DashboardLayout = () => {
@@ -38,6 +39,12 @@ const DashboardLayout = () => {
       to: '/dashboard',
       icon: LayoutDashboard,
       end: true,
+    },
+    {
+      name: 'Candidate Pipeline',
+      to: '/dashboard/pipeline',
+      icon: Users,
+      end: false,
     },
     {
       name: 'Create Job',

@@ -155,8 +155,89 @@ const updateApplicationStatus = async (req, res, next) => {
   }
 };
 
+// @desc    Get all applications across all jobs for the logged-in recruiter (Candidate Pipeline)
+// @route   GET /api/applications
+// @access  Private (Recruiter)
+const getAllApplications = async (req, res, next) => {
+  try {
+    const { status, jobId, search } = req.query;
+
+    // Find all jobs owned by this recruiter
+    const recruiterJobs = await Job.find({ recruiter: req.user._id }).sort({ createdAt: -1 });
+    const jobIds = recruiterJobs.map((j) => j._id);
+
+    if (jobIds.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: {
+          counts: { all: 0, applied: 0, shortlisted: 0, rejected: 0 },
+          applications: [],
+          jobs: [],
+        },
+      });
+    }
+
+    const filter = {
+      job: jobId ? jobId : { $in: jobIds },
+    };
+
+    if (status && ['applied', 'shortlisted', 'rejected'].includes(status.toLowerCase())) {
+      filter.status = status.toLowerCase();
+    }
+
+    if (search && search.trim()) {
+      const searchRegex = new RegExp(search.trim(), 'i');
+      filter.$or = [
+        { fullName: searchRegex },
+        { email: searchRegex },
+      ];
+    }
+
+    const applications = await Application.find(filter)
+      .populate('job')
+      .sort({ submittedAt: -1 });
+
+    // Aggregate counts across all recruiter jobs
+    const counts = await Application.aggregate([
+      { $match: { job: { $in: jobIds } } },
+      { $group: { _id: '$status', count: { $sum: 1 } } },
+    ]);
+
+    const countSummary = {
+      all: 0,
+      applied: 0,
+      shortlisted: 0,
+      rejected: 0,
+    };
+
+    counts.forEach((c) => {
+      countSummary[c._id] = c.count;
+      countSummary.all += c.count;
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        counts: countSummary,
+        applications,
+        jobs: recruiterJobs.map((j) => ({
+          _id: j._id,
+          title: j.title,
+          companyName: j.companyName,
+          status: j.status,
+          slug: j.slug,
+          location: j.location,
+        })),
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getJobApplications,
   getApplicationById,
   updateApplicationStatus,
+  getAllApplications,
 };

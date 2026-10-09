@@ -378,6 +378,21 @@ const seedDemoForRecruiter = async (req, res, next) => {
       ],
     });
 
+    await Application.create({
+      job: job._id,
+      fullName: 'David Chen',
+      email: 'david.chen@example.com',
+      phone: '+1 (555) 345-6789',
+      cvUrl: '/uploads/sample_cv_david.pdf',
+      status: 'rejected',
+      submittedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+      answers: [
+        { question: q1._id, label: q1.label, type: q1.type, answer: '1' },
+        { question: q2._id, label: q2.label, type: q2.type, answer: 'Angular' },
+        { question: q3._id, label: q3.label, type: q3.type, answer: 'Looking for an entry level opportunity in web dev.' },
+      ],
+    });
+
     return res.status(201).json({
       success: true,
       message: 'Sample job and applications loaded successfully.',

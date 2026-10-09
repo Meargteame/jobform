@@ -319,7 +319,12 @@ const memoryApplication = {
   find(filter = {}) {
     let list = [...store.applications];
     if (filter.job) {
-      list = list.filter((a) => a.job.toString() === filter.job.toString());
+      if (filter.job.$in) {
+        const ids = filter.job.$in.map((id) => id.toString());
+        list = list.filter((a) => ids.includes(a.job.toString()));
+      } else {
+        list = list.filter((a) => a.job.toString() === filter.job.toString());
+      }
     }
     if (filter.status) {
       list = list.filter((a) => a.status === filter.status);
