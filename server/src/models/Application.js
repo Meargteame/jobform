@@ -63,6 +63,10 @@ const applicationSchema = new mongoose.Schema({
     default: 'applied',
     index: true,
   },
+  notes: {
+    type: String,
+    default: '',
+  },
   submittedAt: {
     type: Date,
     default: Date.now,

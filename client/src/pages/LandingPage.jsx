@@ -5,22 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import BetterFormLogo from '../components/BetterFormLogo';
 
 const LandingPage = () => {
-  const { isAuthenticated, login } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
-  const handleDemoLogin = async () => {
-    try {
-      await login('demo@betterform.local', 'Demo123456');
-      navigate('/dashboard');
-    } catch (e) {
-      try {
-        await login('demo@jobform.local', 'Demo123456');
-        navigate('/dashboard');
-      } catch (err2) {
-        navigate('/login?demo=true');
-      }
-    }
-  };
 
   return (
     <div className="min-h-screen bg-paper text-ink font-sans flex flex-col selection:bg-signal selection:text-ink">
@@ -82,22 +68,15 @@ const LandingPage = () => {
               BetterForm is a minimalist hiring workflow that lets companies create professional job application forms, share one application link, and manage candidates from one simple dashboard.
             </p>
 
-            {/* CTAs */}
+            {/* Primary Action CTA */}
             <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
               <Link
-                to="/register"
+                to={isAuthenticated ? '/dashboard' : '/register'}
                 className="btn-primary"
               >
-                <span>Create your first job</span>
+                <span>{isAuthenticated ? 'Go to Dashboard' : 'Create your first job'}</span>
                 <ArrowRight className="w-4 h-4 stroke-[1.5]" />
               </Link>
-
-              <button
-                onClick={handleDemoLogin}
-                className="btn-secondary"
-              >
-                View demo workspace
-              </button>
             </div>
 
             {/* Badges / Micro-rules */}

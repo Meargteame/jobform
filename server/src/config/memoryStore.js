@@ -26,6 +26,13 @@ class MemoryUser {
     this.email = data.email?.toLowerCase().trim();
     this.password = data.password;
     this.companyName = data.companyName;
+    this.website = data.website || '';
+    this.industry = data.industry || 'Technology & Software';
+    this.headline = data.headline || 'Building world-class products with exceptional people.';
+    this.notifyNewApplicant = data.notifyNewApplicant ?? true;
+    this.notifyCandidateShortlist = data.notifyCandidateShortlist ?? true;
+    this.autoConfirmationEmail = data.autoConfirmationEmail ?? true;
+    this.webhookUrl = data.webhookUrl || '';
     this.createdAt = data.createdAt || new Date();
   }
 
@@ -112,6 +119,7 @@ class MemoryApplication {
     this.cvUrl = data.cvUrl;
     this.answers = data.answers || [];
     this.status = data.status || 'applied';
+    this.notes = data.notes || '';
     this.submittedAt = data.submittedAt || new Date();
   }
 

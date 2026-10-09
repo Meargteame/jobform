@@ -209,6 +209,11 @@ const getPublicJobs = async (req, res, next) => {
     const jobs = await Job.find({ status: 'published' }).sort({ createdAt: -1 });
 
     let filtered = jobs;
+    if (req.query.company) {
+      const comp = req.query.company.toLowerCase();
+      filtered = filtered.filter((j) => j.companyName?.toLowerCase().includes(comp));
+    }
+
     if (req.query.search) {
       const q = req.query.search.toLowerCase();
       filtered = filtered.filter(

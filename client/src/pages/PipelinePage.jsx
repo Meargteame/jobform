@@ -64,21 +64,6 @@ const PipelinePage = () => {
     setTimeout(() => setToastMessage(''), 3000);
   };
 
-  const handleSeedDemo = async () => {
-    try {
-      setLoading(true);
-      const res = await api.post('/jobs/seed-demo');
-      if (res.data.success) {
-        showToast('Sample posting and candidate data loaded.');
-        await fetchPipelineData();
-      }
-    } catch (err) {
-      alert(err.response?.data?.message || 'Failed to load demo data.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handlePipelineStatusChange = async (appId, newStatus) => {
     try {
       setCandidateUpdatingId(appId);
@@ -327,18 +312,13 @@ const PipelinePage = () => {
           <p className="mt-2 text-xs text-muted leading-relaxed">
             When candidates submit applications through your public links, they appear here organized by hiring stage.
           </p>
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <button
-              onClick={handleSeedDemo}
-              className="btn-primary w-full sm:w-auto"
-            >
-              Load sample candidates
-            </button>
+          <div className="mt-6 flex items-center justify-center">
             <Link
               to="/dashboard/jobs/new"
-              className="btn-secondary w-full sm:w-auto"
+              className="btn-primary"
             >
-              Create job posting
+              <Plus className="w-4 h-4 stroke-[1.5]" />
+              <span>Create job posting</span>
             </Link>
           </div>
         </div>

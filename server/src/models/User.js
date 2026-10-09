@@ -26,6 +26,38 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Company name is required'],
     trim: true,
   },
+  website: {
+    type: String,
+    default: '',
+    trim: true,
+  },
+  industry: {
+    type: String,
+    default: 'Technology & Software',
+    trim: true,
+  },
+  headline: {
+    type: String,
+    default: 'Building world-class products with exceptional people.',
+    trim: true,
+  },
+  notifyNewApplicant: {
+    type: Boolean,
+    default: true,
+  },
+  notifyCandidateShortlist: {
+    type: Boolean,
+    default: true,
+  },
+  autoConfirmationEmail: {
+    type: Boolean,
+    default: true,
+  },
+  webhookUrl: {
+    type: String,
+    default: '',
+    trim: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

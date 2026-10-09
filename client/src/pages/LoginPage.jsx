@@ -38,12 +38,6 @@ const LoginPage = () => {
     }
   };
 
-  const handleFillDemo = () => {
-    setEmail('demo@betterform.local');
-    setPassword('Demo123456');
-    setError('');
-  };
-
   return (
     <div className="min-h-screen bg-paper flex flex-col justify-center py-12 px-6 lg:px-8 font-sans text-ink">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-left">
@@ -119,18 +113,6 @@ const LoginPage = () => {
               </button>
             </div>
           </form>
-
-          {/* Quick-fill helper */}
-          <div className="mt-6 pt-6 border-t border-line">
-            <button
-              type="button"
-              onClick={handleFillDemo}
-              className="btn-secondary w-full text-xs font-semibold"
-            >
-              <span>Fill demo credentials</span>
-              <span className="font-mono text-[11px] text-muted">(demo@betterform.local)</span>
-            </button>
-          </div>
         </div>
       </div>
     </div>

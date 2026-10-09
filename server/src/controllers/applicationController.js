@@ -235,9 +235,46 @@ const getAllApplications = async (req, res, next) => {
   }
 };
 
+// @desc    Update candidate evaluation notes
+// @route   PATCH /api/applications/:id/notes
+// @access  Private (Recruiter)
+const updateApplicationNotes = async (req, res, next) => {
+  try {
+    const { notes } = req.body;
+    const application = await Application.findById(req.params.id).populate('job');
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found.',
+      });
+    }
+
+    // Verify ownership
+    if (application.job.recruiter.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'You are not authorized to update notes on this application.',
+      });
+    }
+
+    application.notes = typeof notes === 'string' ? notes : '';
+    await application.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Evaluation notes saved successfully.',
+      data: application,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getJobApplications,
   getApplicationById,
   updateApplicationStatus,
+  updateApplicationNotes,
   getAllApplications,
 };

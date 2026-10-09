@@ -38,26 +38,32 @@ const SettingsPage = () => {
   const [testingWebhook, setTestingWebhook] = useState(false);
   const [webhookStatus, setWebhookStatus] = useState('');
 
-  // Load persisted local workspace prefs if available
+  // Fetch profile on mount directly from backend
   useEffect(() => {
-    const savedPrefs = localStorage.getItem('bf_workspace_settings');
-    if (savedPrefs) {
+    const fetchProfile = async () => {
       try {
-        const parsed = JSON.parse(savedPrefs);
-        setFormData((prev) => ({
-          ...prev,
-          website: parsed.website || '',
-          industry: parsed.industry || 'Technology & Software',
-          headline: parsed.headline || 'Building world-class products with exceptional people.',
-          notifyNewApplicant: parsed.notifyNewApplicant ?? true,
-          notifyCandidateShortlist: parsed.notifyCandidateShortlist ?? true,
-          autoConfirmationEmail: parsed.autoConfirmationEmail ?? true,
-          webhookUrl: parsed.webhookUrl || '',
-        }));
+        const res = await api.get('/auth/me');
+        if (res.data.success && res.data.user) {
+          const u = res.data.user;
+          setFormData({
+            name: u.name || '',
+            companyName: u.companyName || '',
+            email: u.email || '',
+            website: u.website || '',
+            industry: u.industry || 'Technology & Software',
+            headline: u.headline || 'Building world-class products with exceptional people.',
+            notifyNewApplicant: u.notifyNewApplicant ?? true,
+            notifyCandidateShortlist: u.notifyCandidateShortlist ?? true,
+            autoConfirmationEmail: u.autoConfirmationEmail ?? true,
+            webhookUrl: u.webhookUrl || '',
+          });
+        }
       } catch (e) {
-        console.error('Failed to parse saved preferences', e);
+        console.error('Failed to load user profile', e);
       }
-    }
+    };
+
+    fetchProfile();
   }, []);
 
   const showToast = (msg) => {
@@ -79,33 +85,25 @@ const SettingsPage = () => {
       setSaving(true);
       setError('');
 
-      // Update core profile on backend
+      // Update full profile and workspace preferences on backend
       const res = await api.put('/auth/profile', {
         name: formData.name,
         companyName: formData.companyName,
+        website: formData.website,
+        industry: formData.industry,
+        headline: formData.headline,
+        notifyNewApplicant: formData.notifyNewApplicant,
+        notifyCandidateShortlist: formData.notifyCandidateShortlist,
+        autoConfirmationEmail: formData.autoConfirmationEmail,
+        webhookUrl: formData.webhookUrl,
       });
 
       if (res.data.success) {
-        // Persist local workspace preferences
-        localStorage.setItem(
-          'bf_workspace_settings',
-          JSON.stringify({
-            website: formData.website,
-            industry: formData.industry,
-            headline: formData.headline,
-            notifyNewApplicant: formData.notifyNewApplicant,
-            notifyCandidateShortlist: formData.notifyCandidateShortlist,
-            autoConfirmationEmail: formData.autoConfirmationEmail,
-            webhookUrl: formData.webhookUrl,
-          })
-        );
-
         // Update auth state in context
         if (user) {
           const updatedUser = {
             ...user,
-            name: formData.name,
-            companyName: formData.companyName,
+            ...res.data.user,
           };
           const token = localStorage.getItem('token');
           if (token) {
@@ -123,18 +121,24 @@ const SettingsPage = () => {
     }
   };
 
-  const handleTestWebhook = () => {
-    if (!formData.webhookUrl || !formData.webhookUrl.startsWith('http')) {
+  const handleTestWebhook = async () => {
+    if (!formData.webhookUrl || (!formData.webhookUrl.startsWith('http://') && !formData.webhookUrl.startsWith('https://'))) {
       alert('Please enter a valid HTTP/HTTPS Webhook endpoint URL first.');
       return;
     }
-    setTestingWebhook(true);
-    setWebhookStatus('');
-    setTimeout(() => {
+    try {
+      setTestingWebhook(true);
+      setWebhookStatus('');
+      const res = await api.post('/auth/test-webhook', { webhookUrl: formData.webhookUrl });
+      if (res.data.success) {
+        setWebhookStatus(res.data.message);
+        setTimeout(() => setWebhookStatus(''), 5000);
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to dispatch test ping to webhook.');
+    } finally {
       setTestingWebhook(false);
-      setWebhookStatus('Ping successful (HTTP 200 Mock Response)');
-      setTimeout(() => setWebhookStatus(''), 4000);
-    }, 1200);
+    }
   };
 
   return (
@@ -299,7 +303,7 @@ const SettingsPage = () => {
                     Workspace Identifier
                   </label>
                   <div className="bf-input w-full bg-paper text-muted flex items-center justify-between cursor-not-allowed">
-                    <span className="font-mono text-xs">ws_{user?.id ? user.id.slice(-8) : 'demo'}</span>
+                    <span className="font-mono text-xs">ws_{user?.id ? user.id.slice(-8) : (user?._id ? user._id.slice(-8) : 'hiring')}</span>
                     <ShieldCheck className="w-4 h-4 text-ink stroke-[1.5]" />
                   </div>
                 </div>

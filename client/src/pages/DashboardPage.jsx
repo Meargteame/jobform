@@ -139,21 +139,6 @@ const DashboardPage = () => {
     setTimeout(() => setCopiedSlug(null), 2500);
   };
 
-  const handleSeedDemo = async () => {
-    try {
-      setLoading(true);
-      const res = await api.post('/jobs/seed-demo');
-      if (res.data.success) {
-        showToast('Sample posting and candidate data loaded.');
-        await fetchDashboardData();
-      }
-    } catch (err) {
-      alert(err.response?.data?.message || 'Failed to load demo data.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const filteredJobs = useMemo(() => {
     return jobs
       .filter((job) => {
@@ -409,21 +394,13 @@ const DashboardPage = () => {
           </p>
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             {jobs.length === 0 ? (
-              <>
-                <Link
-                  to="/dashboard/jobs/new"
-                  className="btn-primary w-full sm:w-auto"
-                >
-                  <Plus className="w-4 h-4 stroke-[1.5]" />
-                  <span>Create job</span>
-                </Link>
-                <button
-                  onClick={handleSeedDemo}
-                  className="btn-secondary w-full sm:w-auto"
-                >
-                  Load sample roles
-                </button>
-              </>
+              <Link
+                to="/dashboard/jobs/new"
+                className="btn-primary w-full sm:w-auto"
+              >
+                <Plus className="w-4 h-4 stroke-[1.5]" />
+                <span>Create job</span>
+              </Link>
             ) : (
               <button
                 onClick={() => {

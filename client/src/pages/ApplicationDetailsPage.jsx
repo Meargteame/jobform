@@ -27,9 +27,9 @@ const ApplicationDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [updatingStatus, setUpdatingStatus] = useState(false);
-  const [statusFeedback, setStatusFeedback] = useState('');
-  const [notes, setNotes] = useState(() => localStorage.getItem(`bf_notes_${id}`) || '');
+  const [notes, setNotes] = useState('');
   const [notesSaved, setNotesSaved] = useState(false);
+  const [savingNotes, setSavingNotes] = useState(false);
 
   // Outreach Modal State
   const [emailModalOpen, setEmailModalOpen] = useState(false);
@@ -38,10 +38,19 @@ const ApplicationDetailsPage = () => {
   const [emailBody, setEmailBody] = useState('');
   const [emailCopied, setEmailCopied] = useState(false);
 
-  const handleSaveNotes = () => {
-    localStorage.setItem(`bf_notes_${id}`, notes);
-    setNotesSaved(true);
-    setTimeout(() => setNotesSaved(false), 2500);
+  const handleSaveNotes = async () => {
+    try {
+      setSavingNotes(true);
+      const res = await api.patch(`/applications/${id}/notes`, { notes });
+      if (res.data.success) {
+        setNotesSaved(true);
+        setTimeout(() => setNotesSaved(false), 2500);
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to save evaluation notes.');
+    } finally {
+      setSavingNotes(false);
+    }
   };
 
   const fetchApplication = async () => {
@@ -51,6 +60,7 @@ const ApplicationDetailsPage = () => {
       const res = await api.get(`/applications/${id}`);
       if (res.data.success) {
         setApplication(res.data.data);
+        setNotes(res.data.data.notes || '');
       }
     } catch (err) {
       console.error(err);
@@ -402,9 +412,10 @@ const ApplicationDetailsPage = () => {
           <button
             type="button"
             onClick={handleSaveNotes}
+            disabled={savingNotes}
             className="btn-primary btn-compact"
           >
-            Save evaluation notes
+            {savingNotes ? 'Saving notes...' : 'Save evaluation notes'}
           </button>
         </div>
       </div>

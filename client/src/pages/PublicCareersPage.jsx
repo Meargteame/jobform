@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
 import BetterFormLogo from '../components/BetterFormLogo';
 import {
@@ -16,6 +16,9 @@ import {
 } from 'lucide-react';
 
 const PublicCareersPage = () => {
+  const [searchParams] = useSearchParams();
+  const companyQuery = searchParams.get('company');
+
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -29,6 +32,7 @@ const PublicCareersPage = () => {
       const params = {};
       if (search.trim()) params.search = search.trim();
       if (typeFilter !== 'all') params.type = typeFilter;
+      if (companyQuery) params.company = companyQuery;
 
       const res = await api.get('/public/jobs', { params });
       if (res.data.success) {
@@ -44,14 +48,14 @@ const PublicCareersPage = () => {
 
   useEffect(() => {
     fetchJobs();
-  }, [typeFilter]);
+  }, [typeFilter, companyQuery]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     fetchJobs();
   };
 
-  const companyName = jobs[0]?.companyName || 'Our Company';
+  const companyName = companyQuery || jobs[0]?.companyName || 'Our Company';
 
   return (
     <div className="min-h-screen bg-paper font-sans text-ink selection:bg-signal selection:text-ink">

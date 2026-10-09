@@ -4,6 +4,7 @@ const {
   getJobApplications,
   getApplicationById,
   updateApplicationStatus,
+  updateApplicationNotes,
   getAllApplications,
 } = require('../controllers/applicationController');
 const { protect } = require('../middleware/auth');
@@ -19,5 +20,6 @@ router.get('/jobs/:jobId/applications', getJobApplications);
 // Direct application routes
 router.get('/applications/:id', getApplicationById);
 router.patch('/applications/:id/status', updateApplicationStatus);
+router.patch('/applications/:id/notes', updateApplicationNotes);
 
 module.exports = router;
