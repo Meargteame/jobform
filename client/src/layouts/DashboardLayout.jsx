@@ -18,8 +18,10 @@ const DashboardLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
-  const handleLogout = () => {
+  const handleConfirmLogout = () => {
+    setShowLogoutConfirm(false);
     logout();
     navigate('/login');
   };
@@ -176,9 +178,10 @@ const DashboardLayout = () => {
             </div>
 
             <button
-              onClick={handleLogout}
+              type="button"
+              onClick={() => setShowLogoutConfirm(true)}
               title="Sign Out"
-              className="p-2 text-muted hover:text-ink hover:bg-paper-2 rounded-[6px] transition-colors ml-1"
+              className="p-2 text-muted hover:text-ink hover:bg-paper-2 rounded-[6px] transition-colors ml-1 cursor-pointer"
             >
               <LogOut className="w-4 h-4 stroke-[1.5]" />
             </button>
@@ -190,6 +193,69 @@ const DashboardLayout = () => {
       <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 max-w-7xl">
         <Outlet />
       </main>
+
+      {/* Sign Out Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40 backdrop-blur-xs">
+          <div className="bg-white rounded-[12px] border border-line max-w-md w-full p-6 space-y-5 shadow-xl relative animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between pb-3 border-b border-line">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-[8px] bg-paper flex items-center justify-center text-ink border border-line">
+                  <LogOut className="w-4 h-4 stroke-[1.5]" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-ink">
+                    Sign out of BetterForm?
+                  </h3>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                    Session Security
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowLogoutConfirm(false)}
+                className="p-1.5 text-muted hover:text-ink hover:bg-paper rounded-[6px] transition-colors"
+              >
+                <X className="w-4 h-4 stroke-[1.5]" />
+              </button>
+            </div>
+
+            <p className="text-xs text-muted leading-relaxed">
+              Are you sure you want to end your current recruiter session? You will need to sign back in with your email and password to manage postings and applicants.
+            </p>
+
+            <div className="p-3 bg-paper rounded-[8px] border border-line flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-[6px] bg-ink text-paper font-semibold text-xs flex items-center justify-center shrink-0">
+                {getInitials(user?.name)}
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-ink truncate leading-tight">
+                  {user?.name || 'Recruiter'}
+                </p>
+                <p className="text-[11px] text-muted truncate">{user?.email}</p>
+              </div>
+            </div>
+
+            <div className="pt-2 flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setShowLogoutConfirm(false)}
+                className="btn-secondary btn-compact"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmLogout}
+                className="btn-primary btn-compact"
+              >
+                <span>Yes, sign out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
