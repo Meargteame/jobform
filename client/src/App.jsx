@@ -8,6 +8,7 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
+import PipelinePage from './pages/PipelinePage';
 import JobCreatePage from './pages/JobCreatePage';
 import JobDetailsPage from './pages/JobDetailsPage';
 import JobEditPage from './pages/JobEditPage';
@@ -35,7 +36,7 @@ function App() {
         }
       >
         <Route index element={<DashboardPage />} />
-        <Route path="pipeline" element={<DashboardPage defaultTab="pipeline" />} />
+        <Route path="pipeline" element={<PipelinePage />} />
         <Route path="jobs/new" element={<JobCreatePage />} />
         <Route path="jobs/:id" element={<JobDetailsPage />} />
         <Route path="jobs/:id/edit" element={<JobEditPage />} />
